@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Biel Martínez Janer — Software engineer · pentester · hardware hacker</title>
+<meta name="description" content="Biel Martínez Janer — software engineer, pentester and hardware hacker, founder & CTO. Building systems end to end and breaking them on purpose. Palma, Balearic Islands." />
+<meta name="theme-color" content="#06080E" />
+<meta property="og:title" content="Biel Martínez Janer — Software engineer · pentester · hardware hacker" />
+<meta property="og:description" content="I work in frequencies: audio, radio, data, and the pulse of a Friday night. Building systems end to end and breaking them on purpose." />
+<meta property="og:type" content="website" />
+<script>document.documentElement.classList.add('js');</script>
+
+<link rel="stylesheet" href="assets/css/fonts.css" />
+<link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+
+<!-- live oscilloscope: full-screen in hero, docks to a top strip on scroll -->
+<div id="scope-stage" aria-hidden="true"><canvas id="scope-canvas"></canvas></div>
+
+<!-- docked signal-strip chrome -->
+<header id="topbar">
+  <canvas id="bar-scope" aria-hidden="true"></canvas>
+  <a href="#hero" class="mark">BMJ<b>.</b></a>
+  <div class="tele">
+    <span class="hide-sm" id="tele-band">CH·00 — CARRIER</span>
+    <span id="tele-read">f 0.00 · A 0.00</span>
+    <span class="dot" aria-hidden="true"></span>
+    <a href="#contact" class="cta-mini mono amber" style="letter-spacing:.18em;">OPEN CHANNEL ↗</a>
+  </div>
+</header>
+
+<main>
+  <!-- ============================= HERO ============================= -->
+  <section id="hero" data-band="CH·00 — CARRIER" data-shape="0" data-freq="1.9" data-amp="1.0" data-noise="0">
+    <div class="hero-ticks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <div class="hero-top">
+      <div class="id">
+        <span class="eyebrow"><i class="live"></i>Signal&nbsp;—&nbsp;Active</span>
+        <span class="mono">B.&nbsp;Martínez&nbsp;Janer</span>
+      </div>
+      <div class="id coord">
+        <span class="eyebrow">39.57°N&nbsp;·&nbsp;2.65°E</span>
+        <span class="mono">Palma&nbsp;·&nbsp;Balearic&nbsp;Islands</span>
+      </div>
+    </div>
+
+    <div class="hero-mid">
+      <h1 class="display name">
+        <span class="ln"><span>Biel</span></span>
+        <span class="ln"><span>Martínez</span></span>
+        <span class="ln"><span>Janer</span></span>
+      </h1>
+      <div class="role">
+        <i>Software engineer</i><span class="sep">/</span>
+        <span>pentester</span><span class="sep">/</span>
+        <span>hardware hacker</span>
+      </div>
+    </div>
+
+    <div class="hero-bot">
+      <p class="lede">I build systems end to end — from the firmware on the bench to the platform in production — and I <b>break them on purpose</b> to find where they give.</p>
+      <div class="scrollcue mono">
+        <span>scroll</span><span class="track" aria-hidden="true"></span>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- ============================ THESIS ============================ -->
+  <section id="thesis" class="section" data-band="CH·00 — CARRIER" data-shape="0" data-freq="1.6" data-amp="0.92" data-noise="0.06">
+    <div class="wrap thesis-grid">
+      <h2 class="big reveal">I work in <em>frequencies.</em></h2>
+      <div class="body reveal">
+        <p>Audio, radio, data, and the pulse of a Friday night. Different bands, one habit of mind: take a complex signal apart, learn exactly how it behaves, and rebuild it cleaner.</p>
+        <p>That runs from a <b>cello phrase</b> to an <b>RF capture</b> to a payment flow that can't afford to drop a single transaction.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================== CHANNELS =========================== -->
+  <section id="channels" class="section" data-band="CH·01 — BUILD" data-shape="1" data-freq="3.0" data-amp="0.86" data-noise="0.03">
+    <div class="wrap">
+      <div class="s-head reveal">
+        <span class="idx">[ CHANNELS ]</span>
+        <h2 class="display">What I tune.</h2>
+      </div>
+
+      <div class="channels">
+        <article class="channel reveal" data-band="CH·01 — BUILD" data-shape="1" data-freq="3.2" data-amp="0.86" data-noise="0.03">
+          <div class="ch-id">CH<b>01</b></div>
+          <div class="ch-main">
+            <div class="ch-verb">Build</div>
+            <h3>Software &amp; architecture</h3>
+            <p class="ch-body">Full-stack systems in C#/.NET and Python: data models, APIs, real-time events and production deployment. The work people don't see — an import pipeline that normalizes and validates thousands of messy rows, biometric identity checks, the official VeriFactu integration, the corporate data layer everything else stands on.</p>
+            <div class="ch-meta">
+              <span class="tag">ASP.NET Core</span><span class="tag">EF Core</span><span class="tag">SignalR</span><span class="tag">PostgreSQL</span><span class="tag">Docker</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="channel reveal" data-band="CH·02 — BREAK" data-shape="2" data-freq="8.0" data-amp="0.7" data-noise="0.85">
+          <div class="ch-id">CH<b>02</b></div>
+          <div class="ch-main">
+            <div class="ch-verb">Break</div>
+            <h3>Offensive security &amp; hardware</h3>
+            <p class="ch-body">Pentesting across web (OWASP), networks, radiofrequency and hardware — plus firmware reverse engineering. Controlled ESP32 / ESP8266 wireless and IoT experiments, audits automated with my own Python and C# tooling, and security material I write to train the people around me. Certified in Offensive Hardware Hacking by Black Hat.</p>
+            <div class="ch-meta">
+              <span class="tag">OWASP</span><span class="tag">RF / wireless</span><span class="tag">ESP32 · ESP8266</span><span class="tag">firmware RE</span><span class="tag">hardening</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="channel reveal" data-band="CH·03 — LEAD" data-shape="3" data-freq="2.0" data-amp="1.0" data-noise="0.05">
+          <div class="ch-id">CH<b>03</b></div>
+          <div class="ch-main">
+            <div class="ch-verb">Lead</div>
+            <h3>Founder &amp; CTO</h3>
+            <p class="ch-body">I founded We Love Night and run it as CEO and CTO — designing the system and data model, shipping the MVP to production, and standing up 24/7 observability with Grafana and Sentry. Then the other half of the job: the business plan, the brand, the legal and IP groundwork, the launch with zero incidents, and the 2026 clients already signed.</p>
+            <div class="ch-meta">
+              <span class="tag">product</span><span class="tag">architecture</span><span class="tag">observability</span><span class="tag">go-to-market</span><span class="tag">team</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================== SYSTEMS ============================ -->
+  <section id="systems" class="section" data-band="CH·03 — SYSTEMS" data-shape="3" data-freq="2.2" data-amp="0.95" data-noise="0.06">
+    <div class="wrap">
+      <div class="s-head reveal">
+        <span class="idx">[ SELECTED&nbsp;WORK ]</span>
+        <h2 class="display">Systems in production.</h2>
+      </div>
+
+      <div class="systems">
+        <article class="sys span reveal">
+          <div class="sys-head">
+            <div>
+              <h3>We Love Night</h3>
+              <div class="role">Founder · CEO · CTO</div>
+            </div>
+            <div class="when">2024 → now · in production</div>
+          </div>
+          <p class="sys-sum">A technology company building advanced ticketing, analytics and business-digitalization for the night economy — taken from a blank page to a public launch.</p>
+          <ul class="sys-points">
+            <li>Designed the full software architecture and data model; built and deployed the MVP.</li>
+            <li>Stood up 24/7 observability — Grafana for service health and KPIs, Sentry for error telemetry and traceability.</li>
+            <li>Secured and maintained the production servers; integrated payment gateways and analytics modules.</li>
+            <li>Owned the business too: viability study, brand and IP registration, legal/privacy groundwork, investor materials.</li>
+            <li>Ran the launch event with zero incidents and closed key clients for 2026.</li>
+          </ul>
+          <div class="sys-foot">
+            <span class="tag">.NET</span><span class="tag">PostgreSQL</span><span class="tag">Grafana</span><span class="tag">Sentry</span><span class="tag">payments</span><span class="tag">Linux</span>
+          </div>
+        </article>
+
+        <article class="sys reveal">
+          <div class="sys-head">
+            <div>
+              <h3>Industrial web platform</h3>
+              <div class="role">Project Manager · Head Developer</div>
+            </div>
+            <div class="when">Suministros Jogo · 2023 → now</div>
+          </div>
+          <p class="sys-sum">Top technical lead for a web platform that manages real industrial processes around laser cutting.</p>
+          <ul class="sys-points">
+            <li>Automatic part nesting for laser cutting; advanced DXF processing — read, validate, convert, optimize.</li>
+            <li>SignalR for real-time events; users &amp; roles; payment gateways and autonomous invoicing.</li>
+            <li>Security, audit and advanced logging modules; performance tuning and production deployment.</li>
+            <li>Led the project: planning, team coordination, UI/UX, architecture, data models and APIs.</li>
+          </ul>
+          <div class="sys-foot">
+            <span class="tag">ASP.NET Core</span><span class="tag">DXF · nesting</span><span class="tag">SignalR</span><span class="tag">SQL Server</span>
+          </div>
+        </article>
+
+        <article class="sys reveal">
+          <div class="sys-head">
+            <div>
+              <h3>Industrial software</h3>
+              <div class="role">Software Developer</div>
+            </div>
+            <div class="when">Suministros Jogo · 2023 → now</div>
+          </div>
+          <p class="sys-sum">Automation, backend, infrastructure and internal tooling for a metallurgy business.</p>
+          <ul class="sys-points">
+            <li>Intelligent price-list import — normalization, structural validation and mass processing.</li>
+            <li>Official VeriFactu implementation; corporate data architecture; biometric identity verification.</li>
+            <li>Automated SMS and mailing; scheduler that generates and assigns events to staff.</li>
+            <li>Document viewer and internal file control, both on-prem and in the cloud.</li>
+          </ul>
+          <div class="sys-foot">
+            <span class="tag">C# / .NET</span><span class="tag">Python</span><span class="tag">automation</span><span class="tag">VeriFactu</span>
+          </div>
+        </article>
+
+        <article class="sys span reveal">
+          <div class="sys-head">
+            <div>
+              <h3>Signal lab</h3>
+              <div class="role">Security &amp; hardware research</div>
+            </div>
+            <div class="when">ongoing</div>
+          </div>
+          <p class="sys-sum">Independent research where the hardware and software halves meet — and where I keep the offensive skills sharp.</p>
+          <ul class="sys-points">
+            <li>Web (OWASP), network, radiofrequency and hardware pentesting; basic reverse engineering and firmware analysis.</li>
+            <li>Controlled ESP32 / ESP8266 experiments in wireless and IoT security.</li>
+            <li>Custom audit automation and lightweight pentesting tools in Python and C#.</li>
+            <li>Internal security training and teaching material for technical and non-technical people.</li>
+          </ul>
+          <div class="sys-foot">
+            <span class="tag">ESP32</span><span class="tag">RF</span><span class="tag">firmware</span><span class="tag">Python tooling</span><span class="tag">OWASP</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= STACK ============================ -->
+  <section id="stack" class="section" data-band="CH·01 — STACK" data-shape="1" data-freq="4.0" data-amp="0.8" data-noise="0.04">
+    <div class="wrap">
+      <div class="s-head reveal">
+        <span class="idx">[ CAPABILITIES ]</span>
+        <h2 class="display">The bench.</h2>
+      </div>
+
+      <div class="stack-grid">
+        <div class="stack-col reveal"><h4>Languages</h4><ul>
+          <li>C# (.NET)</li><li>Python</li><li>Java</li><li>Zig</li><li>SQL</li><li>Bash</li><li>HTML</li><li>CSS</li>
+        </ul></div>
+        <div class="stack-col reveal"><h4>Frameworks</h4><ul>
+          <li>ASP.NET Core</li><li>EF Core</li><li>SignalR</li><li>WinForms</li>
+        </ul></div>
+        <div class="stack-col reveal"><h4>Data</h4><ul>
+          <li>SQL Server</li><li>PostgreSQL</li><li>MySQL</li><li>data modeling</li>
+        </ul></div>
+        <div class="stack-col reveal"><h4>Infra &amp; ops</h4><ul>
+          <li>Docker</li><li>Linux</li><li>IIS</li><li>Hyper-V</li><li>Git</li><li>CI</li>
+        </ul></div>
+        <div class="stack-col reveal"><h4>Observability</h4><ul>
+          <li>Grafana</li><li>Sentry</li><li>telemetry</li>
+        </ul></div>
+        <div class="stack-col reveal"><h4>Security</h4><ul>
+          <li>web · OWASP</li><li>network</li><li>radiofrequency</li><li>hardware</li><li>hardening</li><li>audits</li>
+        </ul></div>
+        <div class="stack-col reveal"><h4>Industrial</h4><ul>
+          <li>laser-cut integration</li><li>DXF</li><li>automatic nesting</li>
+        </ul></div>
+        <div class="stack-col reveal"><h4>Design</h4><ul>
+          <li>Figma</li><li>UX architecture</li><li>interaction design</li>
+        </ul></div>
+      </div>
+
+      <div class="creds">
+        <div class="col reveal">
+          <h4>Certifications</h4>
+          <ul>
+            <li><span class="k">SEC</span><span><b>Offensive Hardware Hacking</b> — Black Hat</span></li>
+            <li><span class="k">PY</span><span><b>PCEP</b> — Certified Entry-Level Python Programmer</span></li>
+            <li><span class="k">NET</span><span><b>CCNA</b> content completed — Cisco</span></li>
+            <li><span class="k">ICT</span><span><b>ACTIC</b> — intermediate level</span></li>
+            <li><span class="k">EN</span><span><b>English C1</b> — Cambridge (Advanced)</span></li>
+          </ul>
+        </div>
+        <div class="col reveal">
+          <h4>Education &amp; distinctions</h4>
+          <ul>
+            <li><span class="k">BSC</span><span><b>B.Eng. Software Engineering</b> — final year <span class="sub">· Computer Engineering track</span></span></li>
+            <li><span class="k">HON</span><span><b>Honours</b> — Network Security</span></li>
+            <li><span class="k">HON</span><span><b>Honours</b> — Algebra</span></li>
+            <li><span class="k">MUS</span><span><b>Professional degree, cello</b> — Conservatori de Mallorca</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= OTHER SIGNALS ======================== -->
+  <section id="signals" class="section" data-band="CH·09 — HUMAN" data-shape="0" data-freq="1.1" data-amp="1.0" data-noise="0.02">
+    <div class="wrap">
+      <div class="s-head reveal">
+        <span class="idx">[ OFF&nbsp;THE&nbsp;CLOCK ]</span>
+        <h2 class="display">Other signals.</h2>
+      </div>
+      <div class="sig-grid">
+        <article class="sig reveal">
+          <span class="k">Low frequency · sustained</span>
+          <canvas class="wf" data-wf="sine"></canvas>
+          <h3>Cello</h3>
+          <p>A professional degree from the Conservatori de Mallorca. Years of reading a score, holding a line, and listening for the one note that's slightly off — the same ear I bring to a system.</p>
+        </article>
+        <article class="sig reveal">
+          <span class="k">Transient · high energy</span>
+          <canvas class="wf" data-wf="pulse"></canvas>
+          <h3>Basketball</h3>
+          <p>Semi-professional, competing nationally in 3ª FEB. Where I learned to perform under pressure, read the play two moves ahead, and trust a team to do its job.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ CONTACT =========================== -->
+  <section id="contact" class="section" data-band="CH·00 — CARRIER" data-shape="0" data-freq="1.4" data-amp="1.0" data-noise="0.05">
+    <div class="wrap contact-inner">
+      <div class="reveal">
+        <h2 class="display">Open a <em>channel.</em></h2>
+        <p class="sub">Roles, collaborations, security work, or just to compare notes on hardware. I read everything that comes in.</p>
+      </div>
+      <div class="links reveal">
+        <a class="link-row" href="mailto:bielmj10@gmail.com">
+          <span class="l"><span class="k">Email</span><span class="v">bielmj10@gmail.com</span></span>
+          <span class="arrow">↗</span>
+        </a>
+        <a class="link-row" href="https://github.com/VitoAlighieri" target="_blank" rel="noopener noreferrer">
+          <span class="l"><span class="k">GitHub</span><span class="v">github.com/VitoAlighieri</span></span>
+          <span class="arrow">↗</span>
+        </a>
+        <a class="link-row" href="https://www.linkedin.com/in/biel-mart%C3%ADnez-janer-758042232/" target="_blank" rel="noopener noreferrer">
+          <span class="l"><span class="k">LinkedIn</span><span class="v">Biel Martínez Janer</span></span>
+          <span class="arrow">↗</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="foot-grid">
+    <span class="sig-mark">Biel Martínez Janer<b>.</b></span>
+    <p class="colo">
+      Software engineer · pentester · hardware hacker — Palma, Balearic Islands · 2026.<br>
+      <b>Type:</b> Anybody, Archivo &amp; JetBrains Mono. <b>Signature:</b> a live oscilloscope rendered in WebGL; its shape is a real waveform that re-tunes per section. Honors reduced-motion.
+    </p>
+  </div>
+</footer>
+
+<!-- libraries (CDN) -->
+<script src="assets/vendor/three.min.js"></script>
+<script src="assets/vendor/gsap.min.js"></script>
+<script src="assets/vendor/ScrollTrigger.min.js"></script>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>
