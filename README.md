@@ -9,6 +9,11 @@ Built with **Three.js** (the scope) and **GSAP + ScrollTrigger** (choreography).
 Fully responsive, keyboard-focusable, and it honors `prefers-reduced-motion`
 (static trace, no animation).
 
+**Bilingual (EN · ES).** A tiny no-dependency i18n layer adds an `EN / ES` switch in
+the hero and the docked signal strip. English is the canonical copy in the HTML
+(good for SEO and no-JS); Spanish lives in a dictionary and is swapped in by key. The
+choice is remembered (`localStorage`) and first-visit language follows the browser.
+
 ---
 
 ## Run it
@@ -46,9 +51,11 @@ biel-martinez-portfolio/
 └─ assets/
    ├─ css/
    │  ├─ styles.css        # all styles + design tokens (:root variables)
+   │  ├─ i18n.css          # language-switch chrome + docked-strip gating
    │  └─ fonts.css         # @font-face for the three families
    ├─ js/
-   │  └─ app.js            # the oscilloscope + scroll choreography
+   │  ├─ app.js            # the oscilloscope + scroll choreography
+   │  └─ i18n.js           # EN/ES language layer (Spanish dictionary + switch logic)
    ├─ fonts/               # self-hosted variable fonts (woff2)
    └─ vendor/              # three.min.js, gsap.min.js, ScrollTrigger.min.js
 ```
@@ -65,6 +72,13 @@ biel-martinez-portfolio/
   (`shape`: 0 = sine, 1 = square/digital, 2 = triangle, 3 = pulse). Logic lives in `app.js`.
 - **Contact links:** already wired in the contact section of `index.html`
   (email, github.com/VitoAlighieri, LinkedIn).
+- **Languages / copy in two languages:** every translatable element carries a
+  `data-i18n="some.key"`; the English text stays in `index.html` as the source of
+  truth, and the Spanish strings live in the `ES` dictionary in `assets/js/i18n.js`,
+  keyed identically. To tweak the Spanish wording, edit the matching key. To add a
+  third language, clone the `ES` block + the `META` entry under a new code and add a
+  button (`data-lang-set="xx"`) to each `.lang-switch`. Missing keys fall back to
+  English automatically.
 
 ## Notes & credits
 

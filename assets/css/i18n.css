@@ -1,0 +1,37 @@
+/* =====================================================================
+   I18N CHROME — the EN/ES language switch + docked-strip interaction gating.
+   Loaded AFTER styles.css, so the topbar overrides below win on source order.
+   ===================================================================== */
+
+/* The docked strip only becomes interactive once it has actually docked in,
+   so the invisible strip at the top of the page never steals clicks/focus
+   from the hero (and its language switch) sitting beneath it. */
+#topbar .mark, #topbar a.cta-mini, #topbar .lang-switch{ pointer-events:none; }
+#topbar.is-docked .mark, #topbar.is-docked a.cta-mini, #topbar.is-docked .lang-switch{ pointer-events:auto; }
+
+/* EN / ES switch — reads as part of the instrument chrome */
+.lang-switch{
+  display:inline-flex; align-items:center; gap:.5rem; line-height:1; white-space:nowrap;
+  font-family:var(--m); font-weight:500; font-size:.72rem; letter-spacing:.16em;
+}
+.lang-switch .lang-opt{
+  -webkit-appearance:none; appearance:none; background:none; border:0; margin:0;
+  padding:.15rem .2rem; cursor:pointer; color:var(--mute);
+  font:inherit; letter-spacing:inherit; text-transform:uppercase; line-height:1;
+  transition:color .3s var(--ease);
+}
+.lang-switch .lang-opt:hover{ color:var(--bone-2); }
+.lang-switch .lang-opt.is-on{ color:var(--amber); }
+.lang-switch .lang-div{ color:var(--mute-2); }
+
+/* hero instance: a subtle pill so it reads as a control, sitting on the top line */
+.lang-switch--hero{
+  align-self:flex-start; padding:.42rem .8rem; letter-spacing:.2em;
+  border:1px solid var(--line-2); border-radius:999px; background:rgba(13,18,28,.45);
+  -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+}
+.lang-switch--hero .lang-opt{ font-size:.74rem; }
+
+/* docked-strip instance: slim, no chrome (the bar already provides it) */
+.lang-switch--bar{ font-size:.66rem; gap:.4rem; letter-spacing:.14em; }
+@media (max-width:600px){ .hero-top .lang-switch--hero{ align-self:flex-start; } }
