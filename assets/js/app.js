@@ -327,6 +327,8 @@
   if (window.gsap && window.ScrollTrigger){
     gsap.registerPlugin(ScrollTrigger);
 
+    var topbarEl = document.getElementById('topbar');
+
     /* hero name reveal — always animates: a slide reveal normally, a gentle fade under reduced motion */
     if (!REDUCED){
       var tl = gsap.timeline({ delay:0.12 });
@@ -351,6 +353,9 @@
         canvas.style.opacity = (1 - d);             // fade out the 3D layer
         var bar = Math.max(0, (d-0.35)/0.65);        // strip fades in a touch later
         gsap.set('#topbar', { opacity: bar });
+        // only let the docked strip capture clicks/focus once it's visibly in
+        // (its controls + lang switch are gated on this class in i18n.css)
+        if (topbarEl) topbarEl.classList.toggle('is-docked', bar > 0.45);
       }
     });
 
