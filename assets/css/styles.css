@@ -117,8 +117,12 @@ h2.display{ font-variation-settings:'wght' 760,'wdth' 112; }
 }
 #hero *{ pointer-events:auto; }
 
-/* viewfinder corner registration marks */
-.hero-ticks{ position:absolute; inset:clamp(1.1rem,2.4vh,1.7rem) clamp(1rem,4.2vw,5rem); z-index:2; pointer-events:none; }
+/* viewfinder corner registration marks — purely decorative.
+   The selector is #hero-scoped on purpose: the blunt `#hero *{pointer-events:auto}`
+   rule below outranks a plain `.hero-ticks{pointer-events:none}`, which would let
+   this full-bleed overlay swallow clicks meant for the hero language switch. */
+#hero .hero-ticks, #hero .hero-ticks i{ pointer-events:none; }
+.hero-ticks{ position:absolute; inset:clamp(1.1rem,2.4vh,1.7rem) clamp(1rem,4.2vw,5rem); z-index:2; }
 .hero-ticks i{ position:absolute; width:15px; height:15px; opacity:.55; }
 .hero-ticks i:nth-child(1){ top:0; left:0; border-top:1.5px solid var(--line-2); border-left:1.5px solid var(--line-2); }
 .hero-ticks i:nth-child(2){ top:0; right:0; border-top:1.5px solid var(--line-2); border-right:1.5px solid var(--line-2); }

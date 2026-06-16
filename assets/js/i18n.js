@@ -171,6 +171,7 @@
       b.classList.toggle('is-on', on);
       b.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
+    placeAll();
 
     current = lang;
   }
@@ -200,6 +201,31 @@
     remember(lang);
     apply(lang);
   });
+
+  /* ---- the gliding indicator: measure the active option, move the chip ---- */
+  function placeIndicator(sw){
+    var ind = sw.querySelector('.lang-ind');
+    var on  = sw.querySelector('.lang-opt.is-on') || sw.querySelector('.lang-opt');
+    if (!ind || !on) return;
+    ind.style.width  = on.offsetWidth + 'px';
+    ind.style.height = on.offsetHeight + 'px';
+    ind.style.transform = 'translate(' + on.offsetLeft + 'px,' + on.offsetTop + 'px)';
+  }
+  function placeAll(){
+    var list = document.querySelectorAll('.lang-switch');
+    for (var i=0;i<list.length;i++) placeIndicator(list[i]);
+  }
+  function enableGlide(){
+    placeAll();
+    var list = document.querySelectorAll('.lang-switch');
+    for (var i=0;i<list.length;i++) list[i].classList.add('lang-ready');
+  }
+  // place instantly once layout/fonts have settled, then enable the glide so
+  // only user-initiated changes animate — never the first paint
+  if (document.fonts && document.fonts.ready){ document.fonts.ready.then(enableGlide); }
+  window.addEventListener('load', enableGlide);
+  setTimeout(enableGlide, 1200);
+  window.addEventListener('resize', placeAll, { passive:true });
 
   /* expose a tiny hook (handy for the console / future controls) */
   window.BMJ_I18N = { set:function(l){ if (SUPPORTED.indexOf(l) >= 0){ remember(l); apply(l); } }, get:function(){ return current; } };

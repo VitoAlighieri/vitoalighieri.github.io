@@ -9,29 +9,68 @@
 #topbar .mark, #topbar a.cta-mini, #topbar .lang-switch{ pointer-events:none; }
 #topbar.is-docked .mark, #topbar.is-docked a.cta-mini, #topbar.is-docked .lang-switch{ pointer-events:auto; }
 
-/* EN / ES switch — reads as part of the instrument chrome */
+/* ===================================================================
+   EN / ES SWITCH — reads as part of the instrument chrome.
+   A soft amber "chip" glides behind the active language; the option it
+   lands on lifts to amber. The chip geometry is measured in JS (i18n.js)
+   so it tracks the real glyph widths in either language.
+   =================================================================== */
 .lang-switch{
-  display:inline-flex; align-items:center; gap:.5rem; line-height:1; white-space:nowrap;
+  position:relative; display:inline-flex; align-items:center; gap:.45rem;
+  line-height:1; white-space:nowrap;
   font-family:var(--m); font-weight:500; font-size:.72rem; letter-spacing:.16em;
 }
 .lang-switch .lang-opt{
+  position:relative; z-index:1;
   -webkit-appearance:none; appearance:none; background:none; border:0; margin:0;
-  padding:.15rem .2rem; cursor:pointer; color:var(--mute);
-  font:inherit; letter-spacing:inherit; text-transform:uppercase; line-height:1;
-  transition:color .3s var(--ease);
+  padding:.2rem .42rem; min-width:2.2ch; cursor:pointer; color:var(--mute);
+  font:inherit; letter-spacing:inherit; text-transform:uppercase; text-align:center; line-height:1;
+  border-radius:999px;
+  transition:color .35s var(--ease), transform .18s var(--ease);
 }
 .lang-switch .lang-opt:hover{ color:var(--bone-2); }
 .lang-switch .lang-opt.is-on{ color:var(--amber); }
-.lang-switch .lang-div{ color:var(--mute-2); }
+.lang-switch .lang-opt:active{ transform:scale(.88); }
+.lang-switch .lang-div{ position:relative; z-index:1; color:var(--mute-2); }
+
+/* the gliding indicator (geometry set in JS) */
+.lang-switch .lang-ind{
+  position:absolute; left:0; top:0; z-index:0; width:0; height:0;
+  border-radius:999px; background:rgba(255,173,58,.12);
+  border:1px solid rgba(255,173,58,.30);
+  box-shadow:0 0 12px 1px var(--glow), inset 0 0 7px rgba(255,173,58,.07);
+  pointer-events:none; will-change:transform,width;
+}
+/* transitions only switch on after the first placement, so the chip never
+   slides in from the corner on load — it just appears in place */
+.lang-switch.lang-ready .lang-ind{
+  transition:transform .52s var(--ease), width .52s var(--ease), height .52s var(--ease);
+}
 
 /* hero instance: a subtle pill so it reads as a control, sitting on the top line */
 .lang-switch--hero{
-  align-self:flex-start; padding:.42rem .8rem; letter-spacing:.2em;
+  align-self:flex-start; padding:.4rem .7rem; letter-spacing:.2em;
   border:1px solid var(--line-2); border-radius:999px; background:rgba(13,18,28,.45);
   -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
 }
 .lang-switch--hero .lang-opt{ font-size:.74rem; }
 
-/* docked-strip instance: slim, no chrome (the bar already provides it) */
-.lang-switch--bar{ font-size:.66rem; gap:.4rem; letter-spacing:.14em; }
-@media (max-width:600px){ .hero-top .lang-switch--hero{ align-self:flex-start; } }
+/* docked-strip instance: slim, the bar already provides the chrome */
+.lang-switch--bar{ font-size:.66rem; gap:.35rem; letter-spacing:.14em; }
+
+/* reduced motion: keep the colour cue, drop the glide */
+@media (prefers-reduced-motion: reduce){
+  .lang-switch.lang-ready .lang-ind{ transition:none; }
+  .lang-switch .lang-opt{ transition:color .2s linear; }
+  .lang-switch .lang-opt:active{ transform:none; }
+}
+
+/* ----- mobile: roomier tap targets so the switch is comfortable on touch ----- */
+@media (max-width:600px){
+  .hero-top .lang-switch--hero{ align-self:flex-start; padding:.5rem .9rem; }
+  .lang-switch--hero{ font-size:.78rem; gap:.5rem; }
+  .lang-switch--hero .lang-opt{ font-size:.82rem; padding:.34rem .58rem; }
+}
+@media (max-width:720px){
+  .lang-switch--bar .lang-opt{ padding:.28rem .46rem; }
+}
