@@ -9,6 +9,10 @@ Built with **Three.js** (the scope) and **GSAP + ScrollTrigger** (choreography).
 Fully responsive, keyboard-focusable, and it honors `prefers-reduced-motion`
 (static trace, no animation).
 
+On fine-pointer devices a custom **oscilloscope-style cursor** (an amber reticle — a
+precise dot plus a trailing ring that opens over interactive targets) replaces the
+native one; touch devices and no-JS keep the system cursor.
+
 **Bilingual (EN · ES).** A tiny no-dependency i18n layer adds an `EN / ES` switch in
 the hero and the docked signal strip. English is the canonical copy in the HTML
 (good for SEO and no-JS); Spanish lives in a dictionary and is swapped in by key. The
@@ -50,12 +54,14 @@ biel-martinez-portfolio/
 ├─ index.html              # markup + content (edit your copy here)
 └─ assets/
    ├─ css/
-   │  ├─ styles.css        # all styles + design tokens (:root variables)
+   │  ├─ styles.css        # all styles + design tokens (:root variables) + custom scrollbar
    │  ├─ i18n.css          # language-switch chrome + docked-strip gating
+   │  ├─ cursor.css        # custom oscilloscope-style cursor (reticle)
    │  └─ fonts.css         # @font-face for the three families
    ├─ js/
    │  ├─ app.js            # the oscilloscope + scroll choreography
-   │  └─ i18n.js           # EN/ES language layer (Spanish dictionary + switch logic)
+   │  ├─ i18n.js           # EN/ES language layer (Spanish dictionary + switch logic)
+   │  └─ cursor.js         # custom-cursor controller (fine-pointer only)
    ├─ fonts/               # self-hosted variable fonts (woff2)
    └─ vendor/              # three.min.js, gsap.min.js, ScrollTrigger.min.js
 ```

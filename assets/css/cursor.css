@@ -1,0 +1,56 @@
+/* =====================================================================
+   CUSTOM CURSOR — an oscilloscope-style reticle:
+   a precise amber dot at the true pointer + a softly trailing ring that
+   opens up and warms over interactive targets. Fine-pointer / desktop only;
+   the native cursor stays for touch and if JS never runs.
+   ===================================================================== */
+
+/* hide the native cursor only once JS has switched the custom one on */
+html.has-cursor, html.has-cursor *{ cursor:none !important; }
+
+#cursor{ position:fixed; top:0; left:0; z-index:99999; pointer-events:none; }
+#cursor .cursor-ring,
+#cursor .cursor-dot{
+  position:fixed; top:0; left:0; pointer-events:none;
+  opacity:0; will-change:transform;
+}
+
+/* the precise point — tracks the pointer 1:1 */
+#cursor .cursor-dot{
+  width:6px; height:6px; border-radius:50%;
+  background:var(--amber);
+  box-shadow:0 0 8px 1px rgba(255,173,58,.75);
+  transition:opacity .25s var(--ease), width .2s var(--ease), height .2s var(--ease), scale .16s var(--ease);
+}
+
+/* the trailing reticle */
+#cursor .cursor-ring{
+  width:30px; height:30px; border-radius:50%;
+  border:1px solid rgba(255,173,58,.55);
+  box-shadow:0 0 14px rgba(255,173,58,.16), inset 0 0 9px rgba(255,173,58,.06);
+  transition:opacity .3s var(--ease), width .3s var(--ease), height .3s var(--ease),
+             border-color .3s var(--ease), background-color .3s var(--ease), scale .16s var(--ease);
+}
+
+#cursor.on .cursor-ring, #cursor.on .cursor-dot{ opacity:1; }
+
+/* over an interactive target: the ring opens + warms, the dot tucks in */
+#cursor.hot .cursor-ring{
+  width:54px; height:54px; border-color:var(--amber);
+  background-color:rgba(255,173,58,.09);
+}
+#cursor.hot .cursor-dot{ width:4px; height:4px; }
+
+/* press feedback */
+#cursor.down .cursor-ring{ scale:.82; }
+#cursor.down .cursor-dot{ scale:.65; }
+
+/* reduced motion: keep the cursor, drop the springy flourishes */
+@media (prefers-reduced-motion: reduce){
+  #cursor .cursor-ring{
+    transition:opacity .2s linear, width .2s linear, height .2s linear,
+               border-color .2s linear, background-color .2s linear;
+  }
+  #cursor .cursor-dot{ transition:opacity .2s linear, width .2s linear, height .2s linear; }
+  #cursor.down .cursor-ring, #cursor.down .cursor-dot{ scale:1; }
+}
