@@ -48,6 +48,33 @@ body::before{
     radial-gradient(90% 70% at 0% 110%, rgba(80,120,255,.045), transparent 60%);
 }
 
+/* ===================================================================
+   SCROLLBAR — a slim amber "signal" pill that floats on the night page:
+   soft and translucent at rest, brightening as you grab it. On theme with
+   the oscilloscope trace; minimal footprint, transparent rail.
+   =================================================================== */
+/* Firefox */
+html{ scrollbar-width:thin; scrollbar-color:rgba(255,173,58,.55) transparent; }
+
+/* WebKit / Blink */
+::-webkit-scrollbar{ width:12px; height:12px; }
+::-webkit-scrollbar-track{ background:transparent; }
+::-webkit-scrollbar-thumb{
+  /* transparent border + padding-box clip = a slim pill that floats off the edge */
+  background:linear-gradient(180deg, rgba(255,186,92,.60), rgba(255,150,44,.40));
+  background-clip:padding-box;
+  border:3px solid transparent;
+  border-radius:999px;
+}
+::-webkit-scrollbar-thumb:hover{
+  background:linear-gradient(180deg, var(--amber-2), var(--amber));
+  background-clip:padding-box;
+}
+::-webkit-scrollbar-thumb:active{
+  background:var(--amber); background-clip:padding-box;
+}
+::-webkit-scrollbar-corner{ background:transparent; }
+
 /* ============================ TYPE ROLES ============================ */
 .mono{ font-family:var(--m); font-weight:500; font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:var(--mute); }
 .mono.amber{ color:var(--amber); }
