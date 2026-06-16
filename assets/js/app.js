@@ -9,8 +9,8 @@
   "use strict";
   var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var IS_TOUCH = window.matchMedia('(hover: none)').matches;
-  // Reduced-motion keeps the signature waveform alive but gentle; the jarring
-  // motion (name slide-in, parallax, cursor ping, scroll jolts) is dropped below.
+  // Reduced-motion keeps the signature waveform alive but gentle; the bigger
+  // motion (name slide-in, ambient drift, scroll jolts) is dropped below.
   var SCOPE_SPEED = REDUCED ? 0.5 : 1.0;
   document.body.classList.add('is-ready');
   // failsafe: ensure hero/name are visible shortly after load no matter what
@@ -191,23 +191,21 @@
       bctx.setTransform(DPR2,0,0,DPR2,0,0);
     }
 
-    var mx=0, my=0, tmx=0, tmy=0;
-    if (!IS_TOUCH && !REDUCED){
-      window.addEventListener('pointermove', function(e){
-        tmx = (e.clientX/window.innerWidth)*2-1;
-        tmy = (e.clientY/window.innerHeight)*2-1;
-      }, {passive:true});
-    }
-
+    // Pointer-driven parallax has been removed by request: moving the mouse no
+    // longer shifts the wave or the scene sideways. The hero now breathes on its
+    // own with a calm, automatic, time-based drift (see frame()).
     var phase=0, last=performance.now();
     function frame(now){
       var dt = Math.min(0.05,(now-last)/1000); last=now;
       phase += dt*P.speed*SCOPE_SPEED;
 
-      // ease camera parallax
-      mx += (tmx-mx)*0.06; my += (tmy-my)*0.06;
-      camera.position.x = mx*0.9*(1-P.dock);
-      camera.position.y = -my*0.5*(1-P.dock);
+      // gentle automatic ambient drift (no pointer coupling, no horizontal pan):
+      // a slow vertical float + a faint inward "breath" so the scope feels alive
+      // without ever yanking the scene sideways. Eases out as the hero docks.
+      var amb = REDUCED ? 0 : (1 - P.dock);
+      camera.position.x = 0;
+      camera.position.y = Math.sin(phase*0.45) * 0.09 * amb;
+      camera.position.z = 9 + (Math.cos(phase*0.32) - 1) * 0.10 * amb;
       camera.lookAt(0,0,0);
 
       computeWave();
@@ -251,12 +249,6 @@
           base += vnoise(nx)*P.noise*0.9 + vnoise(nx*2.3)*P.noise*0.4;
         }
         var y = base*amp;
-        // cursor "ping": local amplitude bump near pointer (hero only)
-        if (!IS_TOUCH && !REDUCED && P.dock<0.5){
-          var px = mx*halfX;
-          var dd = (x-px); var bump = Math.exp(-(dd*dd)/2.2);
-          y += Math.sin(phase*6.0)*bump*0.5*(1-P.dock);
-        }
         corePos[s*3]=x; corePos[s*3+1]=y; corePos[s*3+2]=0;
         var bi=s*2*3;
         ribbonPos[bi]  =x; ribbonPos[bi+1]=y+thick; ribbonPos[bi+2]=0;
