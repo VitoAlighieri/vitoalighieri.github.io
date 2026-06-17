@@ -93,6 +93,12 @@ h2.display{ font-variation-settings:'wght' 760,'wdth' 112; }
 .s-head .idx{ font-family:var(--m); font-weight:500; font-size:.72rem; letter-spacing:.2em; color:var(--amber); padding-top:.5rem; white-space:nowrap; }
 .s-head h2{ margin:0; font-size:clamp(2rem,5.5vw,4.2rem); }
 .s-lead{ font-size:clamp(1.15rem,2.1vw,1.6rem); line-height:1.4; color:var(--bone); max-width:30ch; font-weight:500; }
+/* on narrow screens the label + big heading can't share a row — stack them so
+   the heading gets the full width to wrap instead of being clipped off-screen */
+@media (max-width:640px){
+  .s-head{ flex-direction:column; align-items:flex-start; gap:.5rem; }
+  .s-head .idx{ padding-top:0; }
+}
 
 /* ===================================================================
    SCOPE  (fixed canvas → docks into a slim signal strip on scroll)
