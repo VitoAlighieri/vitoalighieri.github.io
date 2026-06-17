@@ -20,13 +20,15 @@
   function build(){
     if (built) return;
     wrap = document.createElement('div'); wrap.id = 'cursor'; wrap.setAttribute('aria-hidden','true');
-    ring = document.createElement('div'); ring.className = 'cursor-ring';
-    dot  = document.createElement('div'); dot.className  = 'cursor-dot';
+    ring = document.createElement('div'); ring.className = 'cursor-ring'; ring.appendChild(document.createElement('i'));
+    dot  = document.createElement('div'); dot.className  = 'cursor-dot';  dot.appendChild(document.createElement('i'));
     wrap.appendChild(ring); wrap.appendChild(dot);
     document.body.appendChild(wrap);
     built = true;
   }
-  function place(el, x, y){ el.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) translate(-50%,-50%)'; }
+  // position the point only; the inner <i> centres itself (and scales on press)
+  // in CSS, so press-feedback can never disturb the location
+  function place(el, x, y){ el.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)'; }
   function show(){ if (active && !shown){ shown = true; wrap.classList.add('on'); } }
   function hide(){ if (shown){ shown = false; wrap.classList.remove('on'); } }
 
