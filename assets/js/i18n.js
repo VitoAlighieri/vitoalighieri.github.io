@@ -55,13 +55,13 @@
     'channels.h2':  'Lo que sintonizo.',
     'ch01.verb': 'Construir',
     'ch01.h3':   'Software y arquitectura',
-    'ch01.body': 'Sistemas full-stack en C#/.NET y Python: modelos de datos, APIs, eventos en tiempo real y despliegue en producción. El trabajo que no se ve —un pipeline de importación que normaliza y valida miles de filas desordenadas, verificación biométrica de identidad, la integración oficial de VeriFactu, la capa de datos corporativa sobre la que se sostiene todo lo demás.',
+    'ch01.body': 'Sistemas full-stack en C#/.NET y Python: modelos de datos, APIs, eventos en tiempo real y despliegue en producción. El trabajo que no se ve —un pipeline de importación que normaliza y valida miles de filas desordenadas, verificación biométrica de identidad, gestión de clientes y proveedores, la capa de datos corporativa sobre la que se sostiene todo lo demás.',
     'ch02.verb': 'Romper',
     'ch02.h3':   'Seguridad ofensiva y hardware',
     'ch02.body': 'Pentesting en web (OWASP), redes, radiofrecuencia y hardware —además de ingeniería inversa de firmware. Experimentos controlados de wireless e IoT con ESP32 / ESP8266, auditorías automatizadas con mis propias herramientas en Python y C#, y material de seguridad que escribo para formar a quienes me rodean. Certificado en Offensive Hardware Hacking por Black Hat.',
     'ch03.verb': 'Liderar',
-    'ch03.h3':   'Fundador y CTO',
-    'ch03.body': 'Fundé We Love Night y la dirijo como CEO y CTO —diseñando el sistema y el modelo de datos, llevando el MVP a producción y montando observabilidad 24/7 con Grafana y Sentry. Y luego la otra mitad del trabajo: el plan de negocio, la marca, la base legal y de propiedad intelectual, el lanzamiento sin una sola incidencia y los clientes de 2026 ya firmados.',
+    'ch03.h3':   'Fundador y CEO',
+    'ch03.body': 'Fundé We Love Night y la dirijo como CEO y CTO —fijando la visión, la estrategia y la hoja de ruta técnica, diseñando el sistema y el modelo de datos y llevando el MVP a producción. Y luego la mitad del trabajo que lo decide todo: dirigir el negocio —plan de negocio, marca, base legal y de propiedad intelectual, captación de inversión y alianzas, el lanzamiento sin una sola incidencia y los clientes de 2026 ya firmados.',
     'ch03.meta': '<span class="tag">producto</span><span class="tag">arquitectura</span><span class="tag">observabilidad</span><span class="tag">go-to-market</span><span class="tag">equipo</span>',
 
     /* systems */
@@ -70,9 +70,9 @@
 
     'sys.wln.role':   'Fundador · CEO · CTO',
     'sys.wln.when':   '2024 → hoy · en producción',
-    'sys.wln.sum':    'Una empresa tecnológica que construye ticketing avanzado, analítica y digitalización de negocio para la economía nocturna —llevada de una página en blanco a un lanzamiento público.',
-    'sys.wln.points': '<li>Diseñé toda la arquitectura de software y el modelo de datos; construí y desplegué el MVP.</li><li>Monté observabilidad 24/7 —Grafana para la salud de los servicios y los KPIs, Sentry para la telemetría de errores y la trazabilidad.</li><li>Aseguré y mantuve los servidores de producción; integré pasarelas de pago y módulos de analítica.</li><li>También me encargué del negocio: estudio de viabilidad, registro de marca y propiedad intelectual, base legal y de privacidad, materiales para inversores.</li><li>Dirigí el evento de lanzamiento sin una sola incidencia y cerré clientes clave para 2026.</li>',
-    'sys.wln.foot':   '<span class="tag">.NET</span><span class="tag">PostgreSQL</span><span class="tag">Grafana</span><span class="tag">Sentry</span><span class="tag">pagos</span><span class="tag">Linux</span>',
+    'sys.wln.sum':    'Una empresa tecnológica que fundé y dirijo, que construye ticketing avanzado, analítica y digitalización de negocio para la economía nocturna —llevada de una página en blanco a un lanzamiento público.',
+    'sys.wln.points': '<li>Marco la dirección de la empresa como CEO y CTO —visión, estrategia, hoja de ruta de producto y equipo.</li><li>Dirijo el negocio de principio a fin: estudio de viabilidad, plan de negocio, registro de marca y propiedad intelectual, base legal y de privacidad y materiales para inversores.</li><li>Diseñé toda la arquitectura de software y el modelo de datos y llevé el MVP a producción —con monitorización, pasarelas de pago y analítica en marcha.</li><li>Impulso el go-to-market y las alianzas; aseguré y mantengo la plataforma de producción.</li><li>Dirigí el evento de lanzamiento sin una sola incidencia y cerré clientes clave para 2026.</li>',
+    'sys.wln.foot':   '<span class="tag">estrategia</span><span class="tag">go-to-market</span><span class="tag">.NET</span><span class="tag">PostgreSQL</span><span class="tag">pagos</span><span class="tag">Linux</span>',
 
     'sys.iwp.h3':     'Plataforma web industrial',
     'sys.iwp.role':   'Jefe de proyecto · Desarrollador principal',
@@ -84,9 +84,9 @@
     'sys.isw.h3':     'Software industrial',
     'sys.isw.role':   'Desarrollador de software',
     'sys.isw.when':   'Suministros Jogo · 2023 → hoy',
-    'sys.isw.sum':    'Automatización, backend, infraestructura y herramientas internas para una empresa de metalurgia.',
-    'sys.isw.points': '<li>Importación inteligente de tarifas —normalización, validación estructural y procesamiento masivo.</li><li>Implementación oficial de VeriFactu; arquitectura de datos corporativa; verificación biométrica de identidad.</li><li>SMS y mailing automatizados; planificador que genera y asigna eventos al personal.</li><li>Visor de documentos y control interno de archivos, tanto on-premise como en la nube.</li>',
-    'sys.isw.foot':   '<span class="tag">C# / .NET</span><span class="tag">Python</span><span class="tag">automatización</span><span class="tag">VeriFactu</span>',
+    'sys.isw.sum':    'Automatización, backend, gestión de clientes y proveedores y herramientas internas para una empresa de metalurgia.',
+    'sys.isw.points': '<li>Gestión integral de clientes y proveedores —fichas, tarifas, pedidos, facturación y la arquitectura de datos corporativa que hay detrás.</li><li>Importación inteligente de tarifas —normalización, validación estructural y procesamiento masivo.</li><li>Verificación biométrica de identidad; SMS y mailing automatizados; planificador que genera y asigna eventos al personal.</li><li>Visor de documentos y control interno de archivos, tanto on-premise como en la nube.</li>',
+    'sys.isw.foot':   '<span class="tag">C# / .NET</span><span class="tag">Python</span><span class="tag">automatización</span><span class="tag">clientes · proveedores</span>',
 
     'sys.lab.h3':     'Laboratorio de señales',
     'sys.lab.role':   'Investigación en seguridad y hardware',
@@ -111,9 +111,9 @@
     'stack.ul.design':        '<li>Figma</li><li>arquitectura UX</li><li>diseño de interacción</li>',
 
     'creds.cert.h4': 'Certificaciones',
-    'creds.cert.ul': '<li><span class="k">SEC</span><span><b>Offensive Hardware Hacking</b> — Black Hat</span></li><li><span class="k">PY</span><span><b>PCEP</b> — Programador Python certificado de nivel inicial</span></li><li><span class="k">NET</span><span>Contenido <b>CCNA</b> completado — Cisco</span></li><li><span class="k">ICT</span><span><b>ACTIC</b> — nivel intermedio</span></li><li><span class="k">EN</span><span><b>Inglés C1</b> — Cambridge (Advanced)</span></li>',
+    'creds.cert.ul': '<li><span class="k">SEC</span><span><b>Offensive Hardware Hacking</b> — Black Hat</span></li><li><span class="k">PEN</span><span><b>eJPT</b> — Junior Penetration Tester</span></li><li><span class="k">SEC</span><span><b>OSCC-SEC</b> — seguridad ofensiva</span></li><li><span class="k">SEC</span><span><b>CJCA</b> — analista de ciberseguridad</span></li><li><span class="k">PY</span><span><b>PCEP</b> — Programador Python certificado de nivel inicial</span></li><li><span class="k">NET</span><span>Contenido <b>CCNA</b> completado — Cisco</span></li><li><span class="k">FIN</span><span><b>Finanzas para Directivos No Financieros</b> — ESADE</span></li><li><span class="k">ICT</span><span><b>ACTIC</b> — nivel intermedio</span></li><li><span class="k">EN</span><span><b>Inglés C1</b> — Cambridge (Advanced)</span></li>',
     'creds.edu.h4': 'Formación y distinciones',
-    'creds.edu.ul': '<li><span class="k">BSC</span><span><b>Grado en Ingeniería de Software</b> — último año <span class="sub">· itinerario de Ingeniería Informática</span></span></li><li><span class="k">HON</span><span><b>Matrícula de honor</b> — Seguridad de Redes</span></li><li><span class="k">HON</span><span><b>Matrícula de honor</b> — Álgebra</span></li><li><span class="k">MUS</span><span><b>Título profesional de violonchelo</b> — Conservatori de Mallorca</span></li>',
+    'creds.edu.ul': '<li><span class="k">BSC</span><span><b>Grado en Ingeniería de Software</b> — finalizado <span class="sub">· Mención en Computadores</span></span></li><li><span class="k">HON</span><span><b>Matrícula de honor</b> — Seguridad de Redes</span></li><li><span class="k">HON</span><span><b>Matrícula de honor</b> — Álgebra</span></li><li><span class="k">MUS</span><span><b>Título profesional de violonchelo</b> — Conservatori de Mallorca</span></li>',
 
     /* other signals */
     'signals.idx': '[ FUERA&nbsp;DE&nbsp;HORAS ]',
