@@ -58,7 +58,7 @@
     'ch01.body': 'Sistemas full-stack en C#/.NET y Python: modelos de datos, APIs, eventos en tiempo real y despliegue en producción. El trabajo que no se ve —un pipeline de importación que normaliza y valida miles de filas desordenadas, verificación biométrica de identidad, gestión de clientes y proveedores, la capa de datos corporativa sobre la que se sostiene todo lo demás.',
     'ch02.verb': 'Romper',
     'ch02.h3':   'Seguridad ofensiva',
-    'ch02.body': 'Seguridad ofensiva práctica en web (OWASP), redes y sistemas, radiofrecuencia y señales, hardware e ingeniería inversa de firmware —y también en sistemas industriales (ICS / OT). Experimentos controlados de wireless e IoT con ESP32 / ESP8266, auditorías automatizadas con mis propias herramientas en Python y C#, y material de seguridad que escribo para formar a quienes me rodean. Certificado por OffSec, Hack The Box, INE (eJPT) y Black Hat.',
+    'ch02.body': 'Seguridad ofensiva práctica en web (OWASP), redes y sistemas, radiofrecuencia y señales, hardware e ingeniería inversa de firmware —y también en sistemas industriales (ICS / OT). Análisis de vulnerabilidades con estándares reconocidos (CVE, CVSS, MITRE ATT&amp;CK), las herramientas clave del sector (Burp Suite, Nmap, Metasploit, Ghidra) junto a las mías en Python/C#, hardening de sistemas, y material de seguridad que escribo para formar a quienes me rodean. Certificado por OffSec, Hack The Box, INE (eJPT) y Black Hat.',
     'ch02.meta': '<span class="tag">web · OWASP</span><span class="tag">redes</span><span class="tag">RF · señales</span><span class="tag">hardware · firmware</span><span class="tag">ICS / OT</span>',
     'ch03.verb': 'Liderar',
     'ch03.h3':   'Fundador y CEO',
@@ -93,8 +93,8 @@
     'sys.lab.role':   'Pentesting · red team · investigación',
     'sys.lab.when':   'en curso',
     'sys.lab.sum':    'Trabajo independiente de seguridad ofensiva en toda la pila —de las ondas de radio a la aplicación web y a la planta industrial—, afilado en objetivos reales y laboratorios. Certificado por OffSec, Hack The Box, INE y Black Hat.',
-    'sys.lab.points': '<li><b>Web y APIs</b> — pruebas guiadas por OWASP de autenticación, control de acceso y lógica de negocio.</li><li><b>Redes y sistemas</b> — pentesting de infraestructura, pivoting y escalada de privilegios.</li><li><b>Radiofrecuencia y señales</b> — captura y análisis de RF, wireless e IoT (ESP32 / ESP8266).</li><li><b>Hardware y firmware</b> — hardware hacking, extracción de firmware e ingeniería inversa.</li><li><b>Sistemas industriales (ICS / OT)</b> — seguridad de los procesos y plataformas industriales que también construyo.</li><li><b>Herramientas y formación</b> — utilidades de auditoría a medida en Python/C# y material de seguridad que escribo para formar a otros.</li>',
-    'sys.lab.foot':   '<span class="tag">web · OWASP</span><span class="tag">redes</span><span class="tag">RF · señales</span><span class="tag">ESP32 · IoT</span><span class="tag">hardware</span><span class="tag">firmware RE</span><span class="tag">ICS / OT</span><span class="tag">herramientas Python</span>',
+    'sys.lab.points': '<li><b>Web y APIs</b> — pruebas guiadas por OWASP de autenticación, control de acceso y lógica de negocio.</li><li><b>Redes y sistemas</b> — pentesting de infraestructura, pivoting y escalada de privilegios.</li><li><b>Radiofrecuencia y señales</b> — captura y análisis de RF, wireless e IoT (ESP32 / ESP8266).</li><li><b>Hardware y firmware</b> — hardware hacking, extracción de firmware e ingeniería inversa.</li><li><b>Sistemas industriales (ICS / OT)</b> — seguridad de los procesos y plataformas industriales que también construyo.</li><li><b>Análisis de vulnerabilidades</b> — evaluación, triaje y puntuación con estándares reconocidos (CVE, CVSS, OWASP, MITRE ATT&amp;CK).</li><li><b>Hardening</b> — fortificación de sistemas, redes y aplicaciones con configuraciones seguras por defecto.</li><li><b>Herramientas y formación</b> — herramientas clave del sector (Burp Suite, Nmap, Metasploit, Wireshark, Ghidra) junto a las mías en Python/C#; material de seguridad que escribo para formar a otros.</li>',
+    'sys.lab.foot':   '<span class="tag">web · OWASP</span><span class="tag">redes</span><span class="tag">RF · señales</span><span class="tag">hardware · firmware</span><span class="tag">ICS / OT</span><span class="tag">CVSS · CVE</span><span class="tag">MITRE ATT&amp;CK</span><span class="tag">hardening</span><span class="tag">Burp · Nmap · Ghidra</span>',
 
     /* stack */
     'stack.idx': '[ CAPACIDADES ]',
@@ -107,7 +107,7 @@
     'stack.h.design':        'Diseño',
     'stack.ul.data':          '<li>SQL Server</li><li>PostgreSQL</li><li>MySQL</li><li>modelado de datos</li>',
     'stack.ul.observability': '<li>Grafana</li><li>Sentry</li><li>telemetría</li>',
-    'stack.ul.security':      '<li>web · OWASP</li><li>redes</li><li>radiofrecuencia</li><li>hardware</li><li>firmware · RE</li><li>wireless · IoT</li><li>ICS / OT</li><li>hardening</li><li>auditorías</li>',
+    'stack.ul.security':      '<li>web · OWASP</li><li>redes</li><li>radiofrecuencia</li><li>hardware</li><li>firmware · RE</li><li>wireless · IoT</li><li>ICS / OT</li><li>CVSS · CVE</li><li>MITRE ATT&amp;CK</li><li>hardening</li>',
     'stack.ul.industrial':    '<li>integración de corte por láser</li><li>DXF</li><li>anidado automático</li>',
     'stack.ul.design':        '<li>Figma</li><li>arquitectura UX</li><li>diseño de interacción</li>',
 
