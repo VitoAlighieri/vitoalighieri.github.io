@@ -275,6 +275,11 @@ h2.display{ font-variation-settings:'wght' 760,'wdth' 112; }
 .sys-points{ list-style:none; margin:0; padding:0; display:grid; gap:.55rem; }
 .sys-points li{ position:relative; padding-left:1.4rem; color:var(--bone-2); font-size:clamp(.96rem,1.3vw,1.06rem); }
 .sys-points li::before{ content:""; position:absolute; left:0; top:.62em; width:9px; height:1px; background:var(--amber); }
+/* bold lead-ins in a points list (used by the offensive-security card) read as
+   labels; on the security card they take the amber signal colour for weight */
+.sys-points li b{ color:var(--bone); font-weight:600; }
+.sys--sec .sys-points li b{ color:var(--amber); }
+.sys--sec::before{ opacity:.9; }
 .sys-foot{ margin-top:1.3rem; padding-top:1.1rem; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:.5rem; }
 @media (min-width:980px){ .systems{ grid-template-columns:1fr 1fr; } .sys.span{ grid-column:1 / -1; } }
 
