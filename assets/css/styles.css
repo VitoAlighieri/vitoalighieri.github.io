@@ -37,6 +37,9 @@ body{
 }
 img{max-width:100%;display:block;}
 a{color:inherit;text-decoration:none;}
+/* touch: kill the grey tap flash; interactive rows give their own press feedback
+   below (hover states never fire on touch, so :active is the tactile response) */
+a, button{ -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
 ::selection{ background:var(--amber); color:#0a0a0a; }
 :focus-visible{ outline:2px solid var(--amber); outline-offset:3px; border-radius:2px; }
 
@@ -53,27 +56,31 @@ body::before{
    soft and translucent at rest, brightening as you grab it. On theme with
    the oscilloscope trace; minimal footprint, transparent rail.
    =================================================================== */
-/* Firefox */
-html{ scrollbar-width:thin; scrollbar-color:rgba(255,173,58,.55) transparent; }
+/* desktop / fine pointers only — touch devices keep their native overlay
+   scrollbar, which is slimmer and doesn't reserve layout width */
+@media (hover:hover) and (pointer:fine){
+  /* Firefox */
+  html{ scrollbar-width:thin; scrollbar-color:rgba(255,173,58,.55) transparent; }
 
-/* WebKit / Blink */
-::-webkit-scrollbar{ width:12px; height:12px; }
-::-webkit-scrollbar-track{ background:transparent; }
-::-webkit-scrollbar-thumb{
-  /* transparent border + padding-box clip = a slim pill that floats off the edge */
-  background:linear-gradient(180deg, rgba(255,186,92,.60), rgba(255,150,44,.40));
-  background-clip:padding-box;
-  border:3px solid transparent;
-  border-radius:999px;
+  /* WebKit / Blink */
+  ::-webkit-scrollbar{ width:12px; height:12px; }
+  ::-webkit-scrollbar-track{ background:transparent; }
+  ::-webkit-scrollbar-thumb{
+    /* transparent border + padding-box clip = a slim pill that floats off the edge */
+    background:linear-gradient(180deg, rgba(255,186,92,.60), rgba(255,150,44,.40));
+    background-clip:padding-box;
+    border:3px solid transparent;
+    border-radius:999px;
+  }
+  ::-webkit-scrollbar-thumb:hover{
+    background:linear-gradient(180deg, var(--amber-2), var(--amber));
+    background-clip:padding-box;
+  }
+  ::-webkit-scrollbar-thumb:active{
+    background:var(--amber); background-clip:padding-box;
+  }
+  ::-webkit-scrollbar-corner{ background:transparent; }
 }
-::-webkit-scrollbar-thumb:hover{
-  background:linear-gradient(180deg, var(--amber-2), var(--amber));
-  background-clip:padding-box;
-}
-::-webkit-scrollbar-thumb:active{
-  background:var(--amber); background-clip:padding-box;
-}
-::-webkit-scrollbar-corner{ background:transparent; }
 
 /* ============================ TYPE ROLES ============================ */
 .mono{ font-family:var(--m); font-weight:500; font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:var(--mute); }
@@ -93,6 +100,17 @@ p, .sys-points li, .creds li{ text-wrap:pretty; }
 .section--tight{ padding-block:clamp(4rem,8vh,6.5rem); }
 /* anchor jumps (e.g. OPEN CHANNEL → #contact) clear the docked strip */
 .section, #hero{ scroll-margin-top:calc(var(--bar) + 1rem); }
+
+/* notched phones: gutters never sink under the rounded corners / camera housing
+   (viewport-fit=cover is set in the meta; env() is 0 elsewhere, so this is inert
+   on regular screens) */
+@supports (padding:max(0px)){
+  #topbar, #hero, .section, footer{
+    padding-left:max(var(--gut), env(safe-area-inset-left));
+    padding-right:max(var(--gut), env(safe-area-inset-right));
+  }
+  footer{ padding-bottom:max(clamp(2.2rem,5vh,3.2rem), calc(env(safe-area-inset-bottom) + 1.4rem)); }
+}
 .rule{ height:1px; background:var(--line); border:0; margin:0; }
 
 /* shared section header */
@@ -182,14 +200,30 @@ p, .sys-points li, .creds li{ text-wrap:pretty; }
 .hero-top .coord{ text-align:right; }
 .hero-top .lang-switch--hero{ justify-self:center; }
 @media (max-width:600px){
-  .hero-top{ grid-template-columns:1fr; gap:.55rem; }
-  .hero-top .coord{ text-align:left; }
+  /* phone composition: id left · switch top-right, coords on their own row —
+     a balanced two-corner header instead of a tall single stack */
+  .hero-top{
+    grid-template-columns:minmax(0,1fr) auto; gap:.9rem 1rem;
+    grid-template-areas:"id switch" "coord coord";
+  }
+  .hero-top .id{ grid-area:id; }
+  .hero-top .lang-switch--hero{ grid-area:switch; justify-self:end; }
+  .hero-top .coord{ grid-area:coord; text-align:left; flex-direction:row; flex-wrap:wrap; align-items:baseline; gap:.3rem 1.1rem; }
   .hero-top .eyebrow{ letter-spacing:.2em; }
-  .hero-top .lang-switch--hero{ justify-self:start; }
+}
+/* tiniest phones: compact the id type + pill so the two-corner row still fits
+   (the mono strings carry non-breaking spaces, so they can't wrap) */
+@media (max-width:360px){
+  .hero-top{ gap:.9rem .7rem; }
+  .hero-top .eyebrow{ font-size:.64rem; letter-spacing:.16em; }
+  .hero-top .id .mono{ font-size:.66rem; letter-spacing:.18em; }
 }
 
 .hero-mid{ align-self:center; max-width:none; }
-.hero-mid .name{ font-size:clamp(3rem,11.6vw,10.6rem); margin:0; line-height:.9; letter-spacing:-.02em; font-variation-settings:'wght' 825,'wdth' 122; }
+/* truly fluid: 13.5vw tracks the phone width (measured safe max ≈14.4vw for
+   "Martínez" at wdth 122), so a 414px phone gets ~56px instead of a flat 48px
+   floor — and 320px drops to ~43px, fixing a silent right-edge clip there */
+.hero-mid .name{ font-size:clamp(2.6rem,13.5vw,10.6rem); margin:0; line-height:.9; letter-spacing:-.02em; font-variation-settings:'wght' 825,'wdth' 122; }
 .hero-mid .name .ln{ display:block; overflow:hidden; padding-top:.02em; }
 .hero-mid .name .ln > span{ display:block; will-change:transform; }
 .hero-mid .role{
@@ -202,6 +236,11 @@ p, .sys-points li, .creds li{ text-wrap:pretty; }
 
 .hero-bot{ display:flex; justify-content:space-between; align-items:flex-end; gap:2rem; }
 .hero-bot .lede{ max-width:46ch; font-size:clamp(1rem,1.5vw,1.22rem); line-height:1.5; color:var(--bone-2); }
+@media (max-width:600px){
+  /* stack: the lede breathes at full width, the scroll cue tucks bottom-right */
+  .hero-bot{ flex-direction:column; align-items:stretch; gap:1.1rem; }
+  .hero-bot .scrollcue{ align-self:flex-end; }
+}
 .hero-bot .lede b{ color:var(--bone); font-weight:600; }
 .scrollcue{ display:flex; align-items:center; gap:.7rem; white-space:nowrap; }
 .scrollcue .track{ width:46px; height:1px; background:var(--line-2); position:relative; overflow:hidden; }
@@ -249,6 +288,11 @@ p, .sys-points li, .creds li{ text-wrap:pretty; }
   font-family:var(--m); font-weight:500; font-size:.68rem; letter-spacing:.06em;
   color:var(--bone-2); border:1px solid var(--line-2); border-radius:999px;
   padding:.32rem .7rem; background:var(--surface);
+}
+/* small screens: tighter pills so long tag rows (the security card has nine)
+   stay a compact cloud instead of a tall tower */
+@media (max-width:480px){
+  .tag{ font-size:.63rem; padding:.26rem .56rem; }
 }
 @media (max-width:640px){
   .channel{ grid-template-columns:1fr; gap:.4rem; }
@@ -365,6 +409,10 @@ p, .sys-points li, .creds li{ text-wrap:pretty; }
 .link-row .arrow{ font-family:var(--m); color:var(--amber); transition:transform .35s var(--ease); }
 .link-row:hover{ border-color:var(--amber); background:var(--surface-2); transform:translateX(4px); }
 .link-row:hover .arrow{ transform:translate(4px,-4px); }
+/* press feedback — the touch counterpart of the hover states above */
+.link-row:active{ border-color:var(--amber); background:var(--surface-2); transform:scale(.985); }
+.link-row:active .arrow{ transform:translate(4px,-4px); }
+#topbar a.cta-mini:active{ opacity:.7; }
 
 footer{ position:relative; z-index:2; border-top:1px solid var(--line); padding:clamp(2.2rem,5vh,3.2rem) var(--gut); background:var(--ink); }
 .foot-grid{ max-width:var(--maxw); margin-inline:auto; display:flex; flex-wrap:wrap; justify-content:space-between; gap:1.2rem; align-items:flex-start; }
