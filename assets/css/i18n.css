@@ -67,9 +67,13 @@
 
 /* ----- mobile: roomier tap targets so the switch is comfortable on touch ----- */
 @media (max-width:600px){
-  .hero-top .lang-switch--hero{ align-self:flex-start; padding:.5rem .9rem; }
-  .lang-switch--hero{ font-size:.78rem; gap:.5rem; }
-  .lang-switch--hero .lang-opt{ font-size:.82rem; padding:.34rem .58rem; }
+  .lang-switch--hero{ font-size:.78rem; gap:.5rem; padding:.5rem .9rem; }
+  .lang-switch--hero .lang-opt{ font-size:.82rem; padding:.44rem .6rem; }
+}
+/* tiniest phones: a more compact pill so the hero's two-corner top row fits */
+@media (max-width:360px){
+  .lang-switch--hero{ font-size:.72rem; gap:.35rem; padding:.4rem .6rem; letter-spacing:.14em; }
+  .lang-switch--hero .lang-opt{ font-size:.76rem; padding:.38rem .48rem; }
 }
 @media (max-width:720px){
   .lang-switch--bar .lang-opt{ padding:.28rem .46rem; }
