@@ -78,3 +78,22 @@
 @media (max-width:720px){
   .lang-switch--bar .lang-opt{ padding:.28rem .46rem; }
 }
+
+/* touch: 44px hit areas on the strip's controls without changing the visual
+   chrome — vertical for both options, plus the OUTER edge of each (EN's left,
+   ES's right), so the two targets grow without ever overlapping each other.
+   The '/' divider passes taps through instead of reading as a dead button. */
+@media (hover:none){
+  .lang-switch .lang-opt::before{ content:""; position:absolute; left:0; right:0; top:-14px; bottom:-14px; }
+  /* inner edges meet under the '/' (gap + divider + gap ≈ 18px on the strip, ≈ 24px on the hero pill), so a tap on the
+     slash always lands on an option; outer edges grow 10px — the strip's ES stops at 8px to leave the round CTA (≤380) its share of the gap */
+  .lang-switch .lang-opt:first-of-type::before{ left:-10px; right:-9px; }
+  .lang-switch .lang-opt:last-of-type::before{ right:-10px; left:-9px; }
+  .lang-switch--hero .lang-opt:first-of-type::before{ right:-12px; }
+  .lang-switch--hero .lang-opt:last-of-type::before{ left:-12px; }
+  .lang-switch--bar .lang-opt:last-of-type::before{ right:-8px; }
+  .lang-switch .lang-div{ pointer-events:none; }
+  #topbar .mark::before{ content:""; position:absolute; inset:-14px -8px; }
+  /* no per-frame backdrop blur over the live WebGL scope on touch GPUs */
+  .lang-switch--hero{ -webkit-backdrop-filter:none; backdrop-filter:none; background:rgba(13,18,28,.78); }
+}
