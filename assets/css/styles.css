@@ -8,7 +8,9 @@
   --line-2:#27303F;
   --bone:#ECE7DB;      /* primary text, warm */
   --bone-2:#C5C8D2;
+  --bone-3:#8E8B85;    /* warm dim for secondary running copy (5.8:1 on ink) — --mute stays for mono chrome */
   --mute:#737C8E;      /* muted blue-grey labels */
+  --mute-hi:#8B94A6;   /* one step brighter: the keys (f, A, — BAND) beside bone-2 values in the docked strip */
   --mute-2:#535B6B;
   --amber:#FFAD3A;     /* the single signal accent */
   --amber-2:#FFC677;
@@ -97,7 +99,6 @@ p, .sys-points li, .creds li{ text-wrap:pretty; }
 /* ============================ LAYOUT ============================ */
 .wrap{ max-width:var(--maxw); margin-inline:auto; }
 .section{ position:relative; z-index:2; padding-block:clamp(5.5rem,12vh,10rem); padding-inline:var(--gut); }
-.section--tight{ padding-block:clamp(4rem,8vh,6.5rem); }
 /* anchor jumps (e.g. OPEN CHANNEL → #contact) clear the docked strip */
 .section, #hero{ scroll-margin-top:calc(var(--bar) + 1rem); }
 
@@ -118,12 +119,7 @@ p, .sys-points li, .creds li{ text-wrap:pretty; }
 .s-head .idx{ font-family:var(--m); font-weight:500; font-size:.72rem; letter-spacing:.2em; color:var(--amber); padding-top:.5rem; white-space:nowrap; }
 .s-head h2{ margin:0; font-size:clamp(2rem,5.5vw,4.2rem); }
 .s-lead{ font-size:clamp(1.15rem,2.1vw,1.6rem); line-height:1.4; color:var(--bone); max-width:30ch; font-weight:500; }
-/* on narrow screens the label + big heading can't share a row — stack them so
-   the heading gets the full width to wrap instead of being clipped off-screen */
-@media (max-width:640px){
-  .s-head{ flex-direction:column; align-items:flex-start; gap:.5rem; }
-  .s-head .idx{ padding-top:0; }
-}
+/* (the header's rule/ticks/readout layout lives in the INSTRUMENT SYSTEM block at the end) */
 
 /* ===================================================================
    SCOPE  (fixed canvas → docks into a slim signal strip on scroll)
@@ -139,8 +135,10 @@ p, .sys-points li, .creds li{ text-wrap:pretty; }
   position:fixed; top:0; left:0; right:0; height:var(--bar); z-index:6;
   display:flex; align-items:center; justify-content:space-between;
   padding-inline:var(--gut); pointer-events:none; opacity:0; overflow:hidden;
-  background:rgba(8,11,18,.93); border-bottom:1px solid var(--line-2);
-  -webkit-backdrop-filter:saturate(125%) blur(10px); backdrop-filter:saturate(125%) blur(10px);
+  /* an opaque label band on top (no display headings ghosting through the readouts) over a floor that stays
+     faintly glassy for the trace; the blur is light so what passes under reads as depth, not haze */
+  background:linear-gradient(180deg, rgba(6,8,14,.985) 0 58%, rgba(8,11,18,.94)); border-bottom:1px solid var(--line-2);
+  -webkit-backdrop-filter:saturate(125%) blur(5px); backdrop-filter:saturate(125%) blur(5px);
 }
 #bar-scope{ position:absolute; inset:0; width:100%; height:100%; display:block; z-index:0; opacity:.9; }
 #topbar > .mark, #topbar > .tele{ position:relative; z-index:1; }
@@ -222,8 +220,11 @@ p, .sys-points li, .creds li{ text-wrap:pretty; }
 .hero-mid{ align-self:center; max-width:none; }
 /* truly fluid: 13.5vw tracks the phone width (measured safe max ≈14.4vw for
    "Martínez" at wdth 122), so a 414px phone gets ~56px instead of a flat 48px
-   floor — and 320px drops to ~43px, fixing a silent right-edge clip there */
-.hero-mid .name{ font-size:clamp(2.6rem,13.5vw,10.6rem); margin:0; line-height:.9; letter-spacing:-.02em; font-variation-settings:'wght' 825,'wdth' 122; }
+   floor — and 320px drops to ~43px, fixing a silent right-edge clip there.
+   The 17.5vh term only bites on short, wide viewports (1024×676 laptops, landscape
+   phones): the three-line name then scales with the height it has, so the role
+   line never runs into the lede at the bottom. Portrait phones and 1440×950 are unchanged. */
+.hero-mid .name{ font-size:clamp(2.6rem,min(13.5vw,17.5vh),10.6rem); margin:0; line-height:.9; letter-spacing:-.02em; font-variation-settings:'wght' 825,'wdth' 122; }
 .hero-mid .name .ln{ display:block; overflow:hidden; padding-top:.02em; }
 .hero-mid .name .ln > span{ display:block; will-change:transform; }
 .hero-mid .role{
@@ -234,13 +235,7 @@ p, .sys-points li, .creds li{ text-wrap:pretty; }
 .hero-mid .role i{ color:var(--amber); font-style:normal; }
 .hero-mid .role .sep{ color:var(--mute-2); }
 
-.hero-bot{ display:flex; justify-content:space-between; align-items:flex-end; gap:2rem; }
-.hero-bot .lede{ max-width:46ch; font-size:clamp(1rem,1.5vw,1.22rem); line-height:1.5; color:var(--bone-2); }
-@media (max-width:600px){
-  /* stack: the lede breathes at full width, the scroll cue tucks bottom-right */
-  .hero-bot{ flex-direction:column; align-items:stretch; gap:1.1rem; }
-  .hero-bot .scrollcue{ align-self:flex-end; }
-}
+/* (.hero-bot composition — readout, lede, CTA, scroll cue — lives in the INSTRUMENT SYSTEM block at the end) */
 .hero-bot .lede b{ color:var(--bone); font-weight:600; }
 .scrollcue{ display:flex; align-items:center; gap:.7rem; white-space:nowrap; }
 .scrollcue .track{ width:46px; height:1px; background:var(--line-2); position:relative; overflow:hidden; }
@@ -261,8 +256,17 @@ p, .sys-points li, .creds li{ text-wrap:pretty; }
 .thesis-grid .body{ max-width:60ch; font-size:clamp(1.08rem,1.7vw,1.34rem); line-height:1.62; color:var(--bone-2); }
 .thesis-grid .body b{ color:var(--bone); font-weight:600; }
 @media (min-width:900px){
-  .thesis-grid{ grid-template-columns:1.35fr 1fr; align-items:end; }
+  /* centred, not end-aligned: the gloss is taller than the statement, so end-alignment
+     pushed it 100–230px above the heading; a wider gutter keeps the amber 'frequencies.'
+     off the paragraph's edge */
+  .thesis-grid{ grid-template-columns:1.35fr 1fr; align-items:start; column-gap:clamp(2.5rem,5vw,5rem); }
+  /* start-aligned, measured: the paragraph's cap line lands within 2px of the display's cap line, so both
+     columns begin on the same line and the gloss runs on below (centring put its first line 30px above) */
+  /* the outer <p> margins would otherwise skew the optical centre by ~17px */
+  .thesis-grid .body > p:first-child{ margin-top:0; }
+  .thesis-grid .body > p:last-child{ margin-bottom:0; }
 }
+@media (max-width:400px){ .thesis-grid .body{ font-size:1.03rem; } }   /* 16.5px on a ~320px measure */
 
 /* ===================================================================
    CHANNELS
@@ -294,18 +298,13 @@ p, .sys-points li, .creds li{ text-wrap:pretty; }
 @media (max-width:480px){
   .tag{ font-size:.63rem; padding:.26rem .56rem; }
 }
-@media (max-width:640px){
-  .channel{ grid-template-columns:1fr; gap:.4rem; }
-  .channel .ch-id{ display:flex; align-items:baseline; gap:.7rem; padding-top:0; }
-  .channel .ch-id b{ display:inline; font-size:1.1rem; margin:0; }
-}
+/* (the phone layout of .channel / .ch-id lives in the INSTRUMENT SYSTEM block at the end) */
 
 /* ===================================================================
    SYSTEMS  (selected work)
    =================================================================== */
 #systems{ background:linear-gradient(180deg, var(--ink-1), var(--ink)); }
 .systems{ display:grid; gap:clamp(1rem,2vw,1.4rem); grid-template-columns:1fr; }
-@media (min-width:56rem){ .systems{ grid-template-columns:1fr 1fr; } }
 .sys.span{ grid-column:1 / -1; }
 .sys{
   container-type:inline-size;
@@ -318,16 +317,19 @@ p, .sys-points li, .creds li{ text-wrap:pretty; }
 }
 .sys:hover{ border-color:var(--line-2); background:var(--surface-2); transform:translateY(-3px); }
 .sys:hover::before{ opacity:1; }
-.sys-head{ display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-start; gap:.6rem 1.5rem; }
+/* two fixed columns (title block · meta): the heading wraps, the meta never drops under it —
+   so 'Suministros Jogo · 2023 → now' sits top-right on every card at every width */
+.sys-head{ display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:start; gap:.6rem 1.5rem; }
 .sys-head h3{
   font-family:var(--d); font-weight:740; font-variation-settings:'wght' 740,'wdth' 104;
   font-size:clamp(1.5rem,3.4vw,2.5rem); margin:0; line-height:1;
 }
 .sys-head .role{ font-family:var(--m); font-weight:500; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--amber); margin-top:.55rem; }
 .sys-head .when{ font-family:var(--m); font-weight:500; font-size:.72rem; letter-spacing:.1em; color:var(--mute); white-space:nowrap; padding-top:.4rem; }
-.sys-sum{ margin:1rem 0 1.2rem; max-width:70ch; color:var(--bone-2); }
+/* hierarchy: the framing sentence is set one step ABOVE the bullets it introduces (same scale as .ch-body) */
+.sys-sum{ margin:1rem 0 1.2rem; max-width:70ch; color:var(--bone-2); font-size:clamp(1rem,1.4vw,1.12rem); line-height:1.55; }
 .sys-points{ list-style:none; margin:0; padding:0; display:grid; gap:.55rem; }
-.sys-points li{ position:relative; padding-left:1.4rem; color:var(--bone-2); font-size:clamp(.96rem,1.3vw,1.06rem); }
+.sys-points li{ position:relative; padding-left:1.4rem; color:var(--bone-2); font-size:clamp(.94rem,1.2vw,1rem); }
 .sys-points li::before{ content:""; position:absolute; left:0; top:.62em; width:9px; height:1px; background:var(--amber); }
 /* bold lead-ins in a points list (used by the offensive-security card) read as
    labels; on the security card they take the amber signal colour for weight */
@@ -335,11 +337,12 @@ p, .sys-points li, .creds li{ text-wrap:pretty; }
 .sys--sec .sys-points li b{ color:var(--amber); }
 .sys--sec::before{ opacity:.9; }
 .sys-foot{ margin-top:1.3rem; padding-top:1.1rem; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:.5rem; }
-/* container queries: each card reacts to its OWN width, so a narrow card (e.g. the
-   paired industrial cards) stacks its header cleanly while a full-width card keeps
-   the title and date on one line — independent of the viewport */
+/* container queries: each card reacts to its OWN width, so a narrow card stacks its
+   header cleanly while a wide card keeps the title and date on one line — and, in
+   the INSTRUMENT SYSTEM block, splits its bullets into two columns — independent
+   of the viewport */
 @container (max-width:30rem){
-  .sys-head{ flex-direction:column; gap:.3rem; }
+  .sys-head{ grid-template-columns:1fr; gap:.3rem; }
   .sys-head .when{ padding-top:0; }
 }
 
@@ -369,7 +372,14 @@ p, .sys-points li, .creds li{ text-wrap:pretty; }
 .creds li{ display:grid; grid-template-columns:auto 1fr; gap:.8rem; align-items:baseline; color:var(--bone); font-size:clamp(.98rem,1.3vw,1.08rem); }
 .creds li .k{ font-family:var(--m); font-weight:500; font-size:.66rem; letter-spacing:.12em; color:var(--mute); white-space:nowrap; }
 .creds li b{ font-weight:600; }
-.creds li span.sub{ color:var(--mute); }
+/* the specialisation is running copy, so it dims WARM (--bone-3), not into the blue-grey of the mono chrome;
+   the separator is generated so the phone tier can drop it and set the subtitle on its own line */
+.creds li span.sub{ color:var(--bone-3); }
+.creds li span.sub::before{ content:"· "; }
+@media (max-width:480px){
+  .creds li span.sub{ display:block; }
+  .creds li span.sub::before{ content:none; }
+}
 
 /* ===================================================================
    OTHER SIGNALS
@@ -415,11 +425,33 @@ p, .sys-points li, .creds li{ text-wrap:pretty; }
 #topbar a.cta-mini:active{ opacity:.7; }
 
 footer{ position:relative; z-index:2; border-top:1px solid var(--line); padding:clamp(2.2rem,5vh,3.2rem) var(--gut); background:var(--ink); }
-.foot-grid{ max-width:var(--maxw); margin-inline:auto; display:flex; flex-wrap:wrap; justify-content:space-between; gap:1.2rem; align-items:flex-start; }
-.foot-grid .colo{ font-family:var(--m); font-weight:400; font-size:.7rem; letter-spacing:.06em; color:var(--mute); max-width:48ch; line-height:1.7; }
-.foot-grid .colo b{ color:var(--bone-2); font-weight:500; }
-.foot-grid .sig-mark{ font-family:var(--d); font-weight:800; font-variation-settings:'wght' 800,'wdth' 120; font-size:1.1rem; }
+/* footer as a closing readout: wordmark row → three-field colophon → location + end-of-transmission tick.
+   The colophon is real text, so it sits at 12px+ (not the 10.5px telemetry tier) */
+.foot-grid{ max-width:var(--maxw); margin-inline:auto; display:grid; gap:clamp(1.3rem,3vh,1.9rem); }
+/* first-line alignment (not centre): on a 360px phone the wordmark wraps to two lines and '↑ top' must stay on the first */
+.foot-row{ display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; }
+.foot-grid .sig-mark{ font-family:var(--d); font-weight:800; font-variation-settings:'wght' 800,'wdth' 120; font-size:1.1rem; line-height:1.2; }
 .foot-grid .sig-mark b{ color:var(--amber); }
+.foot-top{
+  position:relative; display:inline-flex; align-items:center; padding:.35rem .4rem; line-height:1; white-space:nowrap;
+  font-family:var(--m); font-weight:500; font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--mute);
+  transition:color .3s var(--ease);
+}
+.foot-top:hover{ color:var(--amber); }
+@media (hover:none){ .foot-top::before{ content:""; position:absolute; inset:-12px -8px; } }   /* 44px touch target without a tall box */
+.foot-grid .colo{
+  margin:0; padding-top:1.2rem; border-top:1px solid var(--line);
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%,16rem),1fr)); gap:1rem clamp(1.5rem,4vw,3rem);
+}
+.foot-grid .colo > div{ display:grid; gap:.4rem; align-content:start; }
+.foot-grid .colo dt{ font-family:var(--m); font-weight:500; font-size:.66rem; letter-spacing:.22em; text-transform:uppercase; color:var(--amber); }
+.foot-grid .colo dd{ margin:0; font-family:var(--m); font-weight:400; font-size:.78rem; letter-spacing:.03em; line-height:1.65; color:var(--bone-3); max-width:36ch; }
+.foot-end{
+  display:flex; justify-content:space-between; flex-wrap:wrap; gap:.6rem 1.5rem; padding-top:1rem; border-top:1px solid var(--line);
+  font-family:var(--m); font-weight:500; font-size:.66rem; letter-spacing:.18em; text-transform:uppercase; color:var(--mute);
+}
+.foot-end .eot{ display:inline-flex; align-items:center; gap:.7rem; }
+.foot-end .eot::after{ content:""; width:7px; height:11px; background:var(--amber); box-shadow:0 0 8px 1px var(--glow); }   /* the end-of-transmission block */
 
 /* reveal animation base — hidden states gated on .js so nothing flashes pre-JS
    (and so content stays visible if JS never runs) */
@@ -440,3 +472,308 @@ footer{ position:relative; z-index:2; border-top:1px solid var(--line); padding:
 .motion-done #hero .hero-top .id,
 .motion-done #hero .hero-mid .role,
 .motion-done #hero .hero-bot{ opacity:1 !important; transform:none !important; }
+
+/* ===== INSTRUMENT SYSTEM — design pass ===== */
+/* Appended as ONE block, in plan order: same-specificity rules later in the file
+   win, so everything above keeps working as the fallback and the diff stays
+   reviewable. Vocabulary: graticule rules with tick scales, a floor tick scale on
+   the strip, viewfinder marks, mono telemetry, the trace locking on under hover. */
+
+/* T1-01 rhythm + mono scale: one spacing token, two mono tiers (labels .72rem / telemetry .66rem), tabular figures wherever numbers sit */
+:root{ --sp:clamp(3.75rem,9vh,8.5rem); --mono-l:.72rem; --mono-t:.66rem; }
+.section{ padding-block:var(--sp); }
+.section + .section{ border-top:1px solid var(--line); }   /* the ink/ink-1 alternation finally gets a real boundary */
+@media (max-width:640px){ .section{ padding-block:3.75rem; } }
+.mono, .eyebrow, .channel .ch-verb, .sys-head .role, .sys-head .when, .stack-col h4, .creds .col h4, .sig .k, .s-rule .idx{ font-size:var(--mono-l); }   /* .when carries real content (employer + dates): label tier, not telemetry */
+#topbar .tele, .creds li .k, .link-row .k, .s-n{ font-size:var(--mono-t); }
+#topbar .tele, .s-n, .sys-head .when, .readout, .creds li .k, .foot-end{ font-variant-numeric:tabular-nums; }
+.tag{ font-size:.7rem; font-variant-numeric:tabular-nums; }
+@media (max-width:480px){ .tag{ font-size:.75rem; padding:.24rem .52rem; } }   /* phones: 12px floor for small text; padding shrinks instead */
+
+/* T1-02 hero phosphor: grain + faint graticule on the existing vignette layer — above the trace, under the type, hero only */
+#hero::before{
+  background:
+    radial-gradient(125% 95% at 50% 44%, transparent 52%, rgba(3,5,10,.5) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .93 0 0 0 0 .9 0 0 0 0 .84 0 0 0 .11 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E") 0 0/160px 160px,
+    linear-gradient(rgba(255,173,58,.05) 1px, transparent 1px) 0 0/100% 120px,
+    linear-gradient(90deg, rgba(255,173,58,.05) 1px, transparent 1px) 0 0/120px 100%;
+  /* the grain and graticule dissolve before the section border instead of ending on a hard edge —
+     the scope bleeds into the page rather than sitting on it as a pasted panel */
+  -webkit-mask-image:linear-gradient(#000 calc(100% - 140px), transparent);
+          mask-image:linear-gradient(#000 calc(100% - 140px), transparent);
+}
+/* viewfinder registration marks: 22px amber (the 15px line-2 ticks were ~1.3:1, invisible) */
+.hero-ticks i{ width:22px; height:22px; opacity:.5; }
+.hero-ticks i:nth-child(n){ border-color:var(--amber); }
+/* dashed zero-axis, only in the empty right 40% so it never reads as a strike-through of the surname */
+#hero::after{
+  background:repeating-linear-gradient(90deg, rgba(255,173,58,.28) 0 6px, transparent 6px 18px);
+  -webkit-mask-image:linear-gradient(90deg, transparent 0 60%, #000 78%);
+          mask-image:linear-gradient(90deg, transparent 0 60%, #000 78%);
+}
+@media (max-width:900px){ #hero::after{ display:none; } }
+
+/* T1-04 hero bottom: readout + CTA bottom-left, lede + scroll cue bottom-right (old .hero-bot rules deleted above) */
+.hero-bot{
+  display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:end;
+  grid-template-areas:"read read" "lede lede" "cta cue"; gap:1.1rem 1rem;
+}
+/* measured: the CTA is 196px and the cue 114px EN / 123px ES, so the shared row
+   needs 335px — ≤380 (the strip's compact tier) the cue drops under the CTA */
+@media (max-width:380px){ .hero-bot{ grid-template-areas:"read read" "lede lede" "cta cta" "cue cue"; } }
+.hero-bot .lede{ grid-area:lede; margin:0; max-width:46ch; font-size:clamp(1rem,1.5vw,1.22rem); line-height:1.5; color:var(--bone-2); }
+.hero-bot .cta{ grid-area:cta; justify-self:start; }
+.hero-bot .scrollcue{ grid-area:cue; justify-self:end; align-self:center; }
+.readout{ grid-area:read; display:flex; align-items:baseline; gap:.75rem; font-family:var(--m); font-weight:500; font-size:var(--mono-l); letter-spacing:.2em; text-transform:uppercase; color:var(--mute); white-space:nowrap; }
+.readout .rd-k{ color:var(--amber); }
+.readout .rd-k::after{ content:""; display:inline-block; width:22px; height:1px; margin:0 .2rem 0 .85rem; background:linear-gradient(90deg, var(--amber), var(--line-2)); vertical-align:middle; }
+.readout .rd-v{ display:inline-flex; align-items:baseline; gap:.6rem; color:var(--bone-2); }
+.readout .rd-v b{ font-family:var(--d); font-weight:800; font-variation-settings:'wght' 800,'wdth' 118; font-size:2.2rem; line-height:.8; letter-spacing:-.02em; color:var(--bone); }
+@media (max-width:360px){ .readout{ letter-spacing:.14em; gap:.5rem; } .readout .rd-k::after{ width:12px; margin:0 .2rem 0 .5rem; } }   /* the tick stays at every width; 22px+margins was 2px over at 320, 12px fits */
+.cta{
+  display:inline-flex; align-items:center; gap:.7rem; min-height:44px; padding:0 1.3rem; white-space:nowrap;
+  border:1px solid rgba(255,173,58,.5); border-radius:999px; background:rgba(13,18,28,.45);
+  -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+  font-family:var(--m); font-weight:500; font-size:var(--mono-l); letter-spacing:.2em; text-transform:uppercase; color:var(--amber);
+  transition:background .35s var(--ease), border-color .35s var(--ease), color .35s var(--ease), transform .3s var(--ease);
+}
+.cta .ar{ font-size:1rem; transition:transform .35s var(--ease); }
+.cta:hover{ background:var(--amber); border-color:var(--amber); color:#0a0a0a; }
+.cta:hover .ar{ transform:translate(3px,-3px); }
+.cta:active{ transform:scale(.97); }
+@media (min-width:900px){
+  /* margin-top is the floor of the role→lede gap: the centred name block can't close it to 9px on a 676px-tall laptop viewport */
+  .hero-bot{ grid-template-columns:auto minmax(0,1fr) minmax(0,46ch); grid-template-areas:"read . lede" "cta . cue"; column-gap:clamp(2rem,5vw,6rem); row-gap:1.5rem; margin-top:clamp(2rem,5vh,3.5rem); }
+  .hero-bot .lede{ justify-self:end; }
+}
+.hero-mid .role .ri{ white-space:nowrap; }
+.hero-mid .role .sep{ margin-left:.95rem; }   /* the flex gap used to sit between item and slash; the slash now lives inside the item */
+/* a dark halo keeps the amber role label crisp where the amber trace and its glow cross the column */
+.hero-mid .role{ text-shadow:0 0 2px var(--ink), 0 0 10px var(--ink); }
+@media (prefers-reduced-motion: reduce){ .cta, .cta .ar{ transition:none; } .cta:active{ transform:none; } }
+/* touch GPUs: no per-frame backdrop blur over the live WebGL scope — a slightly denser fill does the same job */
+@media (hover:none){ .cta{ -webkit-backdrop-filter:none; backdrop-filter:none; background:rgba(13,18,28,.78); } }
+
+/* T1-05 docked strip as an instrument: dot leads the readout, floor tick scale, retune flicker, 44px CTA */
+#bar-scope{ opacity:.85; }
+#tele-band b{ font-weight:500; color:var(--bone-2); }
+#topbar .tele{ gap:1rem; }
+#topbar .tele .dot{ order:-1; }   /* the live dot leads the readout instead of floating between labels */
+#topbar::after{ /* floor tick scale — same graticule vocabulary as the section rules (T1-06) */
+  content:""; position:absolute; left:0; right:0; bottom:0; height:7px; pointer-events:none; opacity:.55; z-index:0;
+  background:
+    repeating-linear-gradient(90deg, var(--line-2) 0 1px, transparent 1px 2.5%) 0 100%/100% 3px no-repeat,
+    repeating-linear-gradient(90deg, var(--mute-2) 0 1px, transparent 1px 12.5%) 0 100%/100% 7px no-repeat;
+}
+@keyframes retune{ 0%{opacity:.2} 34%{opacity:1} 52%{opacity:.35} 100%{opacity:1} }
+#topbar.retune #tele-band, #topbar.retune #tele-read, #topbar.retune .tele .dot{ animation:retune .42s steps(1,end) 1; }
+#topbar a.cta-mini{ display:inline-flex; align-items:center; gap:.45rem; min-height:44px; padding-inline:.35rem; white-space:nowrap; letter-spacing:.18em; }
+/* the live f/A values are the most 'instrument' thing on the page: the readout moves up to 12px on desktop,
+   the numbers step up to bone-2, and the keys (f, A, — BAND) sit one step above --mute so they don't vanish beside them */
+@media (min-width:721px){ #topbar .tele{ font-size:.75rem; letter-spacing:.14em; } }
+#tele-read i{ font-style:normal; color:var(--mute-hi); }
+#tele-read b{ font-weight:500; color:var(--bone-2); }
+#tele-band span{ color:var(--mute-hi); }
+@media (max-width:720px){
+  #topbar .tele{ gap:.6rem; }
+  #topbar a.cta-mini{ padding-inline:0; }   /* measured budget at 390 EN is 20px with these two; keep them */
+  #topbar::after{ display:none; }           /* phones: the trace itself lives in the floor band */
+}
+/* ≤380: the CTA collapses to a round 40px '↗' (label visually hidden, still announced), which buys ~90px —
+   enough to keep the CH·xx code AND its live dot in the strip on the smallest phones */
+@media (max-width:380px){
+  #topbar a.cta-mini{ position:relative; width:40px; min-height:40px; justify-content:center; border:1px solid rgba(255,173,58,.55); border-radius:999px; }
+  #topbar a.cta-mini .cta-l{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; }
+  #topbar a.cta-mini .ar{ font-size:1rem; line-height:1; }
+}
+/* the round CTA keeps its 40px visual but gets a 48×50 thumb target, like the mark and the switch: it grows into
+   the free gutter on its right and only 1px on its left, where the ES option's own extension ends (no overlap) */
+@media (max-width:380px) and (hover:none){
+  #topbar a.cta-mini::before{ content:""; position:absolute; top:-6px; bottom:-6px; left:-2px; right:-8px; border-radius:999px; }
+}
+@media (prefers-reduced-motion: reduce){ #topbar.retune #tele-band, #topbar.retune #tele-read, #topbar.retune .tele .dot{ animation:none; } }
+
+/* T1-06 section header as an instrument rule: label · tick scale · CH·xx — BAND, then the h2 (old ≤640 .s-head block deleted above).
+   One numbering system only: the code is the same one the docked strip prints for that section — no second 'page index' beside it. */
+.s-head{ display:grid; gap:clamp(1rem,2.4vh,1.5rem); margin-bottom:clamp(2rem,5vh,3.6rem); align-items:start; }
+.s-head .idx{ padding-top:0; line-height:1; }
+.s-rule{ display:flex; align-items:flex-end; gap:1rem; }
+.s-ticks{
+  flex:1; height:8px; min-width:2rem;
+  background:
+    repeating-linear-gradient(90deg, var(--line-2) 0 1px, transparent 1px 2.5%) 0 100%/100% 4px no-repeat,
+    repeating-linear-gradient(90deg, var(--mute-2) 0 1px, transparent 1px 12.5%) 0 100%/100% 8px no-repeat,
+    linear-gradient(var(--line-2), var(--line-2)) 0 100%/100% 1px no-repeat;
+}
+.s-n{ font-family:var(--m); font-weight:500; letter-spacing:.16em; text-transform:uppercase; color:var(--mute); white-space:nowrap; line-height:1; }
+.s-n b{ font-weight:500; color:var(--bone-2); }
+@media (max-width:640px){ .s-n .nm{ display:none; } }   /* phones: code only ('CH·04') */
+@media (max-width:380px){ .s-n{ display:none; } }       /* '[ TRABAJO SELECCIONADO ]' needs the whole row at 320 */
+/* heading wipe: the h2 rises from under the rule; the header itself only fades */
+.js .s-head.reveal{ transform:none; }
+.js .s-head h2{ clip-path:inset(-.15em -.1em 100% 0); transform:translateY(.32em); }
+.is-ready .s-head h2{ transition:clip-path 1s var(--ease) .12s, transform 1s var(--ease) .12s; }
+.js .s-head.in h2{ clip-path:inset(-.15em -.1em -.15em 0); transform:none; }
+/* thesis statement gets the same wipe (its size and grid stay as they are) */
+.js .thesis-grid .big{ clip-path:inset(-.15em -.1em 100% 0); transform:translateY(.32em); }
+.is-ready .thesis-grid .big{ transition:opacity .9s var(--ease), clip-path 1s var(--ease) .1s, transform 1s var(--ease) .1s; }
+.js .thesis-grid .big.in{ clip-path:inset(-.15em -.1em -.15em 0); transform:none; }
+@media (prefers-reduced-motion: reduce){
+  .s-head h2, .thesis-grid .big{ clip-path:none !important; transform:none !important; transition:none; }
+}
+
+/* T1-07 channels: outlined numerals that lock on + a third column with the channel's own trace (old ≤640 channel block deleted above) */
+.channel{ grid-template-columns:auto minmax(0,1fr); padding-block:clamp(2.2rem,5vh,3.6rem); }
+.channel:hover{ background:rgba(255,173,58,.045); }
+.channel .ch-id{ font-size:var(--mono-t); letter-spacing:.24em; padding-top:.55rem; }
+.channel .ch-id b{
+  display:block; margin-top:.25rem;
+  font-family:var(--d); font-weight:800; font-variation-settings:'wght' 800,'wdth' 124;
+  font-size:clamp(2.6rem,6vw,5.2rem); line-height:.82; letter-spacing:-.035em; font-variant-numeric:tabular-nums;
+  color:transparent; -webkit-text-stroke:1.5px rgba(255,173,58,.35);   /* a dim amber outline at rest (the line-2 stroke was ~1.5:1, invisible until hovered) */
+  transition:color .55s var(--ease), -webkit-text-stroke-color .55s var(--ease);
+}
+.channel:hover .ch-id b{ color:var(--amber); -webkit-text-stroke-color:var(--amber); }   /* the reticle locks on */
+@supports not (-webkit-text-stroke:1px #000){ .channel .ch-id b{ color:var(--amber); } }
+@media (hover:none){ .channel .ch-id b{ -webkit-text-stroke-color:rgba(255,173,58,.55); } }   /* no hover on touch: a brighter outline at rest */
+.channel .ch-main h3{ font-size:clamp(1.75rem,4.4vw,3.2rem); letter-spacing:-.01em; }
+.channel .ch-body{ max-width:56ch; }
+.channel .ch-body p{ margin:0; }               /* a two-paragraph body (CH·03): the wrapper carries the outer margin */
+.channel .ch-body p + p{ margin-top:.75em; }
+.ch-side{ grid-column:1 / -1; display:grid; gap:.55rem; margin-top:.4rem; }
+.ch-side .wf{ display:block; width:100%; height:40px; opacity:.7; transition:opacity .5s var(--ease); }
+.channel:hover .ch-side .wf{ opacity:1; }
+/* the trace's own caption — the strip's f/A vocabulary (generated by app.js from the article's data-*), desktop only */
+.ch-side .ch-tele{ display:none; font-family:var(--m); font-weight:500; font-size:var(--mono-t); letter-spacing:.16em; text-transform:uppercase; color:var(--mute-hi); font-variant-numeric:tabular-nums; white-space:nowrap; line-height:1; }
+.ch-side .ch-tele b{ font-weight:500; color:var(--bone-2); }
+@media (min-width:900px){
+  .channel{ grid-template-columns:auto minmax(0,1.25fr) minmax(0,.9fr); }
+  .ch-side{ grid-column:auto; margin-top:0; align-self:center; padding-left:clamp(1rem,3vw,2.5rem); border-left:1px solid var(--line); gap:.8rem; }
+  .ch-side .wf{ height:96px; }
+  .ch-side .ch-tele{ display:block; }
+}
+@media (max-width:640px){
+  .channel{ grid-template-columns:1fr; gap:.5rem; }
+  .channel .ch-id{ display:flex; align-items:baseline; gap:.7rem; padding-top:0; }
+  .channel .ch-id b{ display:inline; font-size:2rem; margin:0; line-height:1; color:var(--amber); -webkit-text-stroke:0; }   /* 32px outlines vanish on ink; fill them */
+  .ch-side{ margin-top:.6rem; }
+  .ch-side .wf{ height:36px; }
+}
+@media (prefers-reduced-motion: reduce){ .channel, .channel .ch-id b, .ch-side .wf{ transition:none; } }
+
+/* T1-08 touch tier: shorter reveal travel, press feedback on chips and rows */
+@media (hover:none){
+  .js .reveal{ transform:translateY(14px); }
+  .is-ready .reveal{ transition-duration:.7s, .7s; }
+  .tag:active, .stack-col li:active{ border-color:var(--amber); color:var(--bone); }
+  .channel:active{ background:rgba(255,173,58,.045); }
+}
+/* the hero scroll cue stops ticking once the strip has docked (it is off-screen then; the compositor still animated it) */
+body:has(#topbar.is-docked) .scrollcue .track::after{ animation-play-state:paused; }
+
+/* T2-01 systems: every card spans; bullets/groups go two-column inside a card ≥48rem wide (the ≥56rem two-column .systems rule is deleted above) */
+.systems{ grid-template-columns:1fr; }
+.sys-groups{ display:grid; gap:1.3rem; }
+.sys-g h4{ font-family:var(--m); font-weight:500; font-size:var(--mono-t); letter-spacing:.22em; text-transform:uppercase; color:var(--bone); margin:0 0 .7rem; padding-bottom:.5rem; border-bottom:1px solid var(--line); }
+.sys-points li{ max-width:66ch; }
+/* every card shares one skeleton: head → summary → [.sys-more: points] → chips. The <details> is open on desktop
+   and its summary hidden; phones (≤600, via app.js) start it closed with a mono '+ SHOW DETAIL' control */
+.sys-more{ display:block; }
+.sys-more > summary{ display:none; }
+@container (min-width:48rem){
+  /* a card's own bullet list flows as two independent columns (multicol), not a row-aligned grid — so a
+     three-line item on the right no longer opens a 90px hole above its neighbour on the left */
+  .sys-more > .sys-points{ display:block; columns:2; column-gap:clamp(1.5rem,4cqw,3.2rem); }
+  .sys-more > .sys-points > li{ break-inside:avoid; -webkit-column-break-inside:avoid; margin-bottom:.7rem; }
+  .sys-more > .sys-points > li:last-child{ margin-bottom:0; }
+  .sys-groups{ grid-template-columns:1fr 1fr; column-gap:clamp(1.5rem,4cqw,3.2rem); }
+  .sys-groups .sys-points{ grid-template-columns:1fr; }   /* groups sit side by side; each group's bullets stay single-column */
+}
+@media (max-width:640px){ .sys{ padding:1.2rem; } }
+@media (max-width:600px){
+  .sys{ padding:1.15rem 1rem; }                   /* +12px of measure inside a 320–360px column */
+  .sys-points{ gap:.45rem; }
+  .sys-sum{ margin-bottom:.9rem; }
+  .sys-more > summary{
+    display:flex; align-items:center; gap:.6rem; min-height:44px; cursor:pointer; list-style:none; -webkit-user-select:none; user-select:none;
+    font-family:var(--m); font-weight:500; font-size:var(--mono-l); letter-spacing:.18em; text-transform:uppercase; color:var(--amber);
+  }
+  .sys-more > summary::-webkit-details-marker{ display:none; }
+  .sys-more > summary .pm{ width:1.1rem; height:1.1rem; border:1px solid rgba(255,173,58,.5); border-radius:3px; display:inline-grid; place-items:center; font-size:.9rem; line-height:1; }
+  .sys-more > summary .pm::before{ content:"+"; }
+  .sys-more[open] > summary .pm::before{ content:"−"; }
+  .sys-more > summary .less{ display:none; }
+  .sys-more[open] > summary .show{ display:none; }
+  .sys-more[open] > summary .less{ display:inline; }
+  .sys-more[open] > summary{ margin-bottom:.5rem; }
+  .sys-more > summary:active .pm{ background:rgba(255,173,58,.14); }
+}
+@media (max-width:480px){ .sys-points li{ text-wrap:auto; } }   /* 'pretty' produces a ragged 3–4-word rag on a 30ch measure */
+@media (max-width:400px){ .sys{ padding-inline:.875rem; } }       /* 14px: ~2 more characters per line inside a 320–360px column; the brackets ride the border, so nothing collides */
+
+/* T2-02 card surfaces: work cards as bracketed 4px panels that lock on; hobby cards as open meter panels; the date as a timeline rail */
+.sys{
+  border:1px solid var(--line-2); border-radius:4px; overflow:visible;   /* visible: the brackets ride the border itself, not a clipped sliver inside it */
+  background:radial-gradient(70% 55% at 0% 0%, rgba(255,173,58,.065), transparent 65%), var(--surface);
+  box-shadow:inset 0 1px 0 rgba(236,231,219,.04), 0 24px 60px -36px rgba(0,0,0,.9);
+}
+.sys::before, .sys::after{ /* two viewfinder brackets replace the single corner tick */
+  content:""; position:absolute; width:22px; height:22px; border:0 solid var(--amber); opacity:.55; pointer-events:none;
+  transition:opacity .45s var(--ease), width .45s var(--ease), height .45s var(--ease);
+}
+.sys::before{ top:-1px; left:-1px; border-top-width:2px; border-left-width:2px; }
+.sys::after{ bottom:-1px; right:-1px; border-bottom-width:2px; border-right-width:2px; }
+.sys:hover, .sys:active{ border-color:var(--line-2); background:radial-gradient(70% 55% at 0% 0%, rgba(255,173,58,.09), transparent 65%), var(--surface-2); }
+.sys:hover::before, .sys:hover::after, .sys:active::before, .sys:active::after{ opacity:1; width:40px; height:40px; }   /* :active — the thumb's hover */
+.sys--sec::before, .sys--sec::after{ opacity:.9; }
+.sys-head .when{ display:inline-flex; align-items:center; gap:.65rem; color:var(--bone-2); }
+.sys-head .when::before{ content:""; width:28px; height:1px; background:linear-gradient(90deg, var(--line-2), var(--amber)); }
+.sys-foot{ border-top-color:var(--line-2); }
+/* hobbies: open meter panels — a top rule and the waveform as the header, no box */
+.sig{ border:0; border-radius:0; background:transparent; border-top:1px solid var(--line-2); padding:1.5rem 0 0; }
+@media (prefers-reduced-motion: reduce){ .sys::before, .sys::after{ transition:none; } .sys:hover{ transform:none; } }
+
+/* T2-03 bench as spec-sheet rows: label column + one wrapped mono line per row (same keys as the chip grid).
+   The rows live in two .stack-half stacks: on wide screens each stack is its own column, so a one-line row
+   (Observability) never inherits the height of a three-line row beside it (Security) — no shared grid rows. */
+.stack-grid{ display:grid; grid-template-columns:1fr; gap:0; border-top:1px solid var(--line); }
+.stack-half{ display:grid; align-content:start; }
+@media (min-width:64rem){ .stack-grid{ grid-template-columns:1fr 1fr; column-gap:clamp(2.5rem,5vw,5rem); } }
+.stack-col{ display:grid; grid-template-columns:minmax(7.5rem,10rem) minmax(0,1fr); gap:.35rem 1.5rem; align-items:baseline; padding-block:.95rem; border-bottom:1px solid var(--line); }
+.stack-col h4{ margin:0; padding:0; border:0; }
+/* the <li> are adjacent with no whitespace, so flex-wrap (not inline) is what lets the row break between items.
+   Separators live in the GAP, not in the items: each item draws its dot at the midpoint of the gap before it, and
+   the ul clips overflow — so the dot of any item that starts a line falls outside the box and vanishes. No line
+   ever starts or ends with a dangling '·'. Items are atomic (nowrap), so a term never breaks away from its dot. */
+.stack-col ul{ display:flex; flex-wrap:wrap; gap:.15rem 1.25em; overflow:hidden; font-family:var(--m); font-weight:400; font-size:.86rem; line-height:1.8; color:var(--bone-2); }
+.stack-col li{ position:relative; white-space:nowrap; border:0; border-radius:0; padding:0; background:none; font-size:inherit; transition:color .3s var(--ease); }
+.stack-col li:hover{ color:var(--amber); border-color:transparent; }
+.stack-col li::before{ content:"·"; position:absolute; left:-.625em; top:0; transform:translateX(-50%); color:var(--mute-2); }
+@media (max-width:480px){ .stack-col{ grid-template-columns:1fr; gap:.15rem; padding-block:.8rem; } }
+
+/* T2-04 credentials: SEC/PEN/PY/… become uniform amber-tinted key boxes so the column aligns and reads as category badges */
+.creds{ margin-top:clamp(2.5rem,6vh,4rem); }
+.creds ul{ gap:.55rem; }
+.creds li{ grid-template-columns:3.4rem 1fr; gap:.9rem; align-items:start; }   /* start + a small top offset: the badge anchors to the FIRST line of a two-line entry */
+.creds li .k{ display:inline-block; width:100%; margin-top:.2rem; text-align:center; letter-spacing:.1em; line-height:1; padding:.3rem 0; color:var(--amber); border:1px solid rgba(255,173,58,.35); border-radius:4px; background:rgba(255,173,58,.06); }
+
+/* T2-05 contact as numbered readout rows ('01 — EMAIL'); the counter prefix is generated, so the .k keys still translate */
+.links{ gap:0; counter-reset:ln; border-top:1px solid var(--line); }
+.link-row{ padding:1.15rem .2rem; border:0; border-bottom:1px solid var(--line); border-radius:0; background:transparent; align-items:flex-start; transition:border-color .35s var(--ease), padding-left .35s var(--ease), background .35s var(--ease); }
+.link-row .l{ gap:.2rem; }
+.link-row .k::before{ counter-increment:ln; content:counter(ln, decimal-leading-zero) " — "; color:var(--amber); }
+.link-row .v{ font-size:clamp(1.08rem,1.6vw,1.35rem); letter-spacing:-.01em; overflow-wrap:anywhere; }
+.link-row .note{ font-family:var(--b); font-size:.9rem; color:var(--bone-3); line-height:1.45; max-width:40ch; margin-top:.2rem; }
+.link-row .arrow{ font-size:1.25rem; margin-top:1.3rem; }   /* pairs with the title line (below the .k label) on every row, two-line GitHub included */
+.link-row:hover{ border-color:var(--amber); padding-left:.8rem; background:transparent; transform:none; }   /* slides by padding so the rule stays continuous */
+.link-row:active{ border-color:var(--amber); background:rgba(255,173,58,.05); transform:none; }
+@media (prefers-reduced-motion: reduce){ .link-row{ transition:none; } }
+
+/* T2-06 footer: the same tick vocabulary on its top edge closes the frame (strip floor → section rules → footer) */
+footer{ border-top-color:var(--line-2); }
+footer::before{
+  content:""; position:absolute; left:0; right:0; top:0; height:7px; pointer-events:none; opacity:.55;
+  background:
+    repeating-linear-gradient(90deg, var(--line-2) 0 1px, transparent 1px 2.5%) 0 0/100% 3px no-repeat,
+    repeating-linear-gradient(90deg, var(--mute-2) 0 1px, transparent 1px 12.5%) 0 0/100% 7px no-repeat;
+}

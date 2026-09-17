@@ -14,9 +14,9 @@
 <script>document.documentElement.classList.add('js');</script>
 
 <link rel="stylesheet" href="assets/css/fonts.css" />
-<link rel="stylesheet" href="assets/css/styles.css?v=7" />
-<link rel="stylesheet" href="assets/css/i18n.css?v=7" />
-<link rel="stylesheet" href="assets/css/cursor.css?v=7" />
+<link rel="stylesheet" href="assets/css/styles.css?v=8" />
+<link rel="stylesheet" href="assets/css/i18n.css?v=8" />
+<link rel="stylesheet" href="assets/css/cursor.css?v=8" />
 </head>
 <body>
 
@@ -28,8 +28,9 @@
   <canvas id="bar-scope" aria-hidden="true"></canvas>
   <a href="#hero" class="mark">BMJ<b>.</b></a>
   <div class="tele">
-    <span class="hide-sm" id="tele-band">CH·00 — CARRIER</span>
-    <span id="tele-read">f 0.00 · A 0.00</span>
+    <span id="tele-band"><b>CH·00</b><span class="hide-sm"> — CARRIER</span></span>
+    <!-- values sit in their own nodes so the live numbers can be brighter than the f/A labels -->
+    <span id="tele-read"><i>f</i> <b class="fv">0.00</b> · <i>A</i> <b class="av">0.00</b><b class="nv"></b></span>
     <span class="dot" aria-hidden="true"></span>
     <div class="lang-switch lang-switch--bar" role="group" aria-label="Idioma · Language">
       <span class="lang-ind" aria-hidden="true"></span>
@@ -37,7 +38,8 @@
       <span class="lang-div" aria-hidden="true">/</span>
       <button type="button" class="lang-opt" data-lang-set="es" aria-pressed="false">ES</button>
     </div>
-    <a href="#contact" class="cta-mini mono amber" style="letter-spacing:.18em;" data-i18n="topbar.cta">OPEN CHANNEL ↗</a>
+    <!-- ≤380px the label is visually hidden (still read by AT) and the link becomes a round 40px '↗' button, so the CH·xx code keeps its place in the strip -->
+    <a href="#contact" class="cta-mini mono amber"><span class="cta-l" data-i18n="topbar.cta">OPEN CHANNEL</span><span class="ar" aria-hidden="true">↗</span></a>
   </div>
 </header>
 
@@ -68,15 +70,21 @@
         <span class="ln"><span>Martínez</span></span>
         <span class="ln"><span>Janer</span></span>
       </h1>
+      <!-- each item carries its trailing slash, so a wrapped line never STARTS with a lone '/' -->
       <div class="role" data-i18n="hero.role">
-        <i>Software engineer</i><span class="sep">/</span>
-        <span>pentester</span><span class="sep">/</span>
-        <span>hardware hacker</span>
+        <span class="ri"><i>Software engineer</i><span class="sep">/</span></span>
+        <span class="ri">pentester<span class="sep">/</span></span>
+        <span class="ri">hardware hacker</span>
       </div>
     </div>
 
     <div class="hero-bot">
+      <div class="readout">
+        <span class="rd-k" data-i18n="hero.expk">Exp</span>
+        <span class="rd-v"><b>03</b><span data-i18n="hero.exp">yrs · 2023 → now</span></span>
+      </div>
       <p class="lede" data-i18n="hero.lede">I build systems end to end — from the firmware on the bench to the platform in production — and I <b>break them on purpose</b> to find where they give.</p>
+      <a class="cta" href="#contact" data-i18n="hero.cta">Open a channel<span class="ar" aria-hidden="true">↗</span></a>
       <div class="scrollcue mono">
         <span data-i18n="hero.scroll">scroll</span><span class="track" aria-hidden="true"></span>
       </div>
@@ -97,10 +105,15 @@
   </section>
 
   <!-- =========================== CHANNELS =========================== -->
-  <section id="channels" class="section" data-band="CH·01 — BUILD" data-shape="1" data-freq="3.0" data-amp="0.86" data-noise="0.03">
+  <!-- data-band tunes the scope on entry (the first channel); data-rule is what the section rule prints, so it describes all three channels -->
+  <section id="channels" class="section" data-band="CH·01 — BUILD" data-rule="CH·01–03 — BUILD / BREAK / LEAD" data-shape="1" data-freq="3.0" data-amp="0.86" data-noise="0.03">
     <div class="wrap">
       <div class="s-head reveal">
-        <span class="idx" data-i18n="channels.idx">[ CHANNELS ]</span>
+        <div class="s-rule">
+          <span class="idx" data-i18n="channels.idx">[ CHANNELS ]</span>
+          <span class="s-ticks" aria-hidden="true"></span>
+          <span class="s-n" aria-hidden="true"></span>
+        </div>
         <h2 class="display" data-i18n="channels.h2">What I tune.</h2>
       </div>
 
@@ -115,6 +128,10 @@
               <span class="tag">ASP.NET Core</span><span class="tag">EF Core</span><span class="tag">SignalR</span><span class="tag">PostgreSQL</span><span class="tag">Docker</span>
             </div>
           </div>
+          <div class="ch-side" aria-hidden="true">
+            <canvas class="wf" data-wf="shape:1"></canvas>
+            <span class="ch-tele"></span>
+          </div>
         </article>
 
         <article class="channel reveal" data-band="CH·02 — BREAK" data-shape="2" data-freq="8.0" data-amp="0.7" data-noise="0.85">
@@ -122,22 +139,32 @@
           <div class="ch-main">
             <div class="ch-verb" data-i18n="ch02.verb">Break</div>
             <h3 data-i18n="ch02.h3">Offensive security</h3>
-            <p class="ch-body" data-i18n="ch02.body">Hands-on offensive security across web (OWASP), networks and systems, radiofrequency and signals, hardware and firmware reverse engineering — and into industrial systems (ICS / OT). Vulnerability analysis against recognised standards (CVE, CVSS, MITRE ATT&amp;CK), the industry's key tooling (Burp Suite, Nmap, Metasploit, Ghidra) alongside my own Python/C#, system hardening, and security material I write to train the people around me. Certified by OffSec, Hack The Box, INE (eJPT) and Black Hat.</p>
+            <p class="ch-body" data-i18n="ch02.body">Hands-on offensive security across web (OWASP), networks and systems, radiofrequency and signals, hardware and firmware reverse engineering — and into industrial systems (ICS / OT). Findings triaged against CVE and MITRE ATT&amp;CK, scored with CVSS — and the tooling and hardening to close them.</p>
             <div class="ch-meta" data-i18n="ch02.meta">
               <span class="tag">web · OWASP</span><span class="tag">network</span><span class="tag">RF · signals</span><span class="tag">hardware · firmware</span><span class="tag">ICS / OT</span>
             </div>
           </div>
+          <div class="ch-side" aria-hidden="true">
+            <canvas class="wf" data-wf="shape:2"></canvas>
+            <span class="ch-tele"></span>
+          </div>
         </article>
 
-        <article class="channel reveal" data-band="CH·03 — LEAD" data-shape="3" data-freq="2.0" data-amp="1.0" data-noise="0.05">
+        <!-- shape 4 = 'step': a slow carrier with one decisive step — a deliberate low-frequency signature for the leadership channel -->
+        <article class="channel reveal" data-band="CH·03 — LEAD" data-shape="4" data-freq="1.6" data-amp="0.9" data-noise="0.03">
           <div class="ch-id">CH<b>03</b></div>
           <div class="ch-main">
             <div class="ch-verb" data-i18n="ch03.verb">Lead</div>
             <h3 data-i18n="ch03.h3">Founder &amp; CEO</h3>
-            <p class="ch-body" data-i18n="ch03.body">I founded We Love Night and direct it as CEO and CTO — setting the vision, the strategy and the technical roadmap, designing the system and data model and taking the MVP to production. Then the half of the job that decides everything: leading the business — business plan, brand, legal and IP groundwork, fundraising and partnerships, the launch with zero incidents, and the 2026 clients already signed.</p>
+            <!-- two paragraphs (same copy): the phone column otherwise reads as one 11-line wall -->
+            <div class="ch-body" data-i18n="ch03.body"><p>I founded We Love Night and direct it as CEO and CTO — setting the vision, the strategy and the technical roadmap, designing the system and data model and taking the MVP to production.</p><p>Then the half of the job that decides everything: leading the business — business plan, brand, legal and IP groundwork, fundraising and partnerships, the launch with zero incidents, and the 2026 clients already signed.</p></div>
             <div class="ch-meta" data-i18n="ch03.meta">
               <span class="tag">product</span><span class="tag">architecture</span><span class="tag">observability</span><span class="tag">go-to-market</span><span class="tag">team</span>
             </div>
+          </div>
+          <div class="ch-side" aria-hidden="true">
+            <canvas class="wf" data-wf="shape:4"></canvas>
+            <span class="ch-tele"></span>
           </div>
         </article>
       </div>
@@ -145,10 +172,16 @@
   </section>
 
   <!-- =========================== SYSTEMS ============================ -->
-  <section id="systems" class="section" data-band="CH·03 — SYSTEMS" data-shape="3" data-freq="2.2" data-amp="0.95" data-noise="0.06">
+  <!-- band codes are unique and monotonic across the page: CH·00 CARRIER (hero/thesis/contact), CH·01–03 the three
+       channels, then CH·04 SYSTEMS, CH·05 STACK, CH·06 HUMAN — the section rule and the docked strip print the same code -->
+  <section id="systems" class="section" data-band="CH·04 — SYSTEMS" data-shape="3" data-freq="2.2" data-amp="0.95" data-noise="0.06">
     <div class="wrap">
       <div class="s-head reveal">
-        <span class="idx" data-i18n="systems.idx">[ SELECTED&nbsp;WORK ]</span>
+        <div class="s-rule">
+          <span class="idx" data-i18n="systems.idx">[ SELECTED&nbsp;WORK ]</span>
+          <span class="s-ticks" aria-hidden="true"></span>
+          <span class="s-n" aria-hidden="true"></span>
+        </div>
         <h2 class="display" data-i18n="systems.h2">Systems in production.</h2>
       </div>
 
@@ -161,7 +194,11 @@
             </div>
             <div class="when" data-i18n="sys.lab.when">ongoing</div>
           </div>
-          <p class="sys-sum" data-i18n="sys.lab.sum">Independent offensive-security work across the whole stack — from the radio waves to the web app to the factory floor — kept sharp on real targets and labs. Certified by OffSec, Hack The Box, INE and Black Hat.</p>
+          <p class="sys-sum" data-i18n="sys.lab.sum">Offensive-security work across the whole stack — from the radio waves to the web app to the factory floor — on the industrial systems I build at Suministros Jogo and on my own projects, kept sharp on real targets and labs. Certified by OffSec, Hack The Box, INE and Black Hat.</p>
+          <!-- .sys-more: always open on desktop (summary hidden); on phones app.js closes the two job cards so they stay scannable —
+               this one carries data-keep and stays open: the nine domains are the differentiator a recruiter should not have to tap for -->
+          <details class="sys-more" open data-keep>
+            <summary><span class="pm" aria-hidden="true"></span><span data-i18n="sys.lab.more"><span class="show">Show detail</span><span class="less">Hide detail</span></span></summary>
           <ul class="sys-points" data-i18n="sys.lab.points">
             <li><b>Web &amp; APIs</b> — OWASP-driven testing of authentication, access control and business-logic flaws.</li>
             <li><b>Networks &amp; systems</b> — infrastructure pentesting, pivoting and privilege escalation.</li>
@@ -170,50 +207,43 @@
             <li><b>Industrial systems (ICS / OT)</b> — securing the industrial processes and platforms I also build.</li>
             <li><b>Vulnerability analysis</b> — assessment, triage and scoring against recognised standards (CVE, CVSS, OWASP, MITRE ATT&amp;CK).</li>
             <li><b>Hardening</b> — system, network and application hardening with secure-by-default baselines.</li>
-            <li><b>Tooling &amp; training</b> — key industry tools (Burp Suite, Nmap, Metasploit, Wireshark, Ghidra) alongside my own Python/C#; security material I write to train others.</li>
+            <li><b>Compliance &amp; standards</b> — ISO/IEC 27001 (ISMS, Annex A controls), NIS2, DORA and GDPR; I map technical findings to the obligations they trigger.</li>
+            <li><b>Tooling &amp; training</b> — key industry tools (Burp Suite, Nmap, Metasploit, Wireshark, Ghidra) alongside my own audit-automation tooling in Python/C#; internal security training I write for the team.</li>
           </ul>
-          <div class="sys-foot" data-i18n="sys.lab.foot">
-            <span class="tag">web · OWASP</span><span class="tag">network</span><span class="tag">RF · signals</span><span class="tag">hardware · firmware</span><span class="tag">ICS / OT</span><span class="tag">CVSS · CVE</span><span class="tag">MITRE ATT&amp;CK</span><span class="tag">hardening</span><span class="tag">Burp · Nmap · Ghidra</span>
+          </details>
+          <div class="sys-foot">
+            <span class="tag">Burp Suite</span><span class="tag">Nmap</span><span class="tag">Metasploit</span><span class="tag">Wireshark</span><span class="tag">Ghidra</span><span class="tag">ESP32 / ESP8266</span><span class="tag">Python / C#</span>
           </div>
         </article>
 
-        <article class="sys reveal">
+        <!-- one Suministros Jogo tenure: the platform and the automation/tooling behind it are two labelled groups of the same job -->
+        <article class="sys span reveal">
           <div class="sys-head">
             <div>
-              <h3 data-i18n="sys.iwp.h3">Industrial web platform</h3>
-              <div class="role" data-i18n="sys.iwp.role">Project Manager · Head Developer</div>
+              <h3 data-i18n="sys.jogo.h3">Industrial platform &amp; software</h3>
+              <div class="role" data-i18n="sys.jogo.role">Technical lead · Software developer</div>
             </div>
-            <div class="when" data-i18n="sys.iwp.when">Suministros Jogo · 2023 → now</div>
+            <div class="when" data-i18n="sys.jogo.when">Suministros Jogo · 2023 → now</div>
           </div>
-          <p class="sys-sum" data-i18n="sys.iwp.sum">Top technical lead for a web platform that manages real industrial processes around laser cutting.</p>
-          <ul class="sys-points" data-i18n="sys.iwp.points">
-            <li>Automatic part nesting for laser cutting; advanced DXF processing — read, validate, convert, optimize.</li>
-            <li>SignalR for real-time events; users &amp; roles; payment gateways and autonomous invoicing.</li>
-            <li>Security, audit and advanced logging modules; performance tuning and production deployment.</li>
-            <li>Led the project: planning, team coordination, UI/UX, architecture, data models and APIs.</li>
-          </ul>
-          <div class="sys-foot" data-i18n="sys.iwp.foot">
-            <span class="tag">ASP.NET Core</span><span class="tag">DXF · nesting</span><span class="tag">SignalR</span><span class="tag">SQL Server</span>
+          <p class="sys-sum" data-i18n="sys.jogo.sum">Top technical lead for the web platform that runs real industrial processes around laser cutting — and for the automation, backend and internal tooling behind a metallurgy business. Planning, team coordination, UI/UX, architecture, data models and APIs.</p>
+          <details class="sys-more" open>
+            <summary><span class="pm" aria-hidden="true"></span><span data-i18n="sys.jogo.more"><span class="show">Show detail</span><span class="less">Hide detail</span></span></summary>
+          <div class="sys-groups" data-i18n="sys.jogo.points">
+            <div class="sys-g"><h4>Platform</h4><ul class="sys-points">
+              <li>Automatic part nesting for laser cutting; advanced DXF processing — read, validate, convert, optimize.</li>
+              <li>SignalR for real-time events; users &amp; roles; payment gateways and autonomous invoicing.</li>
+              <li>Security, audit and advanced logging modules; performance tuning and production deployment.</li>
+            </ul></div>
+            <div class="sys-g"><h4>Automation &amp; tooling</h4><ul class="sys-points">
+              <li>Customer and supplier management end to end — records, pricing, orders, invoicing and the corporate data architecture behind it.</li>
+              <li>Intelligent price-list import — normalization, structural validation and mass processing.</li>
+              <li>Biometric identity verification; automated SMS and mailing; a scheduler that generates and assigns events to staff.</li>
+              <li>Document viewer and internal file control, on-prem and in the cloud.</li>
+            </ul></div>
           </div>
-        </article>
-
-        <article class="sys reveal">
-          <div class="sys-head">
-            <div>
-              <h3 data-i18n="sys.isw.h3">Industrial software</h3>
-              <div class="role" data-i18n="sys.isw.role">Software Developer</div>
-            </div>
-            <div class="when" data-i18n="sys.isw.when">Suministros Jogo · 2023 → now</div>
-          </div>
-          <p class="sys-sum" data-i18n="sys.isw.sum">Automation, backend, customer &amp; supplier management and internal tooling for a metallurgy business.</p>
-          <ul class="sys-points" data-i18n="sys.isw.points">
-            <li>Customer and supplier management end to end — records, pricing, orders, invoicing and the corporate data architecture behind it.</li>
-            <li>Intelligent price-list import — normalization, structural validation and mass processing.</li>
-            <li>Biometric identity verification; automated SMS and mailing; scheduler that generates and assigns events to staff.</li>
-            <li>Document viewer and internal file control, both on-prem and in the cloud.</li>
-          </ul>
-          <div class="sys-foot" data-i18n="sys.isw.foot">
-            <span class="tag">C# / .NET</span><span class="tag">Python</span><span class="tag">automation</span><span class="tag">customers · suppliers</span>
+          </details>
+          <div class="sys-foot" data-i18n="sys.jogo.foot">
+            <span class="tag">ASP.NET Core</span><span class="tag">SignalR</span><span class="tag">SQL Server</span><span class="tag">DXF · nesting</span><span class="tag">C# / .NET</span><span class="tag">Python</span>
           </div>
         </article>
 
@@ -226,6 +256,8 @@
             <div class="when" data-i18n="sys.wln.when">2024 → now · in production</div>
           </div>
           <p class="sys-sum" data-i18n="sys.wln.sum">A technology company I founded and direct, building advanced ticketing, analytics and business-digitalization for the night economy — taken from a blank page to a public launch.</p>
+          <details class="sys-more" open>
+            <summary><span class="pm" aria-hidden="true"></span><span data-i18n="sys.wln.more"><span class="show">Show detail</span><span class="less">Hide detail</span></span></summary>
           <ul class="sys-points" data-i18n="sys.wln.points">
             <li>Set the company's direction as CEO &amp; CTO — vision, strategy, product roadmap and team.</li>
             <li>Lead the business end to end: viability study, business plan, brand and IP registration, legal/privacy groundwork and investor materials.</li>
@@ -233,6 +265,7 @@
             <li>Drive go-to-market and partnerships; secured and maintain the production platform.</li>
             <li>Ran the launch event with zero incidents and closed key clients for 2026.</li>
           </ul>
+          </details>
           <div class="sys-foot" data-i18n="sys.wln.foot">
             <span class="tag">strategy</span><span class="tag">go-to-market</span><span class="tag">.NET</span><span class="tag">PostgreSQL</span><span class="tag">payments</span><span class="tag">Linux</span>
           </div>
@@ -242,38 +275,47 @@
   </section>
 
   <!-- ============================= STACK ============================ -->
-  <section id="stack" class="section" data-band="CH·01 — STACK" data-shape="1" data-freq="4.0" data-amp="0.8" data-noise="0.04">
+  <section id="stack" class="section" data-band="CH·05 — STACK" data-shape="1" data-freq="4.0" data-amp="0.8" data-noise="0.04">
     <div class="wrap">
       <div class="s-head reveal">
-        <span class="idx" data-i18n="stack.idx">[ CAPABILITIES ]</span>
+        <div class="s-rule">
+          <span class="idx" data-i18n="stack.idx">[ CAPABILITIES ]</span>
+          <span class="s-ticks" aria-hidden="true"></span>
+          <span class="s-n" aria-hidden="true"></span>
+        </div>
         <h2 class="display" data-i18n="stack.h2">The bench.</h2>
       </div>
 
+      <!-- two independent stacks: side by side on wide screens (no shared row heights), one column on phones -->
       <div class="stack-grid">
-        <div class="stack-col reveal"><h4 data-i18n="stack.h.languages">Languages</h4><ul>
-          <li>C# (.NET)</li><li>Python</li><li>Java</li><li>Zig</li><li>SQL</li><li>Bash</li><li>HTML</li><li>CSS</li>
-        </ul></div>
-        <div class="stack-col reveal"><h4>Frameworks</h4><ul>
-          <li>ASP.NET Core</li><li>EF Core</li><li>SignalR</li><li>WinForms</li>
-        </ul></div>
-        <div class="stack-col reveal"><h4 data-i18n="stack.h.data">Data</h4><ul data-i18n="stack.ul.data">
-          <li>SQL Server</li><li>PostgreSQL</li><li>MySQL</li><li>data modeling</li>
-        </ul></div>
-        <div class="stack-col reveal"><h4 data-i18n="stack.h.infra">Infra &amp; ops</h4><ul>
-          <li>Docker</li><li>Linux</li><li>IIS</li><li>Hyper-V</li><li>Git</li><li>CI</li>
-        </ul></div>
-        <div class="stack-col reveal"><h4 data-i18n="stack.h.observability">Observability</h4><ul data-i18n="stack.ul.observability">
-          <li>Grafana</li><li>Sentry</li><li>telemetry</li>
-        </ul></div>
-        <div class="stack-col reveal"><h4 data-i18n="stack.h.security">Security</h4><ul data-i18n="stack.ul.security">
-          <li>web · OWASP</li><li>network</li><li>radiofrequency</li><li>hardware</li><li>firmware · RE</li><li>wireless · IoT</li><li>ICS / OT</li><li>CVSS · CVE</li><li>MITRE ATT&amp;CK</li><li>hardening</li>
-        </ul></div>
-        <div class="stack-col reveal"><h4>Industrial</h4><ul data-i18n="stack.ul.industrial">
-          <li>laser-cut integration</li><li>DXF</li><li>automatic nesting</li>
-        </ul></div>
-        <div class="stack-col reveal"><h4 data-i18n="stack.h.design">Design</h4><ul data-i18n="stack.ul.design">
-          <li>Figma</li><li>UX architecture</li><li>interaction design</li>
-        </ul></div>
+        <div class="stack-half">
+          <div class="stack-col reveal"><h4 data-i18n="stack.h.languages">Languages</h4><ul>
+            <li>C# (.NET)</li><li>Python</li><li>Java</li><li>Zig</li><li>SQL</li><li>Bash</li><li>HTML</li><li>CSS</li>
+          </ul></div>
+          <div class="stack-col reveal"><h4>Frameworks</h4><ul>
+            <li>ASP.NET Core</li><li>EF Core</li><li>SignalR</li><li>WinForms</li>
+          </ul></div>
+          <div class="stack-col reveal"><h4 data-i18n="stack.h.data">Data</h4><ul data-i18n="stack.ul.data">
+            <li>SQL Server</li><li>PostgreSQL</li><li>MySQL</li><li>data modeling</li>
+          </ul></div>
+          <div class="stack-col reveal"><h4 data-i18n="stack.h.infra">Infra &amp; ops</h4><ul>
+            <li>Docker</li><li>Linux</li><li>Windows Server</li><li>IIS</li><li>Hyper-V</li><li>Git · CI</li>
+          </ul></div>
+        </div>
+        <div class="stack-half">
+          <div class="stack-col reveal"><h4 data-i18n="stack.h.security">Security</h4><ul data-i18n="stack.ul.security">
+            <li>web / OWASP</li><li>network</li><li>RF / wireless / IoT</li><li>hardware / firmware</li><li>ICS / OT</li><li>hardening</li><li>ISO/IEC 27001</li><li>NIS2 / DORA / GDPR</li>
+          </ul></div>
+          <div class="stack-col reveal"><h4 data-i18n="stack.h.observability">Observability</h4><ul data-i18n="stack.ul.observability">
+            <li>Grafana</li><li>Sentry</li><li>telemetry</li>
+          </ul></div>
+          <div class="stack-col reveal"><h4>Industrial</h4><ul data-i18n="stack.ul.industrial">
+            <li>laser-cut integration</li><li>DXF</li><li>automatic nesting</li>
+          </ul></div>
+          <div class="stack-col reveal"><h4 data-i18n="stack.h.design">Design</h4><ul data-i18n="stack.ul.design">
+            <li>Figma</li><li>UX architecture</li><li>interaction design</li>
+          </ul></div>
+        </div>
       </div>
 
       <div class="creds">
@@ -292,9 +334,8 @@
         <div class="col reveal">
           <h4 data-i18n="creds.edu.h4">Education &amp; distinctions</h4>
           <ul data-i18n="creds.edu.ul">
-            <li><span class="k">BSC</span><span><b>B.Eng. Software Engineering</b> <span class="sub">· Computer Engineering specialisation</span></span></li>
-            <li><span class="k">HON</span><span><b>Honours</b> — Network Security</span></li>
-            <li><span class="k">HON</span><span><b>Honours</b> — Algebra</span></li>
+            <li><span class="k">BSC</span><span><b>B.Eng. Software Engineering</b> <span class="sub">Computer Engineering specialisation</span></span></li>
+            <li><span class="k">HON</span><span><b>Honours</b> — Network Security · Algebra</span></li>
             <li><span class="k">MUS</span><span><b>Professional degree, cello</b> — Conservatori de Mallorca</span></li>
           </ul>
         </div>
@@ -303,10 +344,14 @@
   </section>
 
   <!-- ========================= OTHER SIGNALS ======================== -->
-  <section id="signals" class="section" data-band="CH·09 — HUMAN" data-shape="0" data-freq="1.1" data-amp="1.0" data-noise="0.02">
+  <section id="signals" class="section" data-band="CH·06 — HUMAN" data-shape="0" data-freq="1.1" data-amp="1.0" data-noise="0.02">
     <div class="wrap">
       <div class="s-head reveal">
-        <span class="idx" data-i18n="signals.idx">[ OFF&nbsp;THE&nbsp;CLOCK ]</span>
+        <div class="s-rule">
+          <span class="idx" data-i18n="signals.idx">[ OFF&nbsp;THE&nbsp;CLOCK ]</span>
+          <span class="s-ticks" aria-hidden="true"></span>
+          <span class="s-n" aria-hidden="true"></span>
+        </div>
         <h2 class="display" data-i18n="signals.h2">Other signals.</h2>
       </div>
       <div class="sig-grid">
@@ -339,7 +384,7 @@
           <span class="arrow">↗</span>
         </a>
         <a class="link-row" href="https://github.com/VitoAlighieri" target="_blank" rel="noopener noreferrer">
-          <span class="l"><span class="k">GitHub</span><span class="v">github.com/VitoAlighieri</span></span>
+          <span class="l"><span class="k">GitHub</span><span class="v">github.com/VitoAlighieri</span><span class="note" data-i18n="contact.github.note">Public repos — scrapers, light pentesting tools, microservices.</span></span>
           <span class="arrow">↗</span>
         </a>
         <a class="link-row" href="https://www.linkedin.com/in/biel-mart%C3%ADnez-janer-758042232/" target="_blank" rel="noopener noreferrer">
@@ -351,13 +396,22 @@
   </section>
 </main>
 
+<!-- footer as a closing readout: wordmark + '↑ top', a three-field colophon (signal / type / trace), then the location line and an end-of-transmission tick -->
 <footer>
   <div class="foot-grid">
-    <span class="sig-mark">Biel Martínez Janer<b>.</b></span>
-    <p class="colo" data-i18n="footer.colo">
-      Software engineer · pentester · hardware hacker — Palma, Balearic Islands · 2026.<br>
-      <b>Type:</b> Anybody, Archivo &amp; JetBrains Mono. <b>Signature:</b> a live oscilloscope rendered in WebGL; its shape is a real waveform that re-tunes per section. Honors reduced-motion.
-    </p>
+    <div class="foot-row">
+      <span class="sig-mark">Biel Martínez Janer<b>.</b></span>
+      <a href="#hero" class="foot-top" data-i18n="footer.top">↑&nbsp;Top</a>
+    </div>
+    <dl class="colo">
+      <div><dt data-i18n="footer.sig.k">Signal</dt><dd data-i18n="footer.sig.v">Software engineer · pentester · hardware hacker</dd></div>
+      <div><dt data-i18n="footer.type.k">Type</dt><dd>Anybody · Archivo · JetBrains Mono</dd></div>
+      <div><dt data-i18n="footer.trace.k">Trace</dt><dd data-i18n="footer.trace.v">A live oscilloscope in WebGL — a real waveform that re-tunes per section. Honours reduced motion.</dd></div>
+    </dl>
+    <div class="foot-end">
+      <span data-i18n="footer.loc">Palma, Balearic Islands · 2026</span>
+      <span class="eot" data-i18n="footer.eot">End of transmission</span>
+    </div>
   </div>
 </footer>
 
@@ -368,8 +422,8 @@
 
 <!-- i18n must run before app.js so Spanish is applied while the hero/sections
      are still hidden (opacity 0) — no flash of the English copy -->
-<script src="assets/js/i18n.js?v=7"></script>
-<script src="assets/js/cursor.js?v=7"></script>
-<script src="assets/js/app.js?v=7"></script>
+<script src="assets/js/i18n.js?v=8"></script>
+<script src="assets/js/cursor.js?v=8"></script>
+<script src="assets/js/app.js?v=8"></script>
 </body>
 </html>

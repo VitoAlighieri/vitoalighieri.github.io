@@ -47,11 +47,19 @@
   }
   function kick(){ if (!raf) raf = requestAnimationFrame(loop); }
 
-  function onOver(e){ if (e.target.closest && e.target.closest(INTERACTIVE)) wrap.classList.add('hot'); }
+  // over a channel row or a panel the ring squares off into a crosshair (lock);
+  // links inside still get the hot ring — the hot rules come later in the stylesheet
+  var LOCK = '.channel, .sys, .sig';
+  function onOver(e){
+    if (!e.target.closest) return;
+    if (e.target.closest(INTERACTIVE)) wrap.classList.add('hot');
+    if (e.target.closest(LOCK)) wrap.classList.add('lock');
+  }
   function onOut(e){
-    if (!(e.target.closest && e.target.closest(INTERACTIVE))) return;
-    var to = e.relatedTarget;
-    if (!to || !(to.closest && to.closest(INTERACTIVE))) wrap.classList.remove('hot');
+    if (!e.target.closest) return;
+    var to = e.relatedTarget, toIn = function(sel){ return !!(to && to.closest && to.closest(sel)); };
+    if (e.target.closest(INTERACTIVE) && !toIn(INTERACTIVE)) wrap.classList.remove('hot');
+    if (e.target.closest(LOCK) && !toIn(LOCK)) wrap.classList.remove('lock');
   }
   function onDown(){ wrap.classList.add('down'); }
   function onUp(){ wrap.classList.remove('down'); }

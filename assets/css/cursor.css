@@ -41,9 +41,18 @@ html.has-cursor, html.has-cursor *{ cursor:none !important; }
 
 #cursor.on .cursor-ring > i, #cursor.on .cursor-dot > i{ opacity:1; }
 
+/* over a channel row or a panel: the ring squares off into a crosshair — the scope locking on */
+#cursor.lock .cursor-ring > i{
+  width:26px; height:26px; border-radius:3px; border-color:rgba(255,173,58,.8);
+  background:linear-gradient(var(--amber),var(--amber)) center/1px 8px no-repeat,
+             linear-gradient(var(--amber),var(--amber)) center/8px 1px no-repeat;
+}
+
 /* over an interactive target: the ring opens + warms, the dot tucks in */
 #cursor.hot .cursor-ring > i{ width:54px; height:54px; border-color:var(--amber); background-color:rgba(255,173,58,.09); }
 #cursor.hot .cursor-dot > i{ width:4px; height:4px; }
+/* hot wins over lock on size, radius and crosshair, so a link inside a panel returns to the round ring */
+#cursor.hot .cursor-ring > i{ border-radius:50%; background-image:none; }
 
 /* press feedback — a clean scale around the cursor's own centre (no jump) */
 #cursor.down .cursor-ring > i{ transform:translate(-50%,-50%) scale(.82); }
