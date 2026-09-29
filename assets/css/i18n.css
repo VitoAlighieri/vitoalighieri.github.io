@@ -79,6 +79,30 @@
   .lang-switch--bar .lang-opt{ padding:.28rem .46rem; }
 }
 
+/* ===================================================================
+   THE SWITCH IS A RETUNE (View Transitions; i18n.js sets html.vt-lang for
+   that one transition only). The old copy dims, the new language scans in
+   from the top behind a bright amber edge, the name glides to its new place.
+   The new state is a live snapshot, so the scope keeps running underneath.
+   =================================================================== */
+.vt-edge{ display:none; }
+@supports (view-transition-name:none){
+  html.vt-lang .vt-edge{ display:block; position:fixed; left:0; right:0; top:0; height:2px; z-index:40; pointer-events:none; view-transition-name:bmj-edge;
+    background:linear-gradient(90deg, transparent, var(--amber) 18%, #FFE3B8 50%, var(--amber) 82%, transparent); box-shadow:0 0 16px 3px rgba(255,173,58,.55); }
+  html.vt-lang .hero-mid .name{ view-transition-name:bmj-name; }
+  html.vt-lang::view-transition-old(root){ animation:bmj-vt-out .3s cubic-bezier(.4,0,1,1) both; }
+  html.vt-lang::view-transition-new(root){ animation:bmj-vt-in .55s cubic-bezier(.6,0,.2,1) both; }
+  html.vt-lang::view-transition-group(bmj-name){ animation-duration:.55s; animation-timing-function:cubic-bezier(.6,0,.2,1); }
+  html.vt-lang::view-transition-new(bmj-edge){ animation:bmj-vt-edge .55s cubic-bezier(.6,0,.2,1) both; }
+  @keyframes bmj-vt-out{ to{ opacity:0; } }
+  @keyframes bmj-vt-in{ from{ clip-path:inset(0 0 100% 0); } to{ clip-path:inset(0 0 0 0); } }
+  @keyframes bmj-vt-edge{ 0%{ transform:translateY(0); opacity:1; } 88%{ opacity:1; } 100%{ transform:translateY(100vh); opacity:0; } }
+}
+@media (prefers-reduced-motion: reduce){
+  html.vt-lang::view-transition-old(root), html.vt-lang::view-transition-new(root), html.vt-lang::view-transition-group(bmj-name){ animation:none; }
+  html.vt-lang .vt-edge{ display:none; }
+}
+
 /* touch: 44px hit areas on the strip's controls without changing the visual
    chrome — vertical for both options, plus the OUTER edge of each (EN's left,
    ES's right), so the two targets grow without ever overlapping each other.

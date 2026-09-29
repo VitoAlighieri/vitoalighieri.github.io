@@ -1,0 +1,395 @@
+/* =====================================================================
+   MOBILE — the handheld receiver (phones ≤720px). Loaded LAST, so a
+   same-specificity rule here wins by source order. Every layout rule sits
+   inside a max-width:720px query: tablets and the approved desktop are
+   untouched by construction. The docked strip is the SCREEN (a pure live
+   trace), the controls live in the thumb zone (the tuner dock + channel
+   index), and each section is recomposed for a tall glass.
+   ===================================================================== */
+
+/* phone-only chrome: absent everywhere else */
+.tuner, .chindex, .ch-pager, .ch-swipe, .mail-copy, .scope-touch, .probe, .tapring, .touchhint{ display:none; }
+.sr{ position:absolute !important; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; }
+
+@media (max-width:720px){
+  :root{
+    --mw:calc(100vw - 2 * var(--gut));                              /* the phone measure: the text column between the gutters */
+    --vh:1vh;                                                       /* one small-viewport unit (svh where supported, see below) */
+    --nm:min(var(--mw), calc(54 * var(--vh)));                      /* the name's measure: width-driven, height-capped (landscape) */
+    --dock-h:60px;
+    --dock-gap:max(12px, calc(env(safe-area-inset-bottom) + 4px));
+    --dock-room:calc(var(--dock-h) + var(--dock-gap) + 16px);       /* what the end of the page leaves free for the dock */
+  }
+  /* svh ignores the collapsing URL bar, so nothing resizes mid-scroll; browsers without it keep vh (never an invalid var) */
+  @supports (height:1svh){ :root{ --vh:1svh; } }
+
+  /* ---------- 1 · THE STRIP IS A PURE SCOPE SCREEN ----------
+     BMJ. · the live trace · EN/ES. The CH code moves to the dock, the CTA to the index, so measureLane() finds
+     ~200px between the mark and the switch and draws the real bounded trace instead of the 5px floor band. */
+  #topbar #tele-band, #topbar .tele .dot, #topbar a.cta-mini{ display:none; }
+  #topbar{
+    -webkit-backdrop-filter:none; backdrop-filter:none;              /* no blur over the live WebGL on touch GPUs */
+    background:linear-gradient(180deg, rgba(6,8,14,.99), rgba(8,11,18,.96));
+    height:calc(var(--bar) + env(safe-area-inset-top)); padding-top:env(safe-area-inset-top);
+  }
+  #bar-scope{ top:env(safe-area-inset-top); height:calc(100% - env(safe-area-inset-top)); }
+
+  /* ---------- 2 · THE TUNER DOCK (thumb zone) ---------- */
+  .js .tuner{
+    display:block; position:fixed; z-index:7; height:var(--dock-h);
+    left:max(12px, env(safe-area-inset-left)); right:max(12px, env(safe-area-inset-right)); bottom:var(--dock-gap);
+    transform:translateY(calc(100% + var(--dock-gap) + 18px)); visibility:hidden;
+    transition:transform .45s cubic-bezier(.5,0,.75,0), visibility 0s linear .45s;
+  }
+  /* it arrives with the docked strip and lands like a physical control (a little spring) */
+  .js .tuner.is-on{ transform:none; visibility:visible; transition:transform .75s cubic-bezier(.18,1.25,.3,1), visibility 0s; }
+  .js .tuner.is-on.is-quiet{ transform:translateY(calc(100% + var(--dock-gap) + 18px)); transition:transform .4s cubic-bezier(.5,0,.75,0); }
+  .tuner::before{ content:""; position:absolute; z-index:-1; pointer-events:none; left:-24px; right:-24px; top:-26px; bottom:calc(-1 * var(--dock-gap));
+    background:linear-gradient(180deg, rgba(6,8,14,0), rgba(6,8,14,.88) 45%, var(--ink)); }
+  .tuner-btn{
+    -webkit-appearance:none; appearance:none; margin:0; font:inherit; color:inherit; cursor:pointer; text-align:left;
+    position:relative; width:100%; height:100%; display:grid; grid-template-columns:auto minmax(0,1fr) 44px; align-items:center; gap:14px;
+    padding:0 7px 0 16px; border-radius:999px; border:1px solid var(--line-2);
+    background:linear-gradient(180deg, #0F1520, #080B12);
+    box-shadow:0 0 0 1px rgba(0,0,0,.55), 0 18px 38px -10px rgba(0,0,0,.92), inset 0 1px 0 rgba(236,231,219,.06);
+    transition:transform .18s var(--ease), border-color .3s var(--ease);
+  }
+  .tuner-btn:active{ transform:scale(.975); border-color:rgba(255,173,58,.55); }
+  .tuner-btn:focus-visible{ outline:2px solid var(--amber); outline-offset:3px; border-radius:999px; }
+  /* readout: live dot · CH code over the band name */
+  .tn-read{ display:grid; grid-template-columns:auto auto; grid-template-rows:auto auto; column-gap:9px; row-gap:5px; align-items:center;
+    font-family:var(--m); font-weight:500; text-transform:uppercase; line-height:1; font-variant-numeric:tabular-nums; min-width:5.6rem; }
+  .tn-dot{ grid-row:1 / 3; width:7px; height:7px; border-radius:50%; background:var(--amber); box-shadow:0 0 10px 1px var(--amber); }
+  .tn-code{ font-weight:600; font-size:.86rem; letter-spacing:.1em; color:var(--bone); }
+  .tn-name{ font-size:.7rem; letter-spacing:.16em; color:var(--mute-hi); white-space:nowrap; }
+  .tuner.is-msg .tn-name{ color:var(--amber); }
+  /* scale: minor graticule + one detent per section (placed by JS where that band tunes in) + the needle */
+  .tn-scale{ position:relative; height:30px; align-self:center;
+    background:
+      repeating-linear-gradient(90deg, var(--line-2) 0 1px, transparent 1px 6px) 0 100%/100% 5px no-repeat,
+      linear-gradient(var(--line-2), var(--line-2)) 0 100%/100% 1px no-repeat; }
+  .tn-det{ position:absolute; bottom:0; left:var(--x,0%); width:1px; height:12px; background:var(--mute-2); transition:background .3s, height .3s var(--ease); }
+  .tn-det.is-on{ background:var(--amber); height:17px; box-shadow:0 0 6px rgba(255,173,58,.7); }
+  .tn-fill{ position:absolute; left:0; right:0; bottom:0; height:1px; background:linear-gradient(90deg, rgba(255,173,58,.15), rgba(255,173,58,.75));
+    transform-origin:0 50%; transform:scaleX(var(--p,0)); }
+  .tn-needle{ position:absolute; top:0; bottom:0; left:0; right:2px; transform:translateX(calc(var(--p,0) * 100%)); will-change:transform; }
+  .tn-needle::before{ content:""; position:absolute; left:0; top:3px; bottom:0; width:2px; background:var(--amber); box-shadow:0 0 8px 1px rgba(255,173,58,.75); }
+  .tn-needle::after{ content:""; position:absolute; left:-3px; top:0; border:4px solid transparent; border-top:5px solid var(--amber); }
+  /* the knob: three level bars in a ring — they kick like a VU meter on every retune */
+  .tn-knob{ width:44px; height:44px; border-radius:50%; border:1px solid rgba(255,173,58,.5); display:flex; align-items:center; justify-content:center; gap:3px;
+    background:radial-gradient(circle at 50% 35%, rgba(255,173,58,.12), transparent 70%); }
+  .tn-knob i{ width:2px; border-radius:1px; background:var(--amber); height:10px; transform-origin:50% 100%; }
+  .tn-knob i:nth-child(2){ height:17px; } .tn-knob i:nth-child(3){ height:12px; }
+  @keyframes tn-kick{ 0%{transform:scaleY(1)} 30%{transform:scaleY(.3)} 60%{transform:scaleY(1.25)} 100%{transform:scaleY(1)} }
+  @keyframes tn-flick{ 0%{opacity:.2} 34%{opacity:1} 52%{opacity:.35} 100%{opacity:1} }
+  .tuner.retune .tn-knob i{ animation:tn-kick .5s var(--ease) both; }
+  .tuner.retune .tn-knob i:nth-child(2){ animation-delay:.05s; } .tuner.retune .tn-knob i:nth-child(3){ animation-delay:.1s; }
+  .tuner.retune .tn-dot{ animation:tn-flick .42s steps(1,end) 1; }
+  /* the end of the page leaves room for the dock */
+  footer{ padding-bottom:calc(var(--dock-room) + 1.4rem) !important; }
+
+  /* ---------- 3 · CHANNEL INDEX (full screen, grows out of the dock) ---------- */
+  .js .chindex{
+    display:grid; grid-template-rows:auto 1fr auto; grid-template-columns:minmax(0,1fr); position:fixed; inset:0; z-index:30;
+    visibility:hidden; pointer-events:none; overflow-y:auto; overscroll-behavior:contain;
+    padding:calc(env(safe-area-inset-top) + 18px) max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left));
+  }
+  .js .chindex.is-open{ visibility:visible; pointer-events:auto; }
+  html.ix-open{ overflow:hidden; }
+  .ix-bg{ position:fixed; inset:0; z-index:-1; pointer-events:none;
+    background:
+      linear-gradient(rgba(255,173,58,.035) 1px, transparent 1px) 0 0/100% 64px,
+      radial-gradient(120% 70% at 100% 100%, rgba(255,173,58,.08), transparent 60%),
+      var(--ink); }
+  .ix-scan{ position:fixed; left:0; right:0; top:0; height:1px; z-index:1; pointer-events:none; opacity:0;
+    background:linear-gradient(90deg, transparent, var(--amber) 20%, var(--amber-2) 50%, var(--amber) 80%, transparent);
+    box-shadow:0 0 14px 2px rgba(255,173,58,.55); }
+  .ix-head{ display:flex; align-items:flex-end; gap:.8rem; padding-bottom:.9rem; }
+  .ix-head .idx{ font-family:var(--m); font-weight:500; font-size:var(--mono-l); letter-spacing:.2em; color:var(--amber); white-space:nowrap; line-height:1; }
+  .ix-head .s-ticks{ flex:1; min-width:.5rem; }   /* the ticks give way first: '[ ÍNDICE DE CANALES ]' needs the row at 320 */
+  .ix-head .ix-now{ font-family:var(--m); font-weight:500; font-size:var(--mono-t); letter-spacing:.16em; color:var(--bone-2); white-space:nowrap; line-height:1; font-variant-numeric:tabular-nums; }
+  .ix-list{ list-style:none; margin:0; padding:0; align-self:center; border-top:1px solid var(--line); }
+  .ix-list > li{ border-bottom:1px solid var(--line); }
+  .ix-row{ position:relative; display:grid; grid-template-columns:3.3rem minmax(0,1fr); grid-template-areas:"code name" "code sub";
+    column-gap:.2rem; padding:.8rem .2rem .7rem 0; min-height:64px; color:var(--bone); }
+  .ix-code{ grid-area:code; font-family:var(--m); font-weight:500; font-size:var(--mono-t); letter-spacing:.12em; color:var(--mute); padding-top:.6rem; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .ix-name{ grid-area:name; font-family:var(--d); font-weight:780; font-variation-settings:'wght' 780,'wdth' var(--w,112);
+    font-size:clamp(2rem,10vw,3.1rem); line-height:.96; letter-spacing:-.015em; transition:color .25s var(--ease); }
+  .ix-sub{ grid-area:sub; display:flex; align-items:center; gap:.8rem; margin-top:.4rem; min-width:0;
+    font-family:var(--m); font-weight:500; font-size:var(--mono-t); letter-spacing:.16em; text-transform:uppercase; color:var(--mute-hi); }
+  .ix-sub > span{ white-space:nowrap; }
+  .ix-wf{ flex:1; min-width:2rem; height:16px; display:block; opacity:.55; }
+  .ix-row.is-cur .ix-code, .ix-row.is-cur .ix-name{ color:var(--amber); }
+  .ix-row.is-cur .ix-wf{ opacity:1; }
+  .ix-row.is-cur::before{ content:""; position:absolute; left:-16px; top:.8rem; bottom:.7rem; width:3px; background:var(--amber); box-shadow:0 0 12px rgba(255,173,58,.7); }
+  .ix-row:active .ix-name, .ix-row.is-pick .ix-name{ color:var(--amber-2); }
+  .ix-row.is-pick{ background:linear-gradient(90deg, rgba(255,173,58,.14), transparent 80%); }
+  /* the channels row carries its three sub-channels as direct tuning keys */
+  .ix-chs{ display:flex; gap:6px; padding:0 0 .8rem 3.5rem; }
+  .ix-chs a{ flex:1; min-height:44px; display:flex; align-items:center; justify-content:center; gap:.4rem; border:1px solid var(--line-2); border-radius:3px;
+    font-family:var(--m); font-weight:500; font-size:var(--mono-t); letter-spacing:.14em; text-transform:uppercase; color:var(--bone-2); white-space:nowrap; }
+  .ix-chs a b{ color:var(--amber); font-weight:600; }
+  .ix-chs a:active, .ix-chs a.is-pick{ border-color:var(--amber); background:rgba(255,173,58,.1); }
+  .ix-chs a.is-cur{ border-color:rgba(255,173,58,.6); }
+  /* thumb-zone footer: it sits exactly where the dock sits, so the dock reads as having flipped into these controls */
+  .ix-foot{ position:sticky; bottom:0; margin:1.2rem calc(-1 * max(16px, env(safe-area-inset-right))) 0 calc(-1 * max(16px, env(safe-area-inset-left)));
+    padding:10px max(12px, env(safe-area-inset-right)) var(--dock-gap) max(12px, env(safe-area-inset-left));
+    background:linear-gradient(180deg, transparent, var(--ink) 30%); }
+  .ix-bar{ height:var(--dock-h); display:grid; grid-template-columns:auto minmax(0,1fr) 44px; align-items:center; gap:10px; padding:0 7px 0 12px;
+    border-radius:999px; border:1px solid var(--line-2); background:linear-gradient(180deg, #0F1520, #080B12); }
+  .ix-bar .lang-switch{ font-size:.74rem; letter-spacing:.18em; }
+  .ix-bar .lang-opt{ padding:.5rem .55rem; }
+  .ix-copy{ -webkit-appearance:none; appearance:none; justify-self:start; min-height:44px; padding:0 .9rem; border:0; border-left:1px solid var(--line-2); background:none; cursor:pointer;
+    font-family:var(--m); font-weight:500; font-size:var(--mono-t); letter-spacing:.16em; text-transform:uppercase; color:var(--bone-2); white-space:nowrap; transition:color .2s; }
+  .ix-copy:active, .ix-copy.is-done{ color:var(--amber); }
+  .ix-copy.is-done::after{ content:" ✓"; }
+  .ix-close{ -webkit-appearance:none; appearance:none; width:44px; height:44px; border-radius:50%; border:1px solid var(--amber); background:rgba(255,173,58,.12); cursor:pointer; position:relative; padding:0; }
+  .ix-close::before, .ix-close::after{ content:""; position:absolute; left:50%; top:50%; width:16px; height:2px; margin:-1px 0 0 -8px; background:var(--amber); border-radius:1px; transform:rotate(45deg); }
+  .ix-close::after{ transform:rotate(-45deg); }
+  .ix-close:active{ transform:scale(.92); }
+  @media (max-width:380px){ .ix-chs{ padding-left:0; } .ix-chs a{ letter-spacing:.1em; } }
+
+  /* ---------- 4 · HERO: the name as a poster that fills the glass ----------
+     Each line runs gutter to gutter at its own size and width axis (measured em-widths at wght 825, ls -.02em:
+     Biel@wdth150 = 2.96em · Martínez@122 = 6.19em · Janer@122 = 4.18em). --lw/--lg are the lines' final axes;
+     the power-on (app.js) decompresses each line from wdth 50 to exactly these values. */
+  #hero{ grid-template-rows:auto auto minmax(0,1fr) auto; padding-bottom:max(1.25rem, calc(env(safe-area-inset-bottom) + .9rem)); }
+  .hero-top .id:not(.coord) .mono{ display:none; }                 /* 'B. Martínez Janer' is redundant under a gutter-to-gutter name */
+  .hero-mid{ align-self:start; margin-top:clamp(1rem, 9svh - 2.5rem, 4rem); }
+  .hero-mid .name{ font-size:calc(var(--nm) / 6.25); letter-spacing:-.02em; line-height:.9; }
+  .hero-mid .name .ln{ padding-top:.04em; }
+  .hero-mid .name .ln:nth-child(1){ --lw:150; --lg:840; font-size:calc(var(--nm) / 2.99); line-height:.84; }
+  .hero-mid .name .ln:nth-child(2){ --lw:122; --lg:825; font-size:calc(var(--nm) / 6.25); }
+  .hero-mid .name .ln:nth-child(3){ --lw:122; --lg:825; font-size:calc(var(--nm) / 4.22); }
+  .hero-mid .name .ln > span{ font-variation-settings:'wght' var(--wg, var(--lg, 825)),'wdth' var(--wd, var(--lw, 122)); }
+  /* the role line becomes a spec strip under the name */
+  .hero-mid .role{ margin-top:clamp(.9rem, 2.2svh, 1.4rem); gap:.35rem .8rem; font-size:.74rem; letter-spacing:.14em; }
+  .hero-mid .role .sep{ margin-left:.8rem; }
+  /* the thumb cluster: readout → lede → a full-width 56px key (the dock's needle is the scroll cue once docked) */
+  .hero-bot{ grid-row:4; margin-top:1.4rem; grid-template-columns:1fr; grid-template-areas:"read" "lede" "cta"; gap:.9rem; }
+  .hero-bot .scrollcue{ display:none; }
+  .hero-bot .lede{ font-size:1rem; line-height:1.5; max-width:none; }
+  .hero-bot .cta{
+    justify-self:stretch; justify-content:space-between; min-height:56px; padding:0 1.25rem; margin-top:.2rem;
+    border-radius:6px; position:relative; overflow:hidden; background:rgba(8,11,18,.86);
+  }
+  .hero-bot .cta::after{   /* a slow scan across the key: the one live affordance in the thumb zone */
+    content:""; position:absolute; top:0; bottom:0; left:0; width:38%; pointer-events:none;
+    background:linear-gradient(90deg, transparent, rgba(255,173,58,.16), transparent);
+    transform:translateX(-110%); animation:bmj-cta-scan 3.6s var(--ease) 2.6s infinite;
+  }
+  body:has(#topbar.is-docked) .hero-bot .cta::after{ animation-play-state:paused; }
+  .hero-bot .cta .ar{ font-size:1.15rem; }
+  /* the thumb cluster sits on its own ink, so the lede never fights the glow; grain + graticule stay */
+  #hero::before{
+    background:
+      linear-gradient(180deg, transparent 56%, rgba(6,8,14,.66) 76%, rgba(6,8,14,.9)),
+      radial-gradient(125% 95% at 50% 44%, transparent 52%, rgba(3,5,10,.5) 100%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .93 0 0 0 0 .9 0 0 0 0 .84 0 0 0 .11 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E") 0 0/160px 160px,
+      linear-gradient(rgba(255,173,58,.05) 1px, transparent 1px) 0 0/100% 120px,
+      linear-gradient(90deg, rgba(255,173,58,.05) 1px, transparent 1px) 0 0/12.5% 100%;
+  }
+  @media (max-height:620px){
+    :root{ --nm:min(var(--mw), calc(46 * var(--vh))); }
+    .hero-mid{ margin-top:.6rem; } .hero-bot{ margin-top:1rem; gap:.7rem; } .hero-bot .cta{ min-height:50px; }
+  }
+
+  /* ---------- 5 · HERO: touch the signal ----------
+     The surface sits UNDER the content inside #hero's stacking context; the name, role and lede pass the gesture up
+     by bubbling (the pill and the CTA are excluded in JS). pan-y keeps vertical scroll native and pinch-zoom keeps
+     zoom — only a clearly sideways drag reaches the tuner. The HUD is transform/opacity only. */
+  #hero{ touch-action:pan-y pinch-zoom; overflow-x:clip; }
+  #hero .scope-touch{ display:block; position:absolute; inset:0; z-index:-1; -webkit-tap-highlight-color:transparent; }
+  #hero .scope-touch, #hero .hero-mid, #hero .hero-mid *{ -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
+  #hero .probe, #hero .probe *, #hero .tapring, #hero .touchhint, #hero .touchhint *{ pointer-events:none; }
+  #hero .probe{ display:block; position:absolute; left:0; top:0; bottom:0; width:0; z-index:2; opacity:0; transition:opacity .25s var(--ease); will-change:transform; transform:translateX(50vw); }
+  #hero .probe.on{ opacity:1; }
+  .probe .pr-line{ position:absolute; top:16%; bottom:26%; left:0; width:1px;
+    background:repeating-linear-gradient(180deg, rgba(255,173,58,.55) 0 5px, transparent 5px 11px); }
+  .probe .pr-read{ position:absolute; top:62%; left:0; transform:translateX(calc(-50% + var(--cx, 0px))); display:inline-flex; align-items:baseline; gap:.35rem;
+    padding:.42rem .6rem; border:1px solid rgba(255,173,58,.5); border-radius:4px; background:rgba(6,8,14,.9);
+    font-size:.7rem; letter-spacing:.14em; color:var(--mute-hi); white-space:nowrap; font-variant-numeric:tabular-nums; }
+  .probe .pr-read i{ font-style:normal; }
+  .probe .pr-read b{ font-weight:500; color:var(--amber); font-size:.86rem; letter-spacing:.06em; }
+  .probe .pr-read em{ font-style:normal; color:var(--bone-2); }
+  .probe.lock .pr-read{ animation:bmj-lock .5s steps(1,end) 1; }
+  @keyframes bmj-lock{ 0%{ box-shadow:0 0 0 1px var(--amber), 0 0 18px rgba(255,173,58,.5); } 40%{ box-shadow:none; } 60%{ box-shadow:0 0 0 1px var(--amber); } 100%{ box-shadow:none; } }
+  #hero .tapring{ display:block; position:absolute; left:0; top:0; z-index:2; width:120px; height:120px; margin:-60px 0 0 -60px; border-radius:50%; opacity:0;
+    border:1px solid rgba(255,173,58,.8); box-shadow:0 0 18px rgba(255,173,58,.35), inset 0 0 12px rgba(255,173,58,.25); }
+  /* discoverability: a ghost touch that demonstrates itself once (ring on the trace + label); gone after the first touch */
+  #hero .touchhint{ display:block; position:absolute; left:0; top:0; z-index:2; opacity:0; will-change:transform; transform:translate(70vw, 60svh); }
+  .touchhint .th-ring{ position:absolute; left:-22px; top:-22px; width:44px; height:44px; border-radius:50%; border:1.5px solid var(--amber);
+    box-shadow:0 0 16px rgba(255,173,58,.45), inset 0 0 10px rgba(255,173,58,.25); }
+  .touchhint.play .th-ring{ animation:bmj-thring 1.5s var(--ease) 2; }
+  @keyframes bmj-thring{ 0%{ transform:scale(.35); opacity:0; } 18%{ transform:scale(.8); opacity:1; } 30%{ transform:scale(.62); opacity:1; } 100%{ transform:scale(1.9); opacity:0; } }
+  .touchhint .th-l{ position:absolute; top:var(--ly, 34px); right:-10px; white-space:nowrap; color:var(--amber); font-size:.7rem; letter-spacing:.2em;
+    padding:.35rem .55rem; background:rgba(6,8,14,.82); border-left:1px solid var(--amber); }
+  .touchhint.left .th-l{ right:auto; left:-10px; }
+  .touchhint .th-ar{ display:inline-block; margin-left:.3rem; animation:bmj-thar 1.2s ease-in-out infinite; }
+  @keyframes bmj-thar{ 0%,100%{ transform:translateX(-3px); } 50%{ transform:translateX(3px); } }
+  #hero .touchhint.on{ opacity:1; transition:opacity .4s var(--ease); }
+  #hero .touchhint.off{ opacity:0; transition:opacity .3s var(--ease); }
+
+  /* ---------- 6 · TYPE & RHYTHM: headings sized to the measure, one spacing scale ----------
+     Longest word on any phone h2 is 'producción.' = 7.31em at wdth 112, so every heading keeps its words whole. */
+  .section{ padding-block:clamp(3.75rem, 9svh, 5rem) clamp(3.25rem, 7svh, 4.25rem); }
+  .s-head{ margin-bottom:clamp(1.6rem, 4svh, 2.4rem); }
+  .s-head h2{ font-size:min(calc(var(--mw) / 7.45), calc(9.5 * var(--vh))); line-height:.92; letter-spacing:-.015em; }   /* the height cap only bites in landscape */
+  .sys-head h3{ font-size:1.45rem; }
+  .sig h3{ font-size:1.5rem; }
+  /* the heading wipe lands while you are still looking at it (1s + .12s delay was half-drawn at reading speed) */
+  .is-ready .s-head h2{ transition:clip-path .75s var(--ease), transform .75s var(--ease); }
+  .is-ready .thesis-grid .big{ transition:opacity .6s var(--ease), clip-path .8s var(--ease), transform .8s var(--ease); }
+  /* the rule's tick scale draws in from the left as the header arrives; its CH code types in after it */
+  .js .s-head .s-ticks{ transform:scaleX(0); transform-origin:0 50%; }
+  .is-ready .s-head .s-ticks{ transition:transform .9s cubic-bezier(.7,0,.2,1) .05s; }
+  .js .s-head.in .s-ticks{ transform:none; }
+  .js .s-head .s-n{ opacity:0; }
+  .is-ready .s-head .s-n{ transition:opacity .3s steps(3,end) .7s; }
+  .js .s-head.in .s-n{ opacity:1; }
+
+  /* thesis: 'frequencies.' spans the glass (7.03em EN / 6.99em ES at wdth 100) and stretches into it once (mobile.js) */
+  .thesis-grid .big{ font-size:min(calc(var(--mw) / 7.9), calc(8.5 * var(--vh))); line-height:.95; font-variation-settings:'wght' 760,'wdth' 112; }
+  .thesis-grid .big em{ display:block; font-size:min(calc(var(--mw) / 7.12), calc(9.6 * var(--vh))); font-variation-settings:'wght' 800,'wdth' 100; letter-spacing:-.02em; margin-top:.06em; }
+  .thesis-grid .body{ font-size:1.02rem; border-left:1px solid rgba(255,173,58,.35); padding-left:1rem; }
+  .thesis-grid .body p:first-child{ margin-top:0; font-size:1.12rem; color:var(--bone); line-height:1.5; }
+  .thesis-grid .body p:last-child{ margin-bottom:0; }
+
+  /* ---------- 7 · CHANNELS AS A TUNER DECK ---------- */
+  .js .ch-pager{ display:grid; grid-template-columns:repeat(3,1fr); position:relative; margin:-.4rem 0 1rem; border-bottom:1px solid var(--line-2); }
+  .ch-pager button{ -webkit-appearance:none; appearance:none; background:none; border:0; margin:0; cursor:pointer; min-height:44px; display:flex; align-items:center; justify-content:center; gap:.45rem;
+    font-family:var(--m); font-weight:500; font-size:var(--mono-t); letter-spacing:.16em; text-transform:uppercase; color:var(--mute); transition:color .3s var(--ease); }
+  .ch-pager button b{ font-weight:600; color:var(--mute-hi); transition:color .3s var(--ease); }
+  .ch-pager button[aria-current="true"], .ch-pager button[aria-current="true"] b{ color:var(--amber); }
+  .ch-pager .pg-needle{ position:absolute; left:0; bottom:-1px; width:33.334%; height:2px; background:var(--amber); box-shadow:0 0 8px rgba(255,173,58,.7);
+    transform:translateX(calc(var(--dp,0) * 200%)); will-change:transform; pointer-events:none; }
+  .js .ch-swipe{ display:flex; justify-content:flex-end; align-items:center; gap:.6rem; margin-top:.9rem; transition:opacity .6s var(--ease);
+    font-family:var(--m); font-weight:500; font-size:var(--mono-t); letter-spacing:.2em; text-transform:uppercase; color:var(--mute); }
+  .ch-swipe::after{ content:""; width:34px; height:1px; background:linear-gradient(90deg, var(--mute-2), var(--amber)); animation:bmj-swipe 2.4s var(--ease) infinite; transform-origin:0 50%; }
+  @keyframes bmj-swipe{ 0%{ transform:scaleX(.2); opacity:.3; } 50%{ transform:scaleX(1); opacity:1; } 100%{ transform:scaleX(1) translateX(10px); opacity:0; } }
+  #channels.deck-seen .ch-swipe{ opacity:0; }
+
+  .js #channels .channels{
+    display:flex; align-items:stretch; gap:12px; overflow-x:auto; overflow-y:hidden; overscroll-behavior-x:contain; scroll-snap-type:x mandatory;
+    margin-inline:calc(-1 * var(--gut)); padding:4px var(--gut) 6px; scroll-padding-inline:var(--gut); border-top:0;
+    scrollbar-width:none; -webkit-overflow-scrolling:touch;
+  }
+  .js #channels .channels::-webkit-scrollbar{ display:none; }
+  .js #channels .channel{
+    flex:0 0 calc(100% - 28px); min-width:0; scroll-snap-align:start; scroll-snap-stop:always; position:relative;   /* min-width:0 — a nowrap caption never widens a card */
+    display:flex; flex-direction:column; gap:.4rem; padding:1.25rem 1.1rem 1.1rem;
+    border:1px solid var(--line-2); border-radius:4px; background:radial-gradient(80% 50% at 100% 0%, rgba(255,173,58,.07), transparent 65%), var(--surface);
+    box-shadow:inset 0 1px 0 rgba(236,231,219,.04);
+  }
+  .js #channels .channel::before, .js #channels .channel::after{ content:""; position:absolute; width:20px; height:20px; border:0 solid var(--amber); opacity:.5; transition:opacity .4s, width .4s var(--ease), height .4s var(--ease); pointer-events:none; }
+  .js #channels .channel::before{ top:-1px; left:-1px; border-top-width:2px; border-left-width:2px; }
+  .js #channels .channel::after{ bottom:-1px; right:-1px; border-bottom-width:2px; border-right-width:2px; }
+  .js #channels .channel.is-cur::before, .js #channels .channel.is-cur::after{ opacity:1; width:34px; height:34px; }
+  /* the card opens on its own scope SCREEN: the channel's live trace, full-bleed, with its f/A caption */
+  .js #channels .ch-side{ order:-1; position:relative; margin:-1.25rem -1.1rem .3rem; padding:.7rem 1.1rem .65rem; gap:.45rem;
+    border-bottom:1px solid var(--line-2); border-radius:4px 4px 0 0;
+    background:linear-gradient(rgba(255,173,58,.05) 1px, transparent 1px) 0 50%/100% 50%, repeating-linear-gradient(90deg, rgba(39,48,63,.55) 0 1px, transparent 1px 12.5%), rgba(3,5,10,.45); }
+  .js #channels .ch-side .wf{ height:72px; opacity:.95; }
+  .js #channels .ch-side .ch-tele{ display:block; white-space:normal; line-height:1.5; }
+  /* the channel number: a big outlined numeral that FILLS when its card locks on */
+  .js #channels .channel .ch-id{ display:flex; justify-content:flex-end; font-size:0; padding:0; margin-top:.35rem; }   /* the tiny 'CH' prefix is redundant under the screen caption */
+  .js #channels .channel .ch-id b{ display:block; margin:0;
+    font-family:var(--d); font-weight:800; font-variation-settings:'wght' 800,'wdth' 124; font-size:3.6rem; line-height:.8; letter-spacing:-.04em;
+    color:transparent; -webkit-text-stroke:1.5px rgba(255,173,58,.45); transition:color .5s var(--ease), -webkit-text-stroke-color .5s var(--ease); }
+  .js #channels .channel.is-cur .ch-id b{ color:var(--amber); -webkit-text-stroke-color:var(--amber); }
+  .js #channels .channel .ch-main{ flex:1 1 auto; display:flex; flex-direction:column; margin-top:-1.55rem; }   /* the verb tucks in beside the numeral's foot */
+  .js #channels .channel .ch-main h3{ font-size:clamp(1.6rem,8vw,2.1rem); margin-top:.5rem; }
+  .js #channels .channel .ch-body{ margin-top:.6rem; font-size:1rem; line-height:1.6; }
+  .js #channels .channel .ch-meta{ margin-top:auto; padding-top:1rem; }                 /* the spec line sits on the card's floor, so all three cards end alike */
+
+  /* ---------- 8 · CHIPS → flat mono spec strings (no false tap affordance) ---------- */
+  .tag{ position:relative; border:0; border-radius:0; background:none; padding:0; font-size:.75rem; letter-spacing:.04em; color:var(--mute-hi); white-space:nowrap; }
+  .tag::before{ content:""; position:absolute; left:-.62em; top:50%; width:3px; height:3px; transform:translate(-50%,-50%); background:var(--amber); opacity:.7; }   /* a square tick, not a '·' — several chips already contain ' · ' */
+  .ch-meta, .sys-foot{ gap:.2rem 1.25em !important; overflow:hidden; }                /* the tick of an item that starts a line falls outside the box and vanishes */
+  .tag:active{ color:var(--mute-hi) !important; border-color:transparent !important; }
+
+  /* ---------- 9 · SYSTEMS: plate codes (04.1–04.3), balanced roles, the security domains as an indexed register ---------- */
+  .systems{ counter-reset:sys; gap:1.1rem; }
+  .sys{ counter-increment:sys; }
+  .sys-head{ position:relative; padding-top:1.7rem; }
+  .sys-head::before{ content:"04." counter(sys); position:absolute; top:0; left:0;
+    font-family:var(--m); font-weight:500; font-size:var(--mono-t); letter-spacing:.2em; color:var(--amber); font-variant-numeric:tabular-nums; }
+  .sys-head .role{ text-wrap:balance; letter-spacing:.1em; line-height:1.6; }
+  .sys-head .when{ margin-top:.2rem; }
+  .sys--sec .sys-more > summary{ display:none; }                                       /* the nine domains are the differentiator: never behind a tap */
+  .sys--sec .sys-points{ counter-reset:dom; gap:0; border-top:1px solid var(--line); }
+  .sys--sec .sys-points li{ counter-increment:dom; padding:.62rem 0 .62rem 2.1rem; border-bottom:1px solid var(--line); font-size:.95rem; line-height:1.5; max-width:none; }
+  .sys--sec .sys-points li::before{ content:counter(dom, decimal-leading-zero); width:auto; height:auto; background:none; top:.8rem;
+    font-family:var(--m); font-weight:500; font-size:var(--mono-t); line-height:1.5; letter-spacing:.1em; color:var(--mute); }
+  .sys--sec .sys-points li b{ font-weight:650; }
+
+  /* ---------- 10 · BENCH: a 2-up spec grid (about one screen instead of two) ---------- */
+  .stack-grid{ grid-template-columns:1fr 1fr; gap:0; border-top:1px solid var(--line);
+    background:linear-gradient(var(--line), var(--line)) 50% 0/1px 100% no-repeat; }                 /* the column rule between the pairs */
+  .stack-half{ display:contents; }
+  .stack-col{ grid-template-columns:1fr; gap:.45rem; padding:.9rem .9rem 1rem 0; border-bottom:1px solid var(--line); align-content:start; }
+  .stack-half > .stack-col:nth-child(even){ padding-left:.9rem; padding-right:0; }
+  .stack-col ul{ font-size:.8rem; line-height:1.6; gap:.1rem 1.1em; }
+  .stack-col li{ white-space:normal; }                     /* long ES items ('integración de corte por láser') wrap inside their half instead of clipping */
+  .stack-col h4{ font-size:var(--mono-t); }
+
+  /* ---------- 11 · CONTACT: the closing statement + a COPY key on the mail row ---------- */
+  .contact-inner h2{ font-size:min(calc(var(--mw) / 5.8), calc(13 * var(--vh))); font-variation-settings:'wght' 780,'wdth' 125; line-height:.88; }
+  .contact-inner h2 em{ display:block; }
+  .link-row .v{ font-size:1.18rem; }
+  .mail-wrap{ position:relative; }
+  .js .mail-wrap .link-row{ padding-right:6.2rem; }       /* the key is ≤88px wide even as 'COPIAR ✓' */
+  .js .mail-wrap .link-row .arrow{ display:none; }         /* the COPY key is this row's right-hand affordance; the row itself still opens mail */
+  .js .mail-copy{ display:inline-flex; align-items:center; gap:.45rem; position:absolute; right:.2rem; top:50%; transform:translateY(-50%); min-height:44px; padding:0 .95rem; cursor:pointer;
+    -webkit-appearance:none; appearance:none; border:1px solid rgba(255,173,58,.45); border-radius:999px; background:rgba(255,173,58,.06);
+    font-family:var(--m); font-weight:500; font-size:var(--mono-t); letter-spacing:.16em; text-transform:uppercase; color:var(--amber); transition:transform .15s var(--ease), background .2s, color .2s; }
+  .mail-copy:active{ transform:translateY(-50%) scale(.94); background:rgba(255,173,58,.18); }
+  .mail-copy.is-done{ background:var(--amber); color:#0a0a0a; border-color:var(--amber); }
+  .mail-copy.is-done::after{ content:"✓"; }
+  @media (max-width:380px){ .mail-wrap .link-row .v{ font-size:1.05rem; } }   /* the address stays on one line beside the key at 320 */
+
+  /* ---------- 12 · FOOTER: the end-of-transmission block blinks while the strip signs off (mobile.js) ---------- */
+  footer.eot-on .foot-end .eot::after{ animation:bmj-eot 1.05s steps(1,end) infinite; }
+  @keyframes bmj-eot{ 50%{ opacity:0; } }
+}
+
+/* ---------- ≤600: the job cards' 'Show detail' becomes a real control that unrolls (mobile.js animates it) ---------- */
+@media (max-width:600px){
+  .sys-more{ position:relative; }
+  .sys-more > summary{ margin-top:.2rem; padding:0 .9rem; justify-content:space-between; border:1px solid var(--line-2); border-radius:3px; min-height:48px; transition:border-color .3s var(--ease), transform .15s var(--ease); }
+  .sys-more > summary .pm{ order:2; transition:transform .45s cubic-bezier(.7,0,.2,1), background .2s; }
+  .sys-more[open] > summary{ border-color:rgba(255,173,58,.4); margin-bottom:.9rem; }
+  .sys-more[open]:not(.is-closing) > summary .pm, .sys-more.is-opening > summary .pm{ transform:rotate(180deg); }
+  /* the label flips the moment you tap, not when the tween ends */
+  .sys-more.is-closing > summary .less{ display:none; }
+  .sys-more.is-closing > summary .show{ display:inline; }
+  .sys-more.is-closing > summary .pm::before{ content:"+"; }
+  .sys-more.is-opening > summary .show{ display:none; }
+  .sys-more.is-opening > summary .less{ display:inline; }
+  /* a scan line rides the moving edge while the list unrolls */
+  .sys-more.is-anim::after{ content:""; position:absolute; left:-1rem; right:-1rem; bottom:0; height:1px; pointer-events:none;
+    background:linear-gradient(90deg, transparent, var(--amber) 25%, var(--amber-2) 50%, var(--amber) 75%, transparent); box-shadow:0 0 12px 1px rgba(255,173,58,.6); }
+}
+
+/* ---------- touch: every real control answers the thumb; nothing sticks after a tap ---------- */
+@media (max-width:720px) and (hover:none){
+  .cta:active, #topbar .mark:active, .foot-top:active, .sys-more > summary:active, .ch-pager button:active{ transform:scale(.96); }
+  .hero-bot .cta:active{ background:rgba(255,173,58,.16); }
+  .foot-top:active{ color:var(--amber); }
+  .link-row:hover{ padding-left:.2rem; }                   /* iOS keeps :hover after a tap — the desktop slide would stick on the last row touched */
+}
+
+@keyframes bmj-cta-scan{ 0%{ transform:translateX(-110%); } 45%,100%{ transform:translateX(290%); } }
+
+/* ---------- reduced motion: every new move becomes instant (or a plain fade) ---------- */
+@media (max-width:720px) and (prefers-reduced-motion: reduce){
+  .js .tuner, .js .tuner.is-on, .js .tuner.is-on.is-quiet{ transform:none; transition:opacity .3s linear, visibility 0s; }
+  .js .tuner{ opacity:0; } .js .tuner.is-on{ opacity:1; }
+  .tuner.retune .tn-knob i, .tuner.retune .tn-dot{ animation:none; }
+  .tn-det, .ix-name, .ch-pager button, .js #channels .channel .ch-id b, .js #channels .channel::before, .js #channels .channel::after{ transition:none; }
+  .js #channels .channels{ scroll-behavior:auto; }
+  .hero-bot .cta::after, .ch-swipe::after, .touchhint .th-ar, footer.eot-on .foot-end .eot::after{ animation:none; }
+  .hero-bot .cta::after{ display:none; }
+  .js .s-head .s-ticks, .js .s-head .s-n{ transform:none; opacity:1; transition:none; }
+  .sys-more > summary .pm{ transition:none; }
+}

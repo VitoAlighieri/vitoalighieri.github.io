@@ -37,7 +37,8 @@
           so they translate through BMJ_I18N.chrome(word); app.js re-renders them on the 'bmj:lang' event. ---- */
   var CHROME_ES = {
     CARRIER:'PORTADORA', BUILD:'CONSTRUIR', BREAK:'ROMPER', LEAD:'LIDERAR', SYSTEMS:'SISTEMAS', STACK:'BANCO', HUMAN:'HUMANO',
-    SINE:'SENO', SQUARE:'CUADRADA', TRIANGLE:'TRIÁNGULO', PULSE:'PULSO', STEP:'ESCALÓN', noise:'ruido'
+    SINE:'SENO', SQUARE:'CUADRADA', TRIANGLE:'TRIÁNGULO', PULSE:'PULSO', STEP:'ESCALÓN', noise:'ruido',
+    COPIED:'COPIADO'
   };
 
   /* ---- Spanish body copy, keyed by data-i18n.
@@ -148,7 +149,34 @@
     'footer.trace.k': 'Traza',
     'footer.trace.v': 'Un osciloscopio en vivo en WebGL —una onda real que se resintoniza en cada sección. Respeta la preferencia de movimiento reducido.',
     'footer.loc':     'Palma, Islas Baleares · 2026',
-    'footer.eot':     'Fin de la transmisión'
+    'footer.eot':     'Fin de la transmisión',
+
+    /* phone chrome: tuner dock, channel index, channel deck, copy, touch hint */
+    'tuner.open':      'Abrir el índice de canales',
+    'ix.title':        '[ ÍNDICE&nbsp;DE&nbsp;CANALES ]',
+    'ix.hero':         'Inicio',
+    'ix.hero.sub':     'Portadora · tesis',
+    'ix.channels':     'Canales',
+    'ix.channels.sub': 'Lo que sintonizo',
+    'ix.ch01':         'Construir',
+    'ix.ch02':         'Romper',
+    'ix.ch03':         'Liderar',
+    'ix.systems':      'Sistemas',
+    'ix.systems.sub':  'Trabajo seleccionado',
+    'ix.stack':        'Banco',
+    'ix.stack.sub':    'Capacidades',
+    'ix.signals':      'Señales',
+    'ix.signals.sub':  'Fuera de horas',
+    'ix.contact':      'Contacto',
+    'ix.contact.sub':  'Abre un canal',
+    'ix.copy':         'Copiar correo',
+    'ix.close':        'Cerrar el índice',
+    'deck.ch01':       'Construir',
+    'deck.ch02':       'Romper',
+    'deck.ch03':       'Liderar',
+    'deck.swipe':      'Desliza para resintonizar',
+    'contact.copy':    'Copiar',
+    'hero.touch':      'Toca la señal'
   };
 
   /* ---- cache the canonical English so we can always switch back losslessly ---- */
@@ -220,8 +248,25 @@
     var lang = btn.getAttribute('data-lang-set');
     if (SUPPORTED.indexOf(lang) < 0 || lang === current) return;
     remember(lang);
-    apply(lang);
+    retune(lang);
   });
+
+  /* a reader's switch reads as a RETUNE: where View Transitions exist (and motion is welcome) the old copy dims while
+     the new language scans in from the top and the name glides to its new place (i18n.css); elsewhere it swaps
+     instantly. The new state is a live snapshot, so the scope keeps running underneath. set() stays instant. */
+  var RM = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var edge = null;   // the bright scan edge that rides the reveal: it exists only in the NEW state, so only it animates in
+  function retune(lang){
+    var root = document.documentElement;
+    if (RM || !document.startViewTransition){ apply(lang); return; }
+    if (!edge){ edge = document.createElement('div'); edge.className = 'vt-edge'; edge.setAttribute('aria-hidden', 'true'); }
+    root.classList.add('vt-lang');
+    try {
+      var vt = document.startViewTransition(function(){ document.body.appendChild(edge); apply(lang); });
+      var done = function(){ root.classList.remove('vt-lang'); if (edge.parentNode) edge.parentNode.removeChild(edge); };
+      vt.finished.then(done, done);
+    } catch (err){ root.classList.remove('vt-lang'); apply(lang); }
+  }
 
   /* ---- the gliding indicator: measure the active option, move the chip ---- */
   function placeIndicator(sw){
@@ -249,7 +294,7 @@
   window.addEventListener('resize', placeAll, { passive:true });
 
   /* expose a tiny hook (handy for the console / future controls) */
-  window.BMJ_I18N = { set:function(l){ if (SUPPORTED.indexOf(l) >= 0){ remember(l); apply(l); } }, get:function(){ return current; }, chrome:chrome };
+  window.BMJ_I18N = { set:function(l){ if (SUPPORTED.indexOf(l) >= 0){ remember(l); apply(l); } }, get:function(){ return current; }, chrome:chrome, place:placeAll };
 })();
 
 /* ---------------------------------------------------------------------
