@@ -624,30 +624,28 @@
       }
       tuned = true;
     }
-    /* ONE resolver decides the band: the deepest [data-band] element (DOM order) whose box contains the viewport's
-       centre point, on both axes. The triggers only say WHEN to look (a centre-line crossing, a refresh); they no longer
-       tune on onEnter each, which let a ScrollTrigger.refresh() (a 'Show detail' tap) replay stale callbacks and leave the
-       strip on the wrong channel. On phones the three channel cards are a horizontal deck: mobile.js owns which card is
-       locked (BRIDGE.deckCard), so a half-swiped deck never makes the readout lie. Rect reads only on those events. */
+    /* ONE resolver decides the band: the last [data-band] element in DOM order whose start line ('top center') the page
+       has crossed — the old "last entered wins", read from the triggers' own state (so it agrees with ScrollTrigger's
+       centre line, and the padding under CH·03 no longer detours through the section's CH·01). The triggers only say
+       WHEN to look (a centre-line crossing, a refresh); they no longer tune on onEnter each, which let a refresh (a 'Show
+       detail' tap) replay stale callbacks and leave the strip on the wrong channel. On phones the three channel cards
+       are a horizontal deck: mobile.js owns which card is locked (BRIDGE.deckCard), so a half-swiped deck never lies. */
     var sections = Array.prototype.slice.call(document.querySelectorAll('[data-band]'));
-    var curEl = null, resolveQueued = false;
+    var curEl = null, resolveQueued = false, bandSTs = [];
     function resolveBand(){
       resolveQueued = false;
-      var deck = PHONE.matches, cx = window.innerWidth/2, cy = window.innerHeight/2, pick = null, above = null;
+      var deck = PHONE.matches, pick = null;
       for (var i=0;i<sections.length;i++){
-        var el = sections[i];
-        if (deck && el.classList.contains('channel')) continue;
-        var r = el.getBoundingClientRect();
-        if (r.top <= cy && r.bottom > cy && r.left <= cx && r.right > cx) pick = el;
-        if (r.top <= cy && r.left <= cx && r.right > cx) above = el;
+        if (deck && sections[i].classList.contains('channel')) continue;
+        if (bandSTs[i] && bandSTs[i].progress > 0) pick = sections[i];
       }
-      pick = pick || above || sections[0];
-      if (deck && pick && pick.id === 'channels' && BRIDGE.deckCard) pick = BRIDGE.deckCard;
-      if (pick && pick !== curEl){ curEl = pick; tuneTo(readBand(pick)); }
+      pick = pick || sections[0];
+      if (deck && pick.id === 'channels' && BRIDGE.deckCard) pick = BRIDGE.deckCard;
+      if (pick !== curEl){ curEl = pick; tuneTo(readBand(pick)); }
     }
     function queueResolve(){ if (!resolveQueued){ resolveQueued = true; requestAnimationFrame(resolveBand); } }
-    sections.forEach(function(sec){
-      ScrollTrigger.create({ trigger:sec, start:'top center', end:'bottom center', onToggle:queueResolve });
+    bandSTs = sections.map(function(sec){
+      return ScrollTrigger.create({ trigger:sec, start:'top center', end:'bottom center', onToggle:queueResolve });
     });
     ScrollTrigger.addEventListener('refresh', queueResolve);
     if (PHONE.addEventListener) PHONE.addEventListener('change', queueResolve);
@@ -693,7 +691,7 @@
         amp:   host ? parseFloat(host.getAttribute('data-amp')||'1') : 1,
         noise: host ? parseFloat(host.getAttribute('data-noise')||'0') : 0
       };
-      var live = LIVE && (shp >= 0 || PHONE.matches);
+      var live = LIVE && (PHONE.matches || (!IS_TOUCH && shp >= 0));   // phones: every trace; fine pointers: the channel traces; tablets keep the still frame
       var ctx = cv.getContext('2d'), w = 0, h = 0, ph = 0.4, lastT = 0, raf = null, inView = false, hov = false;
       var kk = { a:0, u:.5, t:9 };   // one tap ripple per mini trace
       cv.bmjKick = function(u, a){ kk.u = u; kk.a = REDUCED ? 0 : a; kk.t = 0; };
@@ -748,9 +746,9 @@
       }
       size(); draw();
       if (live){
-        if (host){
-          host.addEventListener('mouseenter', function(){ hov = true; });
-          host.addEventListener('mouseleave', function(){ hov = false; });
+        if (host){   // a real mouse only: the mouseenter a touch emulates would leave the trace racing after every tap
+          host.addEventListener('pointerenter', function(e){ if (e.pointerType === 'mouse') hov = true; });
+          host.addEventListener('pointerleave', function(e){ if (e.pointerType === 'mouse') hov = false; });
         }
         new IntersectionObserver(function(en){
           inView = en[0].isIntersecting;

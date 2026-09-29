@@ -150,7 +150,7 @@
      ================================================================= */
   var isOpen = false, pushed = false, pending = null, lastFocus = null, ixTl = null, bgAnim = null, scanAnim = null;
   var outside = [$('main'), topbar, $('footer'), dock].filter(Boolean);
-  var bg = ix && $('.ix-bg', ix), scan = ix && $('.ix-scan', ix), head = ix && $('.ix-head', ix), foot = ix && $('.ix-foot', ix);
+  var bg = ix && $('.ix-bg', ix), scan = ix && $('.ix-scan', ix), head = ix && $('.ix-head', ix), ixFoot = ix && $('.ix-foot', ix);
   var rows = ix ? $$('.ix-list > li', ix) : [], names = ix ? $$('.ix-name', ix) : [];
   var EXPO = 'cubic-bezier(.87,0,.13,1)';   // ≈ expo.inOut, for the compositor-friendly WAAPI clip morph
   function setInert(on){
@@ -178,7 +178,9 @@
   }
   function openIndex(){
     if (isOpen || !ix || !PHONE.matches) return;
-    isOpen = true; lastFocus = document.activeElement; markCurrent();
+    // Safari never focuses a tapped <button>, so activeElement is <body>: fall back to the dock button itself
+    var ae = document.activeElement;
+    isOpen = true; pending = null; lastFocus = (ae && ae !== document.body) ? ae : btn; markCurrent();
     var from = pillClip(), r = btn.getBoundingClientRect();
     ix.classList.add('is-open'); document.documentElement.classList.add('ix-open'); setInert(true); btn.setAttribute('aria-expanded', 'true');
     try { history.pushState({ bmjIx:1 }, ''); pushed = true; } catch(e){ pushed = false; }
@@ -202,14 +204,15 @@
       .fromTo(head, { opacity:0, y:-10 }, { opacity:1, y:0, duration:.45, ease:'power2.out' }, .3)
       .fromTo(rows, { opacity:0, y:34 }, { opacity:1, y:0, duration:.7, ease:'expo.out', stagger:.055 }, .28)
       .fromTo(names, { '--w':64 }, { '--w':112, duration:.75, ease:'expo.out', stagger:.055 }, .28)
-      .fromTo(foot, { opacity:0, y:16 }, { opacity:1, y:0, duration:.45, ease:'power3.out' }, .4);
+      .fromTo(ixFoot, { opacity:0, y:16 }, { opacity:1, y:0, duration:.45, ease:'power3.out' }, .4);
     if (focusEl) focusEl.focus({ preventScroll:true });
   }
   function finishClose(){
     ix.classList.remove('is-open'); document.documentElement.classList.remove('ix-open'); setInert(false);
     btn.setAttribute('aria-expanded', 'false'); stopTraces();
     if (bgAnim){ bgAnim.cancel(); bgAnim = null; } if (scanAnim){ scanAnim.cancel(); scanAnim = null; }
-    if (G) G.set([head, foot, ix].concat(rows, names), { clearProps:'all' });
+    if (G) G.set([head, ixFoot, ix].concat(rows, names), { clearProps:'all' });
+    $$('.is-pick', ix).forEach(function(a){ a.classList.remove('is-pick'); });
     var then = pending; pending = null;
     if (then) then();
     else if (lastFocus && lastFocus.focus && document.contains(lastFocus)) lastFocus.focus({ preventScroll:true });
@@ -224,14 +227,16 @@
     if (ixTl) ixTl.kill();
     ixTl = G.timeline()
       .to(rows.slice().reverse(), { opacity:0, y:18, duration:.24, ease:'power2.in', stagger:.03 }, 0)
-      .to([head, foot], { opacity:0, duration:.2, ease:'power1.in' }, 0);
+      .to([head, ixFoot], { opacity:0, duration:.2, ease:'power1.in' }, 0);
     if (bgAnim) bgAnim.cancel();
     bgAnim = bg.animate([{ clipPath:'inset(0px 0px 0px 0px round 0px)' }, { clipPath:pillClip() }], { duration:460, delay:120, easing:EXPO, fill:'both' });
     bgAnim.onfinish = finishClose;
   }
-  // every UI close goes through history, so the Android back gesture and the close button share one path
+  // every UI close goes through history, so the Android back gesture and the close button share one path.
+  // A second ✕ / Esc while the index is already closing is ignored, and never drops a destination already picked.
   function requestClose(then){
-    pending = then || null;
+    if (then) pending = then;
+    if (!isOpen) return;
     if (pushed){ pushed = false; history.back(); } else closeIndex();
   }
   window.addEventListener('popstate', function(){ if (isOpen){ pushed = false; closeIndex(); } });
@@ -248,7 +253,8 @@
       var a = e.target.closest('[data-go]');
       if (a){
         e.preventDefault(); var id = a.getAttribute('data-go'); a.classList.add('is-pick'); buzz(8);
-        setTimeout(function(){ requestClose(function(){ a.classList.remove('is-pick'); goTo(id); }); }, REDUCED ? 0 : 140);
+        pending = function(){ goTo(id); };                     // the pick is kept even if ✕ / Esc lands during the flash
+        setTimeout(function(){ requestClose(); }, REDUCED ? 0 : 140);
         return;
       }
       if (e.target.closest('.ix-close')) requestClose();
@@ -398,7 +404,8 @@
   function gesture(el, h){
     var g = null;
     el.addEventListener('pointerdown', function(e){
-      if (h.skip && h.skip(e)) return;
+      if (!e.isPrimary || (h.skip && h.skip(e))) return;     // a second finger (pinch, palm) never hijacks the gesture in flight
+      if (g && g.mode === 'drag' && h.dragEnd) h.dragEnd(g, e);
       g = { id:e.pointerId, x0:e.clientX, y0:e.clientY, t0:performance.now(), mode:'?' };
       if (h.down) h.down(g, e);
     }, { passive:true });
@@ -418,7 +425,9 @@
       g = null;
     }
     el.addEventListener('pointerup', function(e){ end(e, false); }, { passive:true });
-    el.addEventListener('pointercancel', function(e){ end(e, true); }, { passive:true });   // the browser took a vertical pan
+    el.addEventListener('pointercancel', function(e){ end(e, true); }, { passive:true });        // the browser took a vertical pan
+    // …or our capture was lost (only el's own: touch starts with an implicit capture on the inner target, which it hands to el)
+    el.addEventListener('lostpointercapture', function(e){ if (e.target === el) end(e, true); }, { passive:true });
   }
   var hero = $('#hero'), probe = hero && $('.probe', hero), ring = hero && $('.tapring', hero), hint = hero && $('.touchhint', hero);
   if (hero && probe && S && S.ok){

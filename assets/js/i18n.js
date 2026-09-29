@@ -251,14 +251,15 @@
     retune(lang);
   });
 
-  /* a reader's switch reads as a RETUNE: where View Transitions exist (and motion is welcome) the old copy dims while
-     the new language scans in from the top and the name glides to its new place (i18n.css); elsewhere it swaps
-     instantly. The new state is a live snapshot, so the scope keeps running underneath. set() stays instant. */
+  /* on phones a reader's switch reads as a RETUNE: where View Transitions exist (and motion is welcome) the old copy
+     dims while the new language scans in from the top and the name glides to its new place (i18n.css). Desktop and
+     tablets keep the approved instant swap. The new state is a live snapshot, so the scope keeps running. set() stays instant. */
   var RM = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var PHONE = window.matchMedia ? window.matchMedia('(max-width:720px)') : { matches:false };
   var edge = null;   // the bright scan edge that rides the reveal: it exists only in the NEW state, so only it animates in
   function retune(lang){
     var root = document.documentElement;
-    if (RM || !document.startViewTransition){ apply(lang); return; }
+    if (RM || !PHONE.matches || !document.startViewTransition){ apply(lang); return; }
     if (!edge){ edge = document.createElement('div'); edge.className = 'vt-edge'; edge.setAttribute('aria-hidden', 'true'); }
     root.classList.add('vt-lang');
     try {
