@@ -13,6 +13,30 @@
   // motion (name slide-in, ambient drift, scroll jolts) is dropped below.
   var SCOPE_SPEED = REDUCED ? 0.5 : 1.0;
   var scrollVel = 0;   // 0..1, fed by the ScrollTrigger below, decays in frame(); the signal reacts to the reader's hand
+  // ONE phone gate for the whole site (the same query mobile.css / mobile.js use); tablets and desktop keep the approved layout
+  var PHONE = window.matchMedia('(max-width:720px)');
+  /* TRANSIENT scope state — kept OUT of P on purpose: tuneTo() kills every tween on P at each section change.
+     env/draw/head: the phone power-on (amplitude envelope, drawn fraction of the trace, scan-head visibility);
+     barEnv: the strip's end-of-transmission collapse; rip[]: up to 3 travelling wave packets struck by a tap
+     (a amplitude, u origin 0..1, t age); det: the frequency multiplier a thumb stretches around anch (springs back
+     to 1 on release); probe: u under the finger (-1 = none), pu its last value. Decayed in frame() with dt. */
+  var TR = { env:1, draw:1, head:1, barEnv:1,
+             rip:[{a:0,u:.5,t:9},{a:0,u:.5,t:9},{a:0,u:.5,t:9}], ri:0, live:false,
+             det:1, detV:0, detTo:1, held:false, anch:.5, probe:-1, pu:.5, probeA:0 };
+  function kick(u, a){
+    var r = TR.rip[TR.ri = (TR.ri+1)%3];
+    r.u = Math.max(0, Math.min(1, u)); r.a = REDUCED ? Math.min(a, .35) : a; r.t = 0; TR.live = true;
+  }
+  function rip(u){   // displacement of all live packets at u: a packet running outward both ways + the struck point itself
+    var y = 0;
+    for (var i=0;i<3;i++){
+      var r = TR.rip[i]; if (r.a < 0.004) continue;
+      var d = Math.abs(u - r.u), f = r.t*0.62, e = (d - f)/0.075, s0 = d/0.028;
+      if (!REDUCED) y += r.a*Math.exp(-e*e)*Math.cos((d - f)*62)/(1 + d*3);
+      y += r.a*1.25*Math.exp(-s0*s0)*Math.exp(-r.t*9);
+    }
+    return y;
+  }
   document.body.classList.add('is-ready');
   // failsafe: ensure hero/name are visible shortly after load no matter what
   setTimeout(function(){ document.documentElement.classList.add('motion-done'); }, 2600);
@@ -223,6 +247,18 @@
       var dt = Math.min(0.05,(now-last)/1000); last=now;
       phase += dt*P.speed*SCOPE_SPEED*(1 + scrollVel*0.8);   // a flick makes the trace race (≤1.8×), then settle — mild enough for trackpad inertia
       scrollVel *= Math.pow(0.03, dt);   // ~1s to settle
+      // touch physics (all no-ops at rest): packets age and ring out, the stretched trace springs home with an overshoot
+      if (TR.live){
+        var alive = false;
+        for (var ri=0; ri<3; ri++){ var rr = TR.rip[ri]; if (rr.a > 0.004){ rr.t += dt; rr.a *= Math.pow(0.16, dt); alive = true; } }
+        TR.live = alive;
+      }
+      if (TR.held){ TR.det += (TR.detTo - TR.det)*(1 - Math.pow(0.0005, dt)); TR.detV = 0; }
+      else if (Math.abs(TR.det - 1) > 0.0005 || Math.abs(TR.detV) > 0.001){
+        TR.detV += (1 - TR.det)*110*dt; TR.detV *= Math.pow(0.012, dt); TR.det += TR.detV*dt;
+      } else { TR.det = 1; TR.detV = 0; }
+      if (TR.probe >= 0) TR.pu = TR.probe;
+      TR.probeA += ((TR.probe >= 0 ? 1 : 0) - TR.probeA)*(1 - Math.pow(0.002, dt));
 
       // gentle automatic ambient drift (no pointer coupling, no horizontal pan):
       // a slow vertical float + a faint inward "breath" so the scope feels alive
@@ -243,7 +279,7 @@
 
       // telemetry readout (three value nodes; DOM writes only on change)
       if (teleF){
-        var tf = P.freq.toFixed(2), ta = P.amp.toFixed(2), tn = P.noise>0.4 ? ' · ' + T('noise') : '';
+        var tf = (P.freq*TR.det).toFixed(2), ta = P.amp.toFixed(2), tn = P.noise>0.4 ? ' · ' + T('noise') : '';
         if (tf !== teleLastF){ teleF.textContent = tf; teleLastF = tf; }
         if (ta !== teleLastA){ teleA.textContent = ta; teleLastA = ta; }
         if (tn !== teleLastN){ teleN.textContent = tn; teleLastN = tn; }
@@ -260,16 +296,20 @@
       coreMat.opacity = 0.98;
 
       var halfX = XSPAN/2;
-      var amp = P.amp*1.7*dockAmp*ASPK;   // portrait: one calm swing through the name instead of two full-height peaks
-      var fq  = P.freq*(0.6 + 0.4*ASPK);
+      var amp = P.amp*1.7*dockAmp*ASPK*TR.env;   // portrait: one calm swing through the name instead of two full-height peaks
+      var fq  = P.freq*(0.6 + 0.4*ASPK), dk = TR.det - 1, an = TR.anch, rl = TR.live;
       var thick = (0.15 + P.amp*0.05) * (1 - P.dock*0.45);
       var thickH = thick*2.9;
+      // power-on: only the first nDraw samples are drawn, and the scan head rides that leading edge
+      var nDraw = TR.draw >= 1 ? SAMPLES : Math.max(2, Math.round(SAMPLES*TR.draw));
+      var pIdx = Math.round(TR.pu*(SAMPLES-1)), pX = 0, pY = 0;
       var lastY=0, lastX=0;
       for (var s=0;s<SAMPLES;s++){
         var u = s/(SAMPLES-1);
         var x = -halfX + u*XSPAN;
         // blend two shapes for smooth section morphs; gentle multi-rate drift for life
-        var ph = (u*Math.PI*2*fq) + phase*2.4 + Math.sin(phase*0.6)*0.3 + Math.sin(phase*0.27)*0.15;
+        // (dk ≠ 0 only while a thumb stretches the trace around its anchor an)
+        var ph = ((u + dk*(u - an))*Math.PI*2*fq) + phase*2.4 + Math.sin(phase*0.6)*0.3 + Math.sin(phase*0.27)*0.15;
         var yA = shapeVal(P.fromShape, ph);
         var yB = shapeVal(P.shape, ph);
         var base = yA + (yB-yA)*P.morph;
@@ -277,7 +317,9 @@
           var nx = u*42 + phase*9.0;
           base += vnoise(nx)*P.noise*0.9 + vnoise(nx*2.3)*P.noise*0.4;
         }
+        if (rl) base += rip(u);
         var y = base*amp;
+        if (s === pIdx){ pX = x; pY = y; }
         corePos[s*3]=x; corePos[s*3+1]=y; corePos[s*3+2]=0;
         var bi=s*2*3;
         ribbonPos[bi]  =x; ribbonPos[bi+1]=y+thick; ribbonPos[bi+2]=0;
@@ -286,16 +328,23 @@
           haloPos[bi]  =x; haloPos[bi+1]=y+thickH; haloPos[bi+2]=0;
           haloPos[bi+3]=x; haloPos[bi+4]=y-thickH; haloPos[bi+5]=0;
         }
-        lastY=y; lastX=x;
+        if (s < nDraw){ lastY=y; lastX=x; }
       }
+      coreGeo.setDrawRange(0, nDraw);
+      ribbonGeo.setDrawRange(0, (nDraw-1)*6);
+      if (haloGeo) haloGeo.setDrawRange(0, (nDraw-1)*6);
       coreGeo.attributes.position.needsUpdate=true;
       ribbonGeo.attributes.position.needsUpdate=true;
       if (haloGeo) haloGeo.attributes.position.needsUpdate=true;
-      dotGeo.attributes.position.array[0]=lastX;
-      dotGeo.attributes.position.array[1]=lastY;
+      // the scan head is the PROBE while a finger is on the trace; otherwise it rides the leading edge.
+      // Phones fade it out after the power-on (at rest it sat past the right edge: a half-cropped blob)
+      var probing = TR.probeA > 0.01, hk = Math.max(TR.head, TR.probeA);
+      var hx = probing ? pX : lastX, hy = probing ? pY : lastY;
+      dotGeo.attributes.position.array[0]=hx;
+      dotGeo.attributes.position.array[1]=hy;
       dotGeo.attributes.position.needsUpdate=true;
-      dotMat.opacity = 0.9*(1-P.dock*0.4);
-      if (head){ head.position.set(lastX,lastY,0.02); head.material.opacity = 0.9*(1-P.dock*0.6); }
+      dotMat.opacity = 0.9*(1-P.dock*0.4)*hk;
+      if (head){ head.position.set(hx,hy,0.02); head.material.opacity = 0.9*(1-P.dock*0.6)*hk; head.visible = hk > 0.01; }
     }
 
     function drawBar(){
@@ -303,7 +352,8 @@
       var low = (laneX1 - laneX0) < 120;                 // no room between the mark and the readouts → a floor band under the labels
       var x0 = low ? 0 : laneX0, x1 = low ? barW : laneX1;
       var mid = low ? barH - 11 : barH/2;
-      var amp = (low ? 5 : mid*0.40) * P.amp;
+      var amp = (low ? 5 : mid*0.40) * P.amp * TR.barEnv;   // barEnv → 0 at the footer: the trace flat-lines (CRT off)
+      var rl = TR.live, ra = (low ? 10 : mid*0.42) * TR.barEnv;
       bctx.globalAlpha = P.glow;                          // dips briefly on retune (see tuneTo)
       // soft glow pass + crisp pass, each faded out at both ends of the lane
       for (var pass=0; pass<2; pass++){
@@ -314,12 +364,12 @@
         bctx.beginPath();
         for (var x=x0; x<=x1; x+=2){
           var u = x/barW;
-          var ph = (u*Math.PI*2*P.freq*1.4) + phase*2.4;
+          var ph = (u*Math.PI*2*P.freq*TR.det*1.4) + phase*2.4;
           var yA = shapeVal(P.fromShape, ph);
           var yB = shapeVal(P.shape, ph);
           var base = yA + (yB-yA)*P.morph;
           if (P.noise>0.001){ base += vnoise(u*42 + phase*9.0)*P.noise*0.7; }
-          var py = mid - base*amp;
+          var py = mid - base*amp - (rl ? rip(u)*ra : 0);
           if (x===x0) bctx.moveTo(x,py); else bctx.lineTo(x,py);
         }
         bctx.lineWidth = pass===0 ? 3.2 : 1.4; bctx.strokeStyle = g; bctx.stroke();
@@ -331,6 +381,13 @@
         bctx.fillRect(Math.round(x0), Math.round(mid-6), 1, 12);
         bctx.fillRect(Math.round(x1), Math.round(mid-6), 1, 12);
       }
+      // sign-off: as the trace flattens, what is left is one phosphor dot in the middle of the lane
+      if (TR.barEnv < 0.97){
+        var cx = (x0 + x1)/2, k = 1 - TR.barEnv;
+        var rg = bctx.createRadialGradient(cx, mid, 0, cx, mid, 10);
+        rg.addColorStop(0, 'rgba(255,233,200,' + k + ')'); rg.addColorStop(.35, 'rgba(255,173,58,' + (k*.7) + ')'); rg.addColorStop(1, 'rgba(255,173,58,0)');
+        bctx.globalAlpha = 1; bctx.fillStyle = rg; bctx.fillRect(cx-10, mid-10, 20, 20);
+      }
       bctx.globalAlpha = 1;
     }
 
@@ -339,8 +396,21 @@
     function stop(){ running=false; if(raf) cancelAnimationFrame(raf); }
     document.addEventListener('visibilitychange', function(){ if(document.hidden) stop(); else start(); });
 
-    return { resize:resize, start:start, stop:stop, renderOnce:function(){ phase = 0.6; computeWave(); renderer.render(scene,camera); } };
+    // world → CSS px inside the hero stage, and the trace's current height at u (for the touch hint); no layout reads
+    function toScreen(wy){ var vH = 2*Math.tan(THREE.MathUtils.degToRad(camera.fov)/2)*camera.position.z; return H/2 - wy*(H/vH); }
+    function waveY(u){ var i = Math.round(Math.max(0, Math.min(1, u))*(SAMPLES-1)); return corePos[i*3+1]; }
+    return { toScreen:toScreen, waveY:waveY, resize:resize, start:start, stop:stop, renderOnce:function(){ phase = 0.6; computeWave(); renderer.render(scene,camera); } };
   })(); } catch(e){ if(window.console) console.warn('Scope init failed; continuing without WebGL:', e); Scope = null; }
+
+  /* ---------- BRIDGE: the scope's only public surface (mobile.js). Null-safe: no WebGL → toScreen/waveY return 0;
+     no GSAP → tuneTo/resolve stay no-ops. Touch state lives in TR (never in P). ---------- */
+  var BRIDGE = window.BMJ_SCOPE = {
+    ok:!!Scope, P:P, TR:TR, kick:kick, shapeVal:shapeVal, reduced:REDUCED, deckCard:null,
+    race:function(v){ if (!REDUCED) scrollVel = Math.max(scrollVel, v); },
+    toScreen:function(wy){ return Scope ? Scope.toScreen(wy) : 0; },
+    waveY:function(u){ return Scope ? Scope.waveY(u) : 0; },
+    tuneTo:function(){}, readBand:null, resolve:function(){}, band:function(){ return 'CH·00 — CARRIER'; }
+  };
 
   /* =================================================================
      RESIZE wiring + boot
@@ -422,11 +492,46 @@
     ds.forEach(function(d){
       d.addEventListener('toggle', function(){
         if (d._sync){ d._sync = false; return; }
-        if (mq.matches) d.setAttribute('data-user', '1');   // a card the reader opened stays open across a rotation
+        // a card the reader opened stays open across a rotation; one they closed stays closed
+        if (mq.matches){ if (d.open) d.setAttribute('data-user', '1'); else d.removeAttribute('data-user'); }
         if (window.ScrollTrigger) ScrollTrigger.refresh();
       });
     });
   })();
+
+  /* PHONE POWER-ON (≤720px, motion allowed): the scan head draws a flat line edge to edge, the line acquires the
+     carrier with an elastic overshoot, the poster name rises while it decompresses on Anybody's width axis to each
+     line's own setting (--lw/--lg in mobile.css), the mono chrome decodes, EXP counts up and the CTA key wipes in.
+     Every beat ends by ~2.2s, inside the 2.6s motion-done failsafe; the axes are CSS vars, so the failsafe never fights them. */
+  function phoneIntro(){
+    var spans = gsap.utils.toArray('.hero-mid .name .ln > span');
+    function lineAxis(el, name, fb){ var v = parseFloat(getComputedStyle(el.parentNode).getPropertyValue(name)); return isNaN(v) ? fb : v; }
+    TR.draw = 0; TR.env = 0.035;
+    var tl = gsap.timeline({ delay:0.05 });
+    tl.to(TR, { draw:1, duration:0.8, ease:'power2.inOut' }, 0.1)
+      .to(TR, { env:1.22, duration:0.34, ease:'power3.out' }, 0.86)
+      .to(TR, { env:1, duration:0.9, ease:'elastic.out(1,0.45)' }, 1.2)
+      .to(TR, { head:0, duration:0.6, ease:'power1.out' }, 1.5)
+      .fromTo('#hero .hero-ticks i', { opacity:0, scale:1.9 }, { opacity:.5, scale:1, duration:0.5, ease:'expo.out', stagger:0.04 }, 0)
+      .fromTo(spans, { y:0, yPercent:115 }, { yPercent:0, duration:1.0, ease:'expo.out', stagger:0.1 }, 0.42)
+      .fromTo(spans, { '--wd':50, '--wg':300 },
+              { '--wd':function(i, el){ return lineAxis(el, '--lw', 122); }, '--wg':function(i, el){ return lineAxis(el, '--lg', 825); },
+                duration:0.9, ease:'power3.inOut', stagger:0.1, clearProps:'--wd,--wg' }, 0.42)
+      .fromTo('.hero-top .id', { opacity:0 }, { opacity:1, duration:0.3, stagger:0.08,
+              onStart:function(){ try { document.dispatchEvent(new CustomEvent('bmj:decode', { detail:{ sel:'#hero .hero-top .eyebrow, #hero .hero-top .mono', dur:700 } })); } catch(e){} } }, 0.3)
+      .fromTo('.hero-mid .role .ri', { clipPath:'inset(0 100% 0 0)', opacity:0 }, { clipPath:'inset(0 0% 0 0)', opacity:1, duration:0.55, ease:'power2.out', stagger:0.09, clearProps:'clipPath' }, 1.05)
+      .set('.hero-mid .role', { opacity:1 }, 1.05)
+      .set('.hero-bot', { opacity:1 }, 1.25)
+      .fromTo('.hero-bot .readout', { opacity:0, x:-10 }, { opacity:1, x:0, duration:0.45, ease:'power2.out' }, 1.25)
+      .fromTo('.hero-bot .lede', { opacity:0, y:12 }, { opacity:1, y:0, duration:0.6, ease:'power2.out' }, 1.4)
+      .fromTo('.hero-bot .cta', { clipPath:'inset(0 100% 0 0 round 6px)' }, { clipPath:'inset(0 0% 0 0 round 6px)', duration:0.6, ease:'expo.inOut', clearProps:'clipPath' }, 1.55);
+    // EXP counts 00 → the value computed above (never hard-coded)
+    var yrs = document.querySelector('.readout .rd-v b');
+    if (yrs){
+      var to = parseInt(yrs.textContent, 10) || 3, c = { v:0 };
+      tl.to(c, { v:to, duration:0.7, ease:'power1.out', onUpdate:function(){ var n = Math.round(c.v); yrs.textContent = (n < 10 ? '0' : '') + n; } }, 1.3);
+    }
+  }
 
   /* =================================================================
      GSAP — hero intro, dock, per-section morph, reveals
@@ -434,6 +539,15 @@
   if (window.gsap && window.ScrollTrigger){
     gsap.registerPlugin(ScrollTrigger);
     ScrollTrigger.config({ ignoreMobileResize:true });   // the address-bar collapse no longer refreshes every trigger mid-scroll
+    /* a refresh measures by jumping the page to 0 and back; with the CSS `scroll-behavior:smooth` (kept for anchor
+       links) those jumps became slow scrolls, so every refresh away from the top (an accordion, a language switch, a
+       resize) stored each trigger ~scrollY too early and the strip tuned to the wrong band. Instant during a refresh. */
+    var rootEl = document.documentElement;
+    ScrollTrigger.addEventListener('refreshInit', function(){
+      rootEl.style.scrollBehavior = 'auto';
+      void getComputedStyle(rootEl).scrollBehavior;   // flush it: Chrome's scrollTo() otherwise still reads the stale 'smooth'
+    });
+    ScrollTrigger.addEventListener('refresh', function(){ rootEl.style.scrollBehavior = ''; });
     if (!REDUCED){
       // scroll velocity → the shared phase (frame()): the trace races with a flick and settles with the page
       ScrollTrigger.create({ start:0, end:'max', onUpdate:function(self){ scrollVel = Math.min(1, Math.abs(self.getVelocity())/4000); } });
@@ -441,8 +555,10 @@
 
     var topbarEl = document.getElementById('topbar');
 
-    /* hero name reveal — always animates: a slide reveal normally, a gentle fade under reduced motion */
-    if (!REDUCED){
+    /* hero name reveal — always animates: the power-on on phones, a slide reveal on larger screens, a gentle fade under reduced motion */
+    if (!REDUCED && PHONE.matches){
+      phoneIntro();
+    } else if (!REDUCED){
       var tl = gsap.timeline({ delay:0.12 });
       tl.fromTo('.hero-mid .name .ln > span', { yPercent:115 }, { yPercent:0, duration:1.05, ease:'expo.out', stagger:0.09 })
         .fromTo('.hero-mid .role', { opacity:0, y:14 }, { opacity:1, y:0, duration:0.7, ease:'power2.out' }, '-=0.5')
@@ -494,6 +610,7 @@
       P.morph = 0;
       P.shape = cfg.shape;
       curBand = cfg.band; renderBand();
+      try { document.dispatchEvent(new CustomEvent('bmj:band', { detail:{ band:cfg.band } })); } catch(e){}   // the phone dock + index listen
       gsap.killTweensOf(P);   // prevent stacked/jittering tweens when scrolling fast
       P.glow = 1;             // a kill mid-dip must never leave the trace dimmed
       gsap.to(P, { morph:1, duration:0.7, ease:'power2.inOut', overwrite:'auto' });
@@ -507,14 +624,36 @@
       }
       tuned = true;
     }
+    /* ONE resolver decides the band: the last [data-band] element in DOM order whose start line ('top center') the page
+       has crossed — the old "last entered wins", read from the triggers' own state (so it agrees with ScrollTrigger's
+       centre line, and the padding under CH·03 no longer detours through the section's CH·01). The triggers only say
+       WHEN to look (a centre-line crossing, a refresh); they no longer tune on onEnter each, which let a refresh (a 'Show
+       detail' tap) replay stale callbacks and leave the strip on the wrong channel. On phones the three channel cards
+       are a horizontal deck: mobile.js owns which card is locked (BRIDGE.deckCard), so a half-swiped deck never lies. */
     var sections = Array.prototype.slice.call(document.querySelectorAll('[data-band]'));
-    sections.forEach(function(sec){
-      ScrollTrigger.create({
-        trigger:sec, start:'top center', end:'bottom center',
-        onEnter:function(){ tuneTo(readBand(sec)); },
-        onEnterBack:function(){ tuneTo(readBand(sec)); }
-      });
+    var curEl = null, resolveQueued = false, bandSTs = [];
+    function resolveBand(){
+      resolveQueued = false;
+      var deck = PHONE.matches, pick = null;
+      for (var i=0;i<sections.length;i++){
+        if (deck && sections[i].classList.contains('channel')) continue;
+        if (bandSTs[i] && bandSTs[i].progress > 0) pick = sections[i];
+      }
+      pick = pick || sections[0];
+      if (deck && pick.id === 'channels' && BRIDGE.deckCard) pick = BRIDGE.deckCard;
+      if (pick !== curEl){ curEl = pick; tuneTo(readBand(pick)); }
+    }
+    function queueResolve(){ if (!resolveQueued){ resolveQueued = true; requestAnimationFrame(resolveBand); } }
+    bandSTs = sections.map(function(sec){
+      return ScrollTrigger.create({ trigger:sec, start:'top center', end:'bottom center', onToggle:queueResolve });
     });
+    ScrollTrigger.addEventListener('refresh', queueResolve);
+    if (PHONE.addEventListener) PHONE.addEventListener('change', queueResolve);
+    // a language switch changes section heights (the Spanish copy runs longer): re-measure every trigger once
+    var langRefresh = null;
+    document.addEventListener('bmj:lang', function(){ clearTimeout(langRefresh); langRefresh = setTimeout(function(){ ScrollTrigger.refresh(); }, 150); });
+    BRIDGE.tuneTo = tuneTo; BRIDGE.readBand = readBand; BRIDGE.resolve = queueResolve;
+    BRIDGE.band = function(){ return curBand; };
 
     /* reveals */
     gsap.utils.toArray('.reveal').forEach(function(el){
@@ -534,12 +673,14 @@
      small 2D waveforms — 'Other signals' cards (sine | pulse: one static frame,
      unchanged look) and the per-channel traces (data-wf="shape:N": the article's
      own data-shape/freq/amp/noise drawn with the scope's shapeVal/vnoise).
-     Channel traces animate only on fine pointers, only while on screen, at 30fps;
-     touch and reduced-motion get one static frame.
+     Channel traces animate only while on screen (IO-gated: in the phone deck
+     only the visible card runs), at 30fps, with no per-frame blur; on phones the
+     hobby traces run too. Reduced motion gets one static frame. A tap on a
+     channel trace strikes it (cv.bmjKick, wired in mobile.js).
      ================================================================= */
   (function(){
     var cards = Array.prototype.slice.call(document.querySelectorAll('canvas.wf'));
-    var LIVE = !REDUCED && !IS_TOUCH && ('IntersectionObserver' in window);
+    var LIVE = !REDUCED && ('IntersectionObserver' in window);
     var FPS = 30;
     cards.forEach(function(cv){
       var kind = cv.getAttribute('data-wf') || 'sine';
@@ -550,8 +691,15 @@
         amp:   host ? parseFloat(host.getAttribute('data-amp')||'1') : 1,
         noise: host ? parseFloat(host.getAttribute('data-noise')||'0') : 0
       };
-      var live = LIVE && shp >= 0;
+      var live = LIVE && (PHONE.matches || (!IS_TOUCH && shp >= 0));   // phones: every trace; fine pointers: the channel traces; tablets keep the still frame
       var ctx = cv.getContext('2d'), w = 0, h = 0, ph = 0.4, lastT = 0, raf = null, inView = false, hov = false;
+      var kk = { a:0, u:.5, t:9 };   // one tap ripple per mini trace
+      cv.bmjKick = function(u, a){ kk.u = u; kk.a = REDUCED ? 0 : a; kk.t = 0; };
+      function ripK(u){
+        if (kk.a < 0.01) return 0;
+        var d = Math.abs(u - kk.u), f = kk.t*0.9, e = (d - f)/0.07;
+        return kk.a*Math.exp(-e*e)*Math.cos((d - f)*70) + kk.a*Math.exp(-(d/0.03)*(d/0.03))*Math.exp(-kk.t*10);
+      }
       function size(){
         var dpr = Math.min(window.devicePixelRatio||1, 2);
         w = cv.clientWidth; h = cv.clientHeight||34;
@@ -562,10 +710,11 @@
         if (shp >= 0){
           var y = shapeVal(shp, u*Math.PI*2*cfg.freq*0.9 + ph)*0.85*cfg.amp;
           if (cfg.noise > 0.001) y += vnoise(u*42 + ph*3.5)*cfg.noise*0.55;
-          return Math.max(-1, Math.min(1, y));
+          return Math.max(-1, Math.min(1, y + ripK(u)));
         }
-        if (kind === 'pulse'){ var t = (u*4)%1; return (Math.exp(-t*6)*Math.sin(t*Math.PI*2*1.5))*1.3; }
-        return Math.sin(u*Math.PI*2*2.2);
+        var drift = live ? ph : 0;   // the hobby traces only move where they are live (phones); desktop keeps its still frame
+        if (kind === 'pulse'){ var t = ((u*4 + drift*0.35)%1 + 1)%1; return (Math.exp(-t*6)*Math.sin(t*Math.PI*2*1.5))*1.3; }
+        return Math.sin(u*Math.PI*2*2.2 + drift);
       }
       function trace(step){
         ctx.beginPath();
@@ -583,18 +732,23 @@
         }
         ctx.shadowBlur = 0;                               // animated: two strokes, no per-frame software blur
         ctx.lineWidth = 5;   ctx.strokeStyle = 'rgba(255,173,58,.18)'; trace(2); ctx.stroke();
-        ctx.lineWidth = 1.6; ctx.strokeStyle = hov ? '#FFC677' : '#FFAD3A'; trace(2); ctx.stroke();
+        var lit = hov || (host && host.classList.contains('is-cur'));   // the locked card of the phone deck burns brighter
+        ctx.lineWidth = 1.6; ctx.strokeStyle = lit ? '#FFC677' : '#FFAD3A'; trace(2); ctx.stroke();
       }
       function loop(t){
         raf = null; if (!inView) return;
-        if (t - lastT >= 1000/FPS){ lastT = t; ph += 0.045*(hov ? 2 : 1); draw(); }
+        if (t - lastT >= 1000/FPS){
+          var dts = Math.min(0.1, (t - lastT)/1000); lastT = t; ph += 0.045*(hov ? 2 : 1);
+          if (kk.a > 0.01){ kk.t += dts; kk.a *= Math.pow(0.1, dts); }
+          draw();
+        }
         raf = requestAnimationFrame(loop);
       }
       size(); draw();
       if (live){
-        if (host){
-          host.addEventListener('mouseenter', function(){ hov = true; });
-          host.addEventListener('mouseleave', function(){ hov = false; });
+        if (host){   // a real mouse only: the mouseenter a touch emulates would leave the trace racing after every tap
+          host.addEventListener('pointerenter', function(e){ if (e.pointerType === 'mouse') hov = true; });
+          host.addEventListener('pointerleave', function(e){ if (e.pointerType === 'mouse') hov = false; });
         }
         new IntersectionObserver(function(en){
           inView = en[0].isIntersecting;

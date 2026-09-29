@@ -579,18 +579,7 @@ footer{ position:relative; z-index:2; border-top:1px solid var(--line); padding:
   #topbar a.cta-mini{ padding-inline:0; }   /* measured budget at 390 EN is 20px with these two; keep them */
   #topbar::after{ display:none; }           /* phones: the trace itself lives in the floor band */
 }
-/* ≤380: the CTA collapses to a round 40px '↗' (label visually hidden, still announced), which buys ~90px —
-   enough to keep the CH·xx code AND its live dot in the strip on the smallest phones */
-@media (max-width:380px){
-  #topbar a.cta-mini{ position:relative; width:40px; min-height:40px; justify-content:center; border:1px solid rgba(255,173,58,.55); border-radius:999px; }
-  #topbar a.cta-mini .cta-l{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; }
-  #topbar a.cta-mini .ar{ font-size:1rem; line-height:1; }
-}
-/* the round CTA keeps its 40px visual but gets a 48×50 thumb target, like the mark and the switch: it grows into
-   the free gutter on its right and only 1px on its left, where the ES option's own extension ends (no overlap) */
-@media (max-width:380px) and (hover:none){
-  #topbar a.cta-mini::before{ content:""; position:absolute; top:-6px; bottom:-6px; left:-2px; right:-8px; border-radius:999px; }
-}
+/* (phones ≤720 hand the CH·xx code to the thumb dock and the CTA to the channel index — see mobile.css) */
 @media (prefers-reduced-motion: reduce){ #topbar.retune #tele-band, #topbar.retune #tele-read, #topbar.retune .tele .dot{ animation:none; } }
 
 /* T1-06 section header as an instrument rule: label · tick scale · CH·xx — BAND, then the h2 (old ≤640 .s-head block deleted above).
