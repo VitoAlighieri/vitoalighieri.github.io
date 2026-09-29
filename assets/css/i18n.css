@@ -15,23 +15,33 @@
    lands on lifts to amber. The chip geometry is measured in JS (i18n.js)
    so it tracks the real glyph widths in either language.
    =================================================================== */
+/* --ls tracking, --opx / --opy option padding: every variant sets these three, and the option derives its box from them */
 .lang-switch{
+  --ls:.16em; --opx:.42rem; --opy:.2rem;
   position:relative; display:inline-flex; align-items:center; gap:.45rem;
   line-height:1; white-space:nowrap;
-  font-family:var(--m); font-weight:500; font-size:.72rem; letter-spacing:.16em;
+  font-family:var(--m); font-weight:500; font-size:.72rem; letter-spacing:var(--ls);
 }
+/* optical centring: the tracking after the last letter is taken back out of the right padding, so 'EN' sits in the
+   exact middle of its chip (it used to lean ~1.2px left) */
 .lang-switch .lang-opt{
   position:relative; z-index:1;
   -webkit-appearance:none; appearance:none; background:none; border:0; margin:0;
-  padding:.2rem .42rem; min-width:2.2ch; cursor:pointer; color:var(--mute);
-  font:inherit; letter-spacing:inherit; text-transform:uppercase; text-align:center; line-height:1;
+  padding:var(--opy) calc(var(--opx) - var(--ls)) var(--opy) var(--opx); min-width:2.2ch; cursor:pointer; color:var(--mute);
+  font:inherit; letter-spacing:var(--ls); text-transform:uppercase; text-align:center; line-height:1;
   border-radius:999px;
   transition:color .35s var(--ease), transform .18s var(--ease);
+}
+/* where the engine can trim the text box to the capitals (Chrome 133+, Safari 18.2+), the caps are centred exactly —
+   metric rounding otherwise leaves them up to ~1px high. The padding grows by what the trim removes (1em − .73em cap
+   height, halved), so every chip keeps exactly the same size either way. */
+@supports (text-box: trim-both cap alphabetic){
+  .lang-switch .lang-opt{ text-box:trim-both cap alphabetic; padding-top:calc(var(--opy) + .135em); padding-bottom:calc(var(--opy) + .135em); }
 }
 .lang-switch .lang-opt:hover{ color:var(--bone-2); }
 .lang-switch .lang-opt.is-on{ color:var(--amber); }
 .lang-switch .lang-opt:active{ transform:scale(.88); }
-.lang-switch .lang-div{ position:relative; z-index:1; color:var(--mute-2); }
+.lang-switch .lang-div{ position:relative; z-index:1; color:var(--mute-2); letter-spacing:0; }   /* a lone '/' carries no tracking: it sits midway between EN and ES */
 
 /* the gliding indicator (geometry set in JS) */
 .lang-switch .lang-ind{
@@ -49,14 +59,15 @@
 
 /* hero instance: a subtle pill so it reads as a control, sitting on the top line */
 .lang-switch--hero{
-  align-self:flex-start; padding:.4rem .7rem; letter-spacing:.2em;
+  --ls:.2em;
+  align-self:flex-start; padding:.4rem .7rem;
   border:1px solid var(--line-2); border-radius:999px; background:rgba(13,18,28,.45);
   -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
 }
 .lang-switch--hero .lang-opt{ font-size:.74rem; }
 
 /* docked-strip instance: slim, the bar already provides the chrome */
-.lang-switch--bar{ font-size:.66rem; gap:.35rem; letter-spacing:.14em; }
+.lang-switch--bar{ --ls:.14em; font-size:.66rem; gap:.35rem; }
 
 /* reduced motion: keep the colour cue, drop the glide */
 @media (prefers-reduced-motion: reduce){
@@ -65,18 +76,19 @@
   .lang-switch .lang-opt:active{ transform:none; }
 }
 
-/* ----- mobile: roomier tap targets so the switch is comfortable on touch ----- */
+/* ----- phones: a compact 32px pill (the 44px+ touch targets come from the invisible ::before hit areas below);
+         the chip is 24px tall, the pill's padding is the same 3px all round, so chip and pill share one centre ----- */
 @media (max-width:600px){
-  .lang-switch--hero{ font-size:.78rem; gap:.5rem; padding:.5rem .9rem; }
-  .lang-switch--hero .lang-opt{ font-size:.82rem; padding:.44rem .6rem; }
+  .lang-switch--hero{ --opx:.62rem; --opy:.36rem; box-sizing:border-box; height:2rem; padding:0 3px; gap:.3rem; font-size:.78rem; }
+  .lang-switch--hero .lang-opt{ font-size:.78rem; }
 }
-/* tiniest phones: a more compact pill so the hero's two-corner top row fits */
+/* tiniest phones: a little tighter so the hero's two-corner top row fits */
 @media (max-width:360px){
-  .lang-switch--hero{ font-size:.72rem; gap:.35rem; padding:.4rem .6rem; letter-spacing:.14em; }
-  .lang-switch--hero .lang-opt{ font-size:.76rem; padding:.38rem .48rem; }
+  .lang-switch--hero{ --ls:.16em; --opx:.52rem; --opy:.4rem; gap:.22rem; font-size:.72rem; }
+  .lang-switch--hero .lang-opt{ font-size:.72rem; }
 }
 @media (max-width:720px){
-  .lang-switch--bar .lang-opt{ padding:.28rem .46rem; }
+  .lang-switch--bar{ --opx:.46rem; --opy:.28rem; }
 }
 
 /* ===================================================================
@@ -118,6 +130,7 @@
   .lang-switch--bar .lang-opt:last-of-type::before{ right:-8px; }
   .lang-switch .lang-div{ pointer-events:none; }
   #topbar .mark::before{ content:""; position:absolute; inset:-14px -8px; }
+  @supports (text-box: trim-both cap alphabetic){ #topbar .mark::before{ inset:-17px -8px; } }   /* the trimmed wordmark box is shorter: keep the 44px target */
   /* no per-frame backdrop blur over the live WebGL scope on touch GPUs */
   .lang-switch--hero{ -webkit-backdrop-filter:none; backdrop-filter:none; background:rgba(13,18,28,.78); }
 }

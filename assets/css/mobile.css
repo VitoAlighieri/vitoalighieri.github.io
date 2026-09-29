@@ -107,17 +107,19 @@
   .ix-head{ display:flex; align-items:flex-end; gap:.8rem; padding-bottom:.9rem; }
   .ix-head .idx{ font-family:var(--m); font-weight:500; font-size:var(--mono-l); letter-spacing:.2em; color:var(--amber); white-space:nowrap; line-height:1; }
   .ix-head .s-ticks{ flex:1; min-width:.5rem; }   /* the ticks give way first: '[ ÍNDICE DE CANALES ]' needs the row at 320 */
-  .ix-head .ix-now{ font-family:var(--m); font-weight:500; font-size:var(--mono-t); letter-spacing:.16em; color:var(--bone-2); white-space:nowrap; line-height:1; font-variant-numeric:tabular-nums; }
+  .ix-head .ix-now{ font-family:var(--m); font-weight:500; font-size:var(--mono-t); letter-spacing:.16em; margin-right:-.16em; color:var(--bone-2); white-space:nowrap; line-height:1; font-variant-numeric:tabular-nums; }
   .ix-list{ list-style:none; margin:0; padding:0; align-self:center; border-top:1px solid var(--line); }
   .ix-list > li{ border-bottom:1px solid var(--line); }
-  .ix-row{ position:relative; display:grid; grid-template-columns:3.3rem minmax(0,1fr); grid-template-areas:"code name" "code sub";
+  .ix-row{ --ixn:clamp(2rem,10vw,3.1rem); position:relative; display:grid; grid-template-columns:3.3rem minmax(0,1fr); grid-template-areas:"code name" "code sub";
     column-gap:.2rem; padding:.8rem .2rem .7rem 0; min-height:64px; color:var(--bone); }
-  .ix-code{ grid-area:code; font-family:var(--m); font-weight:500; font-size:var(--mono-t); letter-spacing:.12em; color:var(--mute); padding-top:.6rem; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  /* the code's capitals sit on the name's cap centre line: the name's caps centre is .42 of its size below its box top
+     (Anybody, line-height .96), the code's is .495 of .66rem below its own (JetBrains Mono, line-height 1) */
+  .ix-code{ grid-area:code; font-family:var(--m); font-weight:500; font-size:var(--mono-t); line-height:1; letter-spacing:.12em; color:var(--mute); padding-top:calc(var(--ixn) * .42 - .33rem); font-variant-numeric:tabular-nums; white-space:nowrap; }
   .ix-name{ grid-area:name; font-family:var(--d); font-weight:780; font-variation-settings:'wght' 780,'wdth' var(--w,112);
-    font-size:clamp(2rem,10vw,3.1rem); line-height:.96; letter-spacing:-.015em; transition:color .25s var(--ease); }
+    font-size:var(--ixn); line-height:.96; letter-spacing:-.015em; transition:color .25s var(--ease); }
   .ix-sub{ grid-area:sub; display:flex; align-items:center; gap:.8rem; margin-top:.4rem; min-width:0;
     font-family:var(--m); font-weight:500; font-size:var(--mono-t); letter-spacing:.16em; text-transform:uppercase; color:var(--mute-hi); }
-  .ix-sub > span{ white-space:nowrap; }
+  .ix-sub > span{ white-space:nowrap; margin-right:-.16em; }   /* no trailing tracking before the mini trace */
   .ix-wf{ flex:1; min-width:2rem; height:16px; display:block; opacity:.55; }
   .ix-row.is-cur .ix-code, .ix-row.is-cur .ix-name{ color:var(--amber); }
   .ix-row.is-cur .ix-wf{ opacity:1; }
@@ -129,6 +131,7 @@
   .ix-chs a{ flex:1; min-height:44px; display:flex; align-items:center; justify-content:center; gap:.4rem; border:1px solid var(--line-2); border-radius:3px;
     font-family:var(--m); font-weight:500; font-size:var(--mono-t); letter-spacing:.14em; text-transform:uppercase; color:var(--bone-2); white-space:nowrap; }
   .ix-chs a b{ color:var(--amber); font-weight:600; }
+  .ix-chs a > span:last-child{ margin-right:-.14em; }       /* the tracking after the last letter would push '01 BUILD' off centre */
   .ix-chs a:active, .ix-chs a.is-pick{ border-color:var(--amber); background:rgba(255,173,58,.1); }
   .ix-chs a.is-cur{ border-color:rgba(255,173,58,.6); }
   /* thumb-zone footer: it sits exactly where the dock sits, so the dock reads as having flipped into these controls */
@@ -137,8 +140,7 @@
     background:linear-gradient(180deg, transparent, var(--ink) 30%); }
   .ix-bar{ height:var(--dock-h); display:grid; grid-template-columns:auto minmax(0,1fr) 44px; align-items:center; gap:10px; padding:0 7px 0 12px;
     border-radius:999px; border:1px solid var(--line-2); background:linear-gradient(180deg, #0F1520, #080B12); }
-  .ix-bar .lang-switch{ font-size:.74rem; letter-spacing:.18em; }
-  .ix-bar .lang-opt{ padding:.5rem .55rem; }
+  .ix-bar .lang-switch{ --ls:.18em; --opx:.55rem; --opy:.5rem; font-size:.74rem; }
   .ix-copy{ -webkit-appearance:none; appearance:none; justify-self:start; min-height:44px; padding:0 .9rem; border:0; border-left:1px solid var(--line-2); background:none; cursor:pointer;
     font-family:var(--m); font-weight:500; font-size:var(--mono-t); letter-spacing:.16em; text-transform:uppercase; color:var(--bone-2); white-space:nowrap; transition:color .2s; }
   .ix-copy:active, .ix-copy.is-done{ color:var(--amber); }
@@ -147,20 +149,22 @@
   .ix-close::before, .ix-close::after{ content:""; position:absolute; left:50%; top:50%; width:16px; height:2px; margin:-1px 0 0 -8px; background:var(--amber); border-radius:1px; transform:rotate(45deg); }
   .ix-close::after{ transform:rotate(-45deg); }
   .ix-close:active{ transform:scale(.92); }
-  @media (max-width:380px){ .ix-chs{ padding-left:0; } .ix-chs a{ letter-spacing:.1em; } }
+  @media (max-width:380px){ .ix-chs{ padding-left:0; } .ix-chs a{ letter-spacing:.1em; } .ix-chs a > span:last-child{ margin-right:-.1em; } }
 
   /* ---------- 4 · HERO: the name as a poster that fills the glass ----------
      Each line runs gutter to gutter at its own size and width axis (measured em-widths at wght 825, ls -.02em:
      Biel@wdth150 = 2.96em · Martínez@122 = 6.19em · Janer@122 = 4.18em). --lw/--lg are the lines' final axes;
      the power-on (app.js) decompresses each line from wdth 50 to exactly these values. */
-  #hero{ grid-template-rows:auto auto minmax(0,1fr) auto; padding-bottom:max(1.25rem, calc(env(safe-area-inset-bottom) + .9rem)); }
+  #hero{ --hpb:max(1.25rem, calc(env(safe-area-inset-bottom) + .9rem)); grid-template-rows:auto auto minmax(0,1fr) auto; }
   .hero-top .id:not(.coord) .mono{ display:none; }                 /* 'B. Martínez Janer' is redundant under a gutter-to-gutter name */
   .hero-mid{ align-self:start; margin-top:clamp(1rem, 9svh - 2.5rem, 4rem); }
   .hero-mid .name{ font-size:calc(var(--nm) / 6.25); letter-spacing:-.02em; line-height:.9; }
   .hero-mid .name .ln{ padding-top:.04em; }
-  .hero-mid .name .ln:nth-child(1){ --lw:150; --lg:840; font-size:calc(var(--nm) / 2.99); line-height:.84; }
+  /* measured in the browser: 'Biel' at /2.99 came out 352.3px in a 350px measure and widened the whole hero by 2.3px
+     (the pill and the CTA key then stuck into the right margin); each line now lands at 99.4–99.7% of the measure */
+  .hero-mid .name .ln:nth-child(1){ --lw:150; --lg:840; font-size:calc(var(--nm) / 3.02); line-height:.84; }
   .hero-mid .name .ln:nth-child(2){ --lw:122; --lg:825; font-size:calc(var(--nm) / 6.25); }
-  .hero-mid .name .ln:nth-child(3){ --lw:122; --lg:825; font-size:calc(var(--nm) / 4.22); }
+  .hero-mid .name .ln:nth-child(3){ --lw:122; --lg:825; font-size:calc(var(--nm) / 4.24); }
   .hero-mid .name .ln > span{ font-variation-settings:'wght' var(--wg, var(--lg, 825)),'wdth' var(--wd, var(--lw, 122)); }
   /* the role line becomes a spec strip under the name */
   .hero-mid .role{ margin-top:clamp(.9rem, 2.2svh, 1.4rem); gap:.35rem .8rem; font-size:.74rem; letter-spacing:.14em; }
@@ -170,7 +174,7 @@
   .hero-bot .scrollcue{ display:none; }
   .hero-bot .lede{ font-size:1rem; line-height:1.5; max-width:none; }
   .hero-bot .cta{
-    justify-self:stretch; justify-content:space-between; min-height:56px; padding:0 1.25rem; margin-top:.2rem;
+    justify-self:stretch; justify-content:space-between; min-height:52px; padding:0 1.25rem; margin-top:.2rem;
     border-radius:6px; position:relative; overflow:hidden; background:rgba(8,11,18,.86);
   }
   .hero-bot .cta::after{   /* a slow scan across the key: the one live affordance in the thumb zone */
@@ -234,7 +238,7 @@
      Longest word on any phone h2 is 'producción.' = 7.31em at wdth 112, so every heading keeps its words whole. */
   .section{ padding-block:clamp(3.75rem, 9svh, 5rem) clamp(3.25rem, 7svh, 4.25rem); }
   .s-head{ margin-bottom:clamp(1.6rem, 4svh, 2.4rem); }
-  .s-head h2{ font-size:min(calc(var(--mw) / 7.45), calc(9.5 * var(--vh))); line-height:.92; letter-spacing:-.015em; }   /* the height cap only bites in landscape */
+  .s-head h2{ font-size:min(calc(var(--mw) / 8.2), calc(9 * var(--vh))); line-height:.92; letter-spacing:-.015em; }   /* ~43px at 390; the height cap only bites in landscape */
   .sys-head h3{ font-size:1.45rem; }
   .sig h3{ font-size:1.5rem; }
   /* the heading wipe lands while you are still looking at it (1s + .12s delay was half-drawn at reading speed) */
@@ -260,11 +264,13 @@
   .ch-pager button{ -webkit-appearance:none; appearance:none; background:none; border:0; margin:0; cursor:pointer; min-height:44px; display:flex; align-items:center; justify-content:center; gap:.45rem;
     font-family:var(--m); font-weight:500; font-size:var(--mono-t); letter-spacing:.16em; text-transform:uppercase; color:var(--mute); transition:color .3s var(--ease); }
   .ch-pager button b{ font-weight:600; color:var(--mute-hi); transition:color .3s var(--ease); }
+  .ch-pager button > span:last-child{ margin-right:-.16em; }   /* '01 BUILD' centred on its third of the pager, not 1px left of it */
   .ch-pager button[aria-current="true"], .ch-pager button[aria-current="true"] b{ color:var(--amber); }
   .ch-pager .pg-needle{ position:absolute; left:0; bottom:-1px; width:33.334%; height:2px; background:var(--amber); box-shadow:0 0 8px rgba(255,173,58,.7);
     transform:translateX(calc(var(--dp,0) * 200%)); will-change:transform; pointer-events:none; }
   .js .ch-swipe{ display:flex; justify-content:flex-end; align-items:center; gap:.6rem; margin-top:.9rem; transition:opacity .6s var(--ease);
     font-family:var(--m); font-weight:500; font-size:var(--mono-t); letter-spacing:.2em; text-transform:uppercase; color:var(--mute); }
+  .ch-swipe span{ margin-right:-.2em; }
   .ch-swipe::after{ content:""; width:34px; height:1px; background:linear-gradient(90deg, var(--mute-2), var(--amber)); animation:bmj-swipe 2.4s var(--ease) infinite; transform-origin:0 50%; }
   @keyframes bmj-swipe{ 0%{ transform:scaleX(.2); opacity:.3; } 50%{ transform:scaleX(1); opacity:1; } 100%{ transform:scaleX(1) translateX(10px); opacity:0; } }
   #channels.deck-seen .ch-swipe{ opacity:0; }
@@ -275,9 +281,14 @@
     scrollbar-width:none; -webkit-overflow-scrolling:touch;
   }
   .js #channels .channels::-webkit-scrollbar{ display:none; }
+  /* the card is a grid: screen · (verb | numeral) · title · copy · spec line. The verb and the numeral share one row and
+     ONE baseline (the verb used to sit 3px under the numeral's foot); the copy row takes the slack, so the spec line —
+     now a footer with its own hairline — sits on the card's floor and all three cards end alike */
   .js #channels .channel{
     flex:0 0 calc(100% - 28px); min-width:0; scroll-snap-align:start; scroll-snap-stop:always; position:relative;   /* min-width:0 — a nowrap caption never widens a card */
-    display:flex; flex-direction:column; gap:.4rem; padding:1.25rem 1.1rem 1.1rem;
+    display:grid; grid-template-columns:minmax(0,1fr) auto; grid-template-rows:auto auto auto 1fr auto;
+    grid-template-areas:"side side" "verb id" "h3 h3" "body body" "meta meta"; column-gap:1rem; row-gap:0; align-items:start;
+    padding:1.25rem 1.1rem 1.1rem;
     border:1px solid var(--line-2); border-radius:4px; background:radial-gradient(80% 50% at 100% 0%, rgba(255,173,58,.07), transparent 65%), var(--surface);
     box-shadow:inset 0 1px 0 rgba(236,231,219,.04);
   }
@@ -286,21 +297,22 @@
   .js #channels .channel::after{ bottom:-1px; right:-1px; border-bottom-width:2px; border-right-width:2px; }
   .js #channels .channel.is-cur::before, .js #channels .channel.is-cur::after{ opacity:1; width:34px; height:34px; }
   /* the card opens on its own scope SCREEN: the channel's live trace, full-bleed, with its f/A caption */
-  .js #channels .ch-side{ order:-1; position:relative; margin:-1.25rem -1.1rem .3rem; padding:.7rem 1.1rem .65rem; gap:.45rem;
+  .js #channels .ch-side{ grid-area:side; position:relative; margin:-1.25rem -1.1rem 1rem; padding:.7rem 1.1rem .65rem; gap:.45rem;
     border-bottom:1px solid var(--line-2); border-radius:4px 4px 0 0;
     background:linear-gradient(rgba(255,173,58,.05) 1px, transparent 1px) 0 50%/100% 50%, repeating-linear-gradient(90deg, rgba(39,48,63,.55) 0 1px, transparent 1px 12.5%), rgba(3,5,10,.45); }
   .js #channels .ch-side .wf{ height:72px; opacity:.95; }
   .js #channels .ch-side .ch-tele{ display:block; white-space:normal; line-height:1.5; }
   /* the channel number: a big outlined numeral that FILLS when its card locks on */
-  .js #channels .channel .ch-id{ display:flex; justify-content:flex-end; font-size:0; padding:0; margin-top:.35rem; }   /* the tiny 'CH' prefix is redundant under the screen caption */
+  .js #channels .channel .ch-id{ grid-area:id; align-self:last baseline; display:block; font-size:0; padding:0; margin:0; }   /* the tiny 'CH' prefix is redundant under the screen caption */
   .js #channels .channel .ch-id b{ display:block; margin:0;
-    font-family:var(--d); font-weight:800; font-variation-settings:'wght' 800,'wdth' 124; font-size:3.6rem; line-height:.8; letter-spacing:-.04em;
+    font-family:var(--d); font-weight:800; font-variation-settings:'wght' 800,'wdth' 124; font-size:3.4rem; line-height:.8; letter-spacing:-.04em;
     color:transparent; -webkit-text-stroke:1.5px rgba(255,173,58,.45); transition:color .5s var(--ease), -webkit-text-stroke-color .5s var(--ease); }
   .js #channels .channel.is-cur .ch-id b{ color:var(--amber); -webkit-text-stroke-color:var(--amber); }
-  .js #channels .channel .ch-main{ flex:1 1 auto; display:flex; flex-direction:column; margin-top:-1.55rem; }   /* the verb tucks in beside the numeral's foot */
-  .js #channels .channel .ch-main h3{ font-size:clamp(1.6rem,8vw,2.1rem); margin-top:.5rem; }
-  .js #channels .channel .ch-body{ margin-top:.6rem; font-size:1rem; line-height:1.6; }
-  .js #channels .channel .ch-meta{ margin-top:auto; padding-top:1rem; }                 /* the spec line sits on the card's floor, so all three cards end alike */
+  .js #channels .channel .ch-main{ display:contents; }
+  .js #channels .channel .ch-verb{ grid-area:verb; align-self:last baseline; }
+  .js #channels .channel .ch-main h3{ grid-area:h3; font-size:clamp(1.5rem,7vw,1.8rem); margin:.6rem 0 0; }
+  .js #channels .channel .ch-body{ grid-area:body; margin-top:.6rem; font-size:1rem; line-height:1.6; }
+  .js #channels .channel .ch-meta{ grid-area:meta; margin-top:1.1rem; padding-top:.85rem; border-top:1px solid var(--line); }
 
   /* ---------- 8 · CHIPS → flat mono spec strings (no false tap affordance) ---------- */
   .tag{ position:relative; border:0; border-radius:0; background:none; padding:0; font-size:.75rem; letter-spacing:.04em; color:var(--mute-hi); white-space:nowrap; }
@@ -334,36 +346,57 @@
   .stack-col h4{ font-size:var(--mono-t); }
 
   /* ---------- 11 · CONTACT: the closing statement + a COPY key on the mail row ---------- */
-  .contact-inner h2{ font-size:min(calc(var(--mw) / 5.8), calc(13 * var(--vh))); font-variation-settings:'wght' 780,'wdth' 125; line-height:.88; }
+  .contact-inner h2{ font-size:min(calc(var(--mw) / 6.3), calc(12 * var(--vh))); font-variation-settings:'wght' 780,'wdth' 125; line-height:.88; }
   .contact-inner h2 em{ display:block; }
   .link-row .v{ font-size:1.18rem; }
-  .mail-wrap{ position:relative; }
+  .mail-wrap{ position:relative; --vfs:1.18rem; }
+  .mail-wrap .link-row .v{ font-size:var(--vfs); }
+  @media (max-width:380px){ .mail-wrap{ --vfs:1.05rem; } }  /* the address stays on one line beside the key at 320 */
   .js .mail-wrap .link-row{ padding-right:6.2rem; }       /* the key is ≤88px wide even as 'COPIAR ✓' */
   .js .mail-wrap .link-row .arrow{ display:none; }         /* the COPY key is this row's right-hand affordance; the row itself still opens mail */
-  .js .mail-copy{ display:inline-flex; align-items:center; gap:.45rem; position:absolute; right:.2rem; top:50%; transform:translateY(-50%); min-height:44px; padding:0 .95rem; cursor:pointer;
+  /* a 36px key centred on the ADDRESS line (the thing it copies), like the ↗ of the other rows — not on the whole
+     label + address block; the touch target stays 44px through ::before */
+  .js .mail-copy{ display:inline-flex; align-items:center; gap:.45rem; position:absolute; right:.2rem; top:auto; bottom:calc(1.15rem + var(--vfs) * .825 - 18px);
+    box-sizing:border-box; height:36px; padding:0 calc(.9rem - .16em) 0 .9rem; cursor:pointer;
     -webkit-appearance:none; appearance:none; border:1px solid rgba(255,173,58,.45); border-radius:999px; background:rgba(255,173,58,.06);
     font-family:var(--m); font-weight:500; font-size:var(--mono-t); letter-spacing:.16em; text-transform:uppercase; color:var(--amber); transition:transform .15s var(--ease), background .2s, color .2s; }
-  .mail-copy:active{ transform:translateY(-50%) scale(.94); background:rgba(255,173,58,.18); }
+  .js .mail-copy::before{ content:""; position:absolute; inset:-4px; border-radius:999px; }
+  .mail-copy:active{ transform:scale(.94); background:rgba(255,173,58,.18); }
   .mail-copy.is-done{ background:var(--amber); color:#0a0a0a; border-color:var(--amber); }
   .mail-copy.is-done::after{ content:"✓"; }
-  @media (max-width:380px){ .mail-wrap .link-row .v{ font-size:1.05rem; } }   /* the address stays on one line beside the key at 320 */
 
   /* ---------- 12 · FOOTER: the end-of-transmission block blinks while the strip signs off (mobile.js) ---------- */
   footer.eot-on .foot-end .eot::after{ animation:bmj-eot 1.05s steps(1,end) infinite; }
   @keyframes bmj-eot{ 50%{ opacity:0; } }
 }
 
-/* ---------- ≤600: the job cards' 'Show detail' becomes a real control that unrolls (mobile.js animates it) ---------- */
+/* ---------- ≤600: the hero's two-corner header, and the job cards' 'Show detail' as a real control ---------- */
 @media (max-width:600px){
+  /* one 32px header row: 'SIGNAL — ACTIVE' and the compact EN/ES pill share a centre line, the top marks sit on it
+     (so the live dot is the exact centre of the top-left mark), and the pill keeps clear of the top-right mark */
+  .hero-top{ grid-template-rows:2rem auto; align-items:center; }
+  .hero-top .coord{ align-self:start; }
+  .hero-top .lang-switch--hero{ margin-right:15px; }
+  .hero-ticks{ --tk-cy:1rem; }
+  /* trimmed to its capitals, the eyebrow is centred on the row exactly (Chrome's leading rounding otherwise lifts it
+     up to ~1.2px at the smallest sizes); the dot follows it, being aligned to the caps */
+  @supports (text-box: trim-both cap alphabetic){ .hero-top .id:not(.coord) .eyebrow{ text-box:trim-both cap alphabetic; } }
+
   .sys-more{ position:relative; }
-  .sys-more > summary{ margin-top:.2rem; padding:0 .9rem; justify-content:space-between; border:1px solid var(--line-2); border-radius:3px; min-height:48px; transition:border-color .3s var(--ease), transform .15s var(--ease); }
-  .sys-more > summary .pm{ order:2; transition:transform .45s cubic-bezier(.7,0,.2,1), background .2s; }
+  .sys-more > summary{ margin-top:.2rem; padding:0 .9rem; justify-content:space-between; border:1px solid var(--line-2); border-radius:3px; min-height:44px; transition:border-color .3s var(--ease), transform .15s var(--ease); }
   .sys-more[open] > summary{ border-color:rgba(255,173,58,.4); margin-bottom:.9rem; }
-  .sys-more[open]:not(.is-closing) > summary .pm, .sys-more.is-opening > summary .pm{ transform:rotate(180deg); }
+  /* the + / − is drawn, not typed: two 8px bars on the exact centre of an 18px box (a '+' glyph sat 1.25px left) —
+     opening folds the vertical bar away, closing grows it back */
+  .sys-more > summary .pm{ order:2; position:relative; box-sizing:border-box; width:18px; height:18px; font-size:0; }
+  /* both bars are drawn upright (a rotated bar rasterises thicker than a flat one): 8 × 1.5 across, 1.5 × 8 down */
+  .sys-more > summary .pm::before, .sys-more > summary .pm::after{ content:""; position:absolute; left:50%; top:50%; border-radius:1px; background:var(--amber); }
+  .sys-more > summary .pm::before{ width:8px; height:1.5px; margin:-.75px 0 0 -4px; }
+  .sys-more > summary .pm::after{ width:1.5px; height:8px; margin:-4px 0 0 -.75px; transition:transform .4s cubic-bezier(.7,0,.2,1); }
+  .sys-more[open] > summary .pm::before{ content:""; }
+  .sys-more[open]:not(.is-closing) > summary .pm::after, .sys-more.is-opening > summary .pm::after{ transform:scaleY(0); }
   /* the label flips the moment you tap, not when the tween ends */
   .sys-more.is-closing > summary .less{ display:none; }
   .sys-more.is-closing > summary .show{ display:inline; }
-  .sys-more.is-closing > summary .pm::before{ content:"+"; }
   .sys-more.is-opening > summary .show{ display:none; }
   .sys-more.is-opening > summary .less{ display:inline; }
   /* a scan line rides the moving edge while the list unrolls */
@@ -391,5 +424,5 @@
   .hero-bot .cta::after, .ch-swipe::after, .touchhint .th-ar, footer.eot-on .foot-end .eot::after{ animation:none; }
   .hero-bot .cta::after{ display:none; }
   .js .s-head .s-ticks, .js .s-head .s-n{ transform:none; opacity:1; transition:none; }
-  .sys-more > summary .pm{ transition:none; }
+  .sys-more > summary .pm::before, .sys-more > summary .pm::after{ transition:none; }
 }

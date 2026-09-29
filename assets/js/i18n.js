@@ -51,7 +51,7 @@
     'hero.expk':   'Exp',
     'hero.exp':    'años · 2023 → hoy',
     'hero.lede':   'Construyo sistemas de principio a fin —del firmware en la mesa de trabajo a la plataforma en producción— y los <b>rompo a propósito</b> para encontrar dónde ceden.',
-    'hero.cta':    'Abrir un canal<span class="ar" aria-hidden="true">↗</span>',
+    'hero.cta':    '<span class="cl">Abrir un canal</span><span class="ar" aria-hidden="true">↗</span>',
     'hero.scroll': 'desliza',
 
     /* topbar */
@@ -274,9 +274,16 @@
     var ind = sw.querySelector('.lang-ind');
     var on  = sw.querySelector('.lang-opt.is-on') || sw.querySelector('.lang-opt');
     if (!ind || !on) return;
-    ind.style.width  = on.offsetWidth + 'px';
-    ind.style.height = on.offsetHeight + 'px';
-    ind.style.transform = 'translate(' + on.offsetLeft + 'px,' + on.offsetTop + 'px)';
+    // sub-pixel geometry: offset* rounds to whole pixels, which left the chip up to a pixel off its label. A pressed
+    // option is scaled (:active), so its rect would lie — then the layout offsets are the better answer.
+    var x = on.offsetLeft, y = on.offsetTop, w = on.offsetWidth, h = on.offsetHeight;
+    if (window.getComputedStyle && getComputedStyle(on).transform === 'none'){
+      var a = on.getBoundingClientRect(), b = sw.getBoundingClientRect();
+      if (a.width && b.width){ x = a.left - b.left - sw.clientLeft; y = a.top - b.top - sw.clientTop; w = a.width; h = a.height; }
+    }
+    ind.style.width  = w.toFixed(2) + 'px';
+    ind.style.height = h.toFixed(2) + 'px';
+    ind.style.transform = 'translate(' + x.toFixed(2) + 'px,' + y.toFixed(2) + 'px)';
   }
   function placeAll(){
     var list = document.querySelectorAll('.lang-switch');
