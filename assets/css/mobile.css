@@ -22,6 +22,9 @@
   }
   /* svh ignores the collapsing URL bar, so nothing resizes mid-scroll; browsers without it keep vh (never an invalid var) */
   @supports (height:1svh){ :root{ --vh:1svh; } }
+  /* the gutter in WHOLE pixels (5vw is 20.6px on a 412px phone, 21.5px on a 430px one): every edge that hangs off it —
+     marks, pill, keys, cards — then lands on a device pixel, so nothing is re-rounded differently when you zoom */
+  @supports (width:round(nearest, 1px, 1px)){ :root{ --gut:round(nearest, clamp(1.25rem, 5vw, 6rem), 1px); } }
 
   /* ---------- 1 · THE STRIP IS A PURE SCOPE SCREEN ----------
      BMJ. · the live trace · EN/ES. The CH code moves to the dock, the CTA to the index, so measureLane() finds
@@ -140,7 +143,7 @@
     background:linear-gradient(180deg, transparent, var(--ink) 30%); }
   .ix-bar{ height:var(--dock-h); display:grid; grid-template-columns:auto minmax(0,1fr) 44px; align-items:center; gap:10px; padding:0 7px 0 12px;
     border-radius:999px; border:1px solid var(--line-2); background:linear-gradient(180deg, #0F1520, #080B12); }
-  .ix-bar .lang-switch{ --ls:.18em; --opx:.55rem; --opy:.5rem; font-size:.74rem; }
+  .ix-bar .lang-switch{ --ls:.18em; --gp:7px; --ow:32px; --oh:28px; --dw:8px; font-size:calc(8px / .73); }   /* whole pixels: a 32 × 28 chip, 8px caps (i18n.css) */
   .ix-copy{ -webkit-appearance:none; appearance:none; justify-self:start; min-height:44px; padding:0 .9rem; border:0; border-left:1px solid var(--line-2); background:none; cursor:pointer;
     font-family:var(--m); font-weight:500; font-size:var(--mono-t); letter-spacing:.16em; text-transform:uppercase; color:var(--bone-2); white-space:nowrap; transition:color .2s; }
   .ix-copy:active, .ix-copy.is-done{ color:var(--amber); }
@@ -155,26 +158,37 @@
      Each line runs gutter to gutter at its own size and width axis (measured em-widths at wght 825, ls -.02em:
      Biel@wdth150 = 2.96em · Martínez@122 = 6.19em · Janer@122 = 4.18em). --lw/--lg are the lines' final axes;
      the power-on (app.js) decompresses each line from wdth 50 to exactly these values. */
-  #hero{ --hpb:max(1.25rem, calc(env(safe-area-inset-bottom) + .9rem)); grid-template-rows:auto auto minmax(0,1fr) auto; }
+  #hero{ --hpb:max(20px, calc(env(safe-area-inset-bottom) + 14px)); grid-template-rows:auto auto minmax(0,1fr) auto; }
   .hero-top .id:not(.coord) .mono{ display:none; }                 /* 'B. Martínez Janer' is redundant under a gutter-to-gutter name */
   .hero-mid{ align-self:start; margin-top:clamp(1rem, 9svh - 2.5rem, 4rem); }
   .hero-mid .name{ font-size:calc(var(--nm) / 6.25); letter-spacing:-.02em; line-height:.9; }
   .hero-mid .name .ln{ padding-top:.04em; }
-  /* measured in the browser: 'Biel' at /2.99 came out 352.3px in a 350px measure and widened the whole hero by 2.3px
-     (the pill and the CTA key then stuck into the right margin); each line now lands at 99.4–99.7% of the measure */
-  .hero-mid .name .ln:nth-child(1){ --lw:150; --lg:840; font-size:calc(var(--nm) / 3.02); line-height:.84; }
-  .hero-mid .name .ln:nth-child(2){ --lw:122; --lg:825; font-size:calc(var(--nm) / 6.25); }
-  .hero-mid .name .ln:nth-child(3){ --lw:122; --lg:825; font-size:calc(var(--nm) / 4.24); }
-  .hero-mid .name .ln > span{ font-variation-settings:'wght' var(--wg, var(--lg, 825)),'wdth' var(--wd, var(--lw, 122)); }
-  /* the role line becomes a spec strip under the name */
-  .hero-mid .role{ margin-top:clamp(.9rem, 2.2svh, 1.4rem); gap:.35rem .8rem; font-size:.74rem; letter-spacing:.14em; }
-  .hero-mid .role .sep{ margin-left:.8rem; }
-  /* the thumb cluster: readout → lede → a full-width 56px key (the dock's needle is the scroll cue once docked) */
-  .hero-bot{ grid-row:4; margin-top:1.4rem; grid-template-columns:1fr; grid-template-areas:"read" "lede" "cta"; gap:.9rem; }
+  /* the lines are justified by their INK, not their advance boxes: measured from the rendered glyphs (DPR 6) at the final
+     axes, --fit is each word's ink width and --lsb the empty side bearing before its first stroke, both in em. Sizing a
+     line to measure / --fit and pulling it back by --lsb puts the first stroke exactly on the content edge and the last
+     one exactly on the opposite edge — 'Biel' used to start 8px in and stop 13px short, so the three lines (and the
+     coordinates above them) never shared an edge. The side bearings sit inside the line's overflow clip, so nothing is cut. */
+  .hero-mid .name .ln:nth-child(1){ --lw:150; --lg:840; --fit:2.8416; --lsb:.0702; line-height:.84; }
+  .hero-mid .name .ln:nth-child(2){ --lw:122; --lg:825; --fit:6.1020; --lsb:.0536; }
+  .hero-mid .name .ln:nth-child(3){ --lw:122; --lg:825; --fit:4.1176; --lsb:.0344; }
+  .hero-mid .name .ln{ font-size:calc(var(--nm) / var(--fit)); overflow-x:visible; overflow-y:clip; }   /* the rise clips vertically only: a last stroke that lands a sub-pixel past the edge is never shaved */
+  .hero-mid .name .ln > span{ margin-left:calc(var(--lsb) * -1em); font-variation-settings:'wght' var(--wg, var(--lg, 825)),'wdth' var(--wd, var(--lw, 122)); }
+  /* the role line becomes a spec strip under the name — and no line of it ever starts OR ends with a '/'. Each item
+     carries its separator in its own left padding (--rg: .8rem · slash · .8rem), the slash centred between the two INKS
+     (the trailing tracking of the item before is allowed for); the line is pulled --rg to the left and clipped 8px out
+     from the content edge, so the separator of whichever item starts a line is never seen (the dark text halo keeps
+     those 8px). The markup's trailing slashes step aside on phones. */
+  .hero-mid .role{ --rg:calc(1.6rem + .6em); margin-top:clamp(.9rem, 2.2svh, 1.4rem); gap:.35rem 0; font-size:.74rem; letter-spacing:.14em;
+    margin-left:calc(-1 * var(--rg)); clip-path:inset(-1.5rem -1rem -1.5rem calc(var(--rg) - 8px)); }
+  .hero-mid .role .sep{ display:none; }
+  .hero-mid .role .ri{ position:relative; padding-left:var(--rg); }
+  .hero-mid .role .ri::before{ content:"/"; position:absolute; top:0; left:calc((var(--rg) - .14em) / 2); transform:translateX(-50%); letter-spacing:0; color:var(--mute-2); }
+  /* the thumb cluster: readout → lede → a full-width 48px key (the dock's needle is the scroll cue once docked) */
+  .hero-bot{ grid-row:4; margin-top:1rem; grid-template-columns:1fr; grid-template-areas:"read" "lede" "cta"; gap:12px; }
   .hero-bot .scrollcue{ display:none; }
-  .hero-bot .lede{ font-size:1rem; line-height:1.5; max-width:none; }
+  .hero-bot .lede{ font-size:15px; line-height:1.5; max-width:none; }   /* the body size: the lede no longer outweighs the copy it introduces */
   .hero-bot .cta{
-    justify-self:stretch; justify-content:space-between; min-height:52px; padding:0 1.25rem; margin-top:.2rem;
+    justify-self:stretch; justify-content:space-between; min-height:48px; padding:0 20px; margin-top:0;
     border-radius:6px; position:relative; overflow:hidden; background:rgba(8,11,18,.86);
   }
   .hero-bot .cta::after{   /* a slow scan across the key: the one live affordance in the thumb zone */
@@ -195,7 +209,7 @@
   }
   @media (max-height:620px){
     :root{ --nm:min(var(--mw), calc(46 * var(--vh))); }
-    .hero-mid{ margin-top:.6rem; } .hero-bot{ margin-top:1rem; gap:.7rem; } .hero-bot .cta{ min-height:50px; }
+    .hero-mid{ margin-top:.5rem; } .hero-bot{ margin-top:.8rem; gap:10px; } .hero-bot .cta{ min-height:46px; }
   }
 
   /* ---------- 5 · HERO: touch the signal ----------
@@ -229,6 +243,7 @@
   .touchhint .th-l{ position:absolute; top:var(--ly, 34px); right:-10px; white-space:nowrap; color:var(--amber); font-size:.7rem; letter-spacing:.2em;
     padding:.35rem .55rem; background:rgba(6,8,14,.82); border-left:1px solid var(--amber); }
   .touchhint.left .th-l{ right:auto; left:-10px; }
+  .touchhint.nolabel .th-l{ display:none; }
   .touchhint .th-ar{ display:inline-block; margin-left:.3rem; animation:bmj-thar 1.2s ease-in-out infinite; }
   @keyframes bmj-thar{ 0%,100%{ transform:translateX(-3px); } 50%{ transform:translateX(3px); } }
   #hero .touchhint.on{ opacity:1; transition:opacity .4s var(--ease); }
@@ -260,7 +275,7 @@
   .thesis-grid .body p:last-child{ margin-bottom:0; }
 
   /* ---------- 7 · CHANNELS AS A TUNER DECK ---------- */
-  .js .ch-pager{ display:grid; grid-template-columns:repeat(3,1fr); position:relative; margin:-.4rem 0 1rem; border-bottom:1px solid var(--line-2); }
+  .js .ch-pager{ display:grid; grid-template-columns:repeat(3,1fr); position:relative; margin:-.4rem var(--dk-off) 1rem; border-bottom:1px solid var(--line-2); }   /* exactly as wide as the centred card below it */
   .ch-pager button{ -webkit-appearance:none; appearance:none; background:none; border:0; margin:0; cursor:pointer; min-height:44px; display:flex; align-items:center; justify-content:center; gap:.45rem;
     font-family:var(--m); font-weight:500; font-size:var(--mono-t); letter-spacing:.16em; text-transform:uppercase; color:var(--mute); transition:color .3s var(--ease); }
   .ch-pager button b{ font-weight:600; color:var(--mute-hi); transition:color .3s var(--ease); }
@@ -268,16 +283,20 @@
   .ch-pager button[aria-current="true"], .ch-pager button[aria-current="true"] b{ color:var(--amber); }
   .ch-pager .pg-needle{ position:absolute; left:0; bottom:-1px; width:33.334%; height:2px; background:var(--amber); box-shadow:0 0 8px rgba(255,173,58,.7);
     transform:translateX(calc(var(--dp,0) * 200%)); will-change:transform; pointer-events:none; }
-  .js .ch-swipe{ display:flex; justify-content:flex-end; align-items:center; gap:.6rem; margin-top:.9rem; transition:opacity .6s var(--ease);
+  .js .ch-swipe{ display:flex; justify-content:flex-end; align-items:center; gap:.6rem; margin:.9rem var(--dk-off) 0; transition:opacity .6s var(--ease);
     font-family:var(--m); font-weight:500; font-size:var(--mono-t); letter-spacing:.2em; text-transform:uppercase; color:var(--mute); }
   .ch-swipe span{ margin-right:-.2em; }
   .ch-swipe::after{ content:""; width:34px; height:1px; background:linear-gradient(90deg, var(--mute-2), var(--amber)); animation:bmj-swipe 2.4s var(--ease) infinite; transform-origin:0 50%; }
   @keyframes bmj-swipe{ 0%{ transform:scaleX(.2); opacity:.3; } 50%{ transform:scaleX(1); opacity:1; } 100%{ transform:scaleX(1) translateX(10px); opacity:0; } }
   #channels.deck-seen .ch-swipe{ opacity:0; }
 
+  /* the deck is CENTRED: every card — the first and the last too — snaps to the middle of the glass with the same sliver
+     of each neighbour showing on both sides. The deck runs edge to edge; its inline padding is exactly one gap plus one
+     peek, so a card (100% of the padded box) sits --dk-in from both screen edges. */
+  #channels{ --dk-gap:18px; --dk-peek:10px; --dk-in:calc(var(--dk-gap) + var(--dk-peek)); --dk-off:calc(var(--dk-in) - var(--gut)); }
   .js #channels .channels{
-    display:flex; align-items:stretch; gap:12px; overflow-x:auto; overflow-y:hidden; overscroll-behavior-x:contain; scroll-snap-type:x mandatory;
-    margin-inline:calc(-1 * var(--gut)); padding:4px var(--gut) 6px; scroll-padding-inline:var(--gut); border-top:0;
+    display:flex; align-items:stretch; gap:var(--dk-gap); overflow-x:auto; overflow-y:hidden; overscroll-behavior-x:contain; scroll-snap-type:x mandatory;
+    margin-inline:calc(-1 * var(--gut)); padding:4px var(--dk-in) 6px; scroll-padding-inline:0; border-top:0;
     scrollbar-width:none; -webkit-overflow-scrolling:touch;
   }
   .js #channels .channels::-webkit-scrollbar{ display:none; }
@@ -285,7 +304,7 @@
      ONE baseline (the verb used to sit 3px under the numeral's foot); the copy row takes the slack, so the spec line —
      now a footer with its own hairline — sits on the card's floor and all three cards end alike */
   .js #channels .channel{
-    flex:0 0 calc(100% - 28px); min-width:0; scroll-snap-align:start; scroll-snap-stop:always; position:relative;   /* min-width:0 — a nowrap caption never widens a card */
+    flex:0 0 100%; min-width:0; scroll-snap-align:center; scroll-snap-stop:always; position:relative;   /* min-width:0 — a nowrap caption never widens a card */
     display:grid; grid-template-columns:minmax(0,1fr) auto; grid-template-rows:auto auto auto 1fr auto;
     grid-template-areas:"side side" "verb id" "h3 h3" "body body" "meta meta"; column-gap:1rem; row-gap:0; align-items:start;
     padding:1.25rem 1.1rem 1.1rem;
@@ -372,28 +391,44 @@
 
 /* ---------- ≤600: the hero's two-corner header, and the job cards' 'Show detail' as a real control ---------- */
 @media (max-width:600px){
-  /* one 32px header row: 'SIGNAL — ACTIVE' and the compact EN/ES pill share a centre line, the top marks sit on it
-     (so the live dot is the exact centre of the top-left mark), and the pill keeps clear of the top-right mark */
-  .hero-top{ grid-template-rows:2rem auto; align-items:center; }
+  /* ONE 24px header row, whole pixels throughout. 'SIGNAL — ACTIVE' and the 24px EN/ES pill share its centre line (12px).
+     The four viewfinder marks are 16px corners of 2px line, 8px outside the content box; the top pair sits so the live
+     dot is the exact centre of the top-left corner (10px from both arms); the pill ends where the top-right mark's arm
+     begins, so the mark never touches it. */
+  #hero{ --hpt:24px; }
+  .hero-top{ grid-template-rows:24px auto; align-items:center; }
   .hero-top .coord{ align-self:start; }
-  .hero-top .lang-switch--hero{ margin-right:15px; }
-  .hero-ticks{ --tk-cy:1rem; }
-  /* trimmed to its capitals, the eyebrow is centred on the row exactly (Chrome's leading rounding otherwise lifts it
-     up to ~1.2px at the smallest sizes); the dot follows it, being aligned to the caps */
+  .hero-top .lang-switch--hero{ margin-right:8px; }
+  .hero-ticks{ --tk-cy:12px; }
+  .hero-ticks i{ width:16px; height:16px; }
+  .hero-ticks i:nth-child(n){ border-width:2px; }
+  /* the dot hangs on the eyebrow's own centre (not on the text's baseline), so dot and mark share one geometry that no
+     font metric can move; trimmed to its capitals, the eyebrow's box IS the caps, so the caps share that centre too */
+  .hero-top .id:not(.coord) .eyebrow{ position:relative; padding-left:calc(6px + .6em); }
+  .hero-top .id:not(.coord) .eyebrow .live{ position:absolute; left:0; top:50%; margin:-3px 0 0; vertical-align:0; }
   @supports (text-box: trim-both cap alphabetic){ .hero-top .id:not(.coord) .eyebrow{ text-box:trim-both cap alphabetic; } }
 
   .sys-more{ position:relative; }
-  .sys-more > summary{ margin-top:.2rem; padding:0 .9rem; justify-content:space-between; border:1px solid var(--line-2); border-radius:3px; min-height:44px; transition:border-color .3s var(--ease), transform .15s var(--ease); }
+  .sys-more > summary{ margin-top:.2rem; padding:0 12px 0 14px; justify-content:space-between;   /* 12px right = the box's 12px above and below: it sits square in the bar's end */ border:1px solid var(--line-2); border-radius:3px; min-height:44px; transition:border-color .3s var(--ease), transform .15s var(--ease); }
   .sys-more[open] > summary{ border-color:rgba(255,173,58,.4); margin-bottom:.9rem; }
-  /* the + / − is drawn, not typed: two 8px bars on the exact centre of an 18px box (a '+' glyph sat 1.25px left) —
-     opening folds the vertical bar away, closing grows it back */
-  .sys-more > summary .pm{ order:2; position:relative; box-sizing:border-box; width:18px; height:18px; font-size:0; }
-  /* both bars are drawn upright (a rotated bar rasterises thicker than a flat one): 8 × 1.5 across, 1.5 × 8 down */
-  .sys-more > summary .pm::before, .sys-more > summary .pm::after{ content:""; position:absolute; left:50%; top:50%; border-radius:1px; background:var(--amber); }
-  .sys-more > summary .pm::before{ width:8px; height:1.5px; margin:-.75px 0 0 -4px; }
-  .sys-more > summary .pm::after{ width:1.5px; height:8px; margin:-4px 0 0 -.75px; transition:transform .4s cubic-bezier(.7,0,.2,1); }
-  .sys-more[open] > summary .pm::before{ content:""; }
-  .sys-more[open]:not(.is-closing) > summary .pm::after, .sys-more.is-opening > summary .pm::after{ transform:scaleY(0); }
+  /* the + / − is drawn, not typed, and drawn by ONE box: its border is the frame and its two background layers are the
+     bars, so frame and bars can never be rounded apart (separately positioned bars could land a device pixel off each
+     other when zoomed). Whole-pixel geometry: an 18px box, 1px border → a 16px field, 10 × 2 bars at 3px / 7px from its
+     edges — on 2× and 3× screens every edge falls on a device pixel. The − IS the +'s bar: opening folds the upright
+     bar to nothing about the same centre, closing grows it back. */
+  .sys-more > summary .pm{
+    order:2; flex:none; box-sizing:border-box; width:18px; height:18px; font-size:0; line-height:0;
+    border:1px solid rgba(255,173,58,.5); border-radius:4px; display:block;
+    background:
+      linear-gradient(var(--amber), var(--amber)) 50% 50% / 10px 2px no-repeat,
+      linear-gradient(var(--amber), var(--amber)) 50% 50% / 2px 10px no-repeat;
+    transition:background-size .4s cubic-bezier(.7,0,.2,1);
+  }
+  .sys-more > summary .pm::before, .sys-more[open] > summary .pm::before, .sys-more > summary .pm::after{ content:none; }
+  .sys-more[open]:not(.is-closing) > summary .pm, .sys-more.is-opening > summary .pm{ background-size:10px 2px, 2px 0; }
+  .sys-more > summary:active .pm{ background-color:rgba(255,173,58,.14); }
+  /* the label is trimmed to its capitals, so the flex line centres the INK on the box's centre */
+  @supports (text-box: trim-both cap alphabetic){ .sys-more > summary > span:not(.pm){ text-box:trim-both cap alphabetic; } }
   /* the label flips the moment you tap, not when the tween ends */
   .sys-more.is-closing > summary .less{ display:none; }
   .sys-more.is-closing > summary .show{ display:inline; }
@@ -424,5 +459,5 @@
   .hero-bot .cta::after, .ch-swipe::after, .touchhint .th-ar, footer.eot-on .foot-end .eot::after{ animation:none; }
   .hero-bot .cta::after{ display:none; }
   .js .s-head .s-ticks, .js .s-head .s-n{ transform:none; opacity:1; transition:none; }
-  .sys-more > summary .pm::before, .sys-more > summary .pm::after{ transition:none; }
+  .sys-more > summary .pm{ transition:none; }
 }
