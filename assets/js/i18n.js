@@ -50,7 +50,7 @@
     'hero.role':   '<span class="ri"><i>Ingeniero de software</i><span class="sep">/</span></span><span class="ri">pentester<span class="sep">/</span></span><span class="ri">hacker de hardware</span>',
     'hero.expk':   'Exp',
     'hero.exp':    'años · 2023 → hoy',
-    'hero.lede':   'Construyo sistemas de principio a fin —del firmware en la mesa de trabajo a la plataforma en producción— y los <b>rompo a propósito</b> para encontrar dónde ceden.',
+    'hero.lede':   'Construyo sistemas de principio a fin —&#8288;del firmware en la mesa de trabajo a la plataforma en producción&#8288;— y los <b>rompo a propósito</b> para encontrar dónde ceden.',
     'hero.cta':    '<span class="cl">Abrir un canal</span><span class="ar" aria-hidden="true">↗</span>',
     'hero.scroll': 'desliza',
 
@@ -67,14 +67,14 @@
     'channels.h2':  'Lo que sintonizo.',
     'ch01.verb': 'Construir',
     'ch01.h3':   'Software y arquitectura',
-    'ch01.body': 'Sistemas full-stack en C#/.NET y Python: modelos de datos, APIs, eventos en tiempo real y despliegue en producción. El trabajo que no se ve —un pipeline de importación que normaliza y valida miles de filas desordenadas, verificación biométrica de identidad, gestión de clientes y proveedores, la capa de datos corporativa sobre la que se sostiene todo lo demás.',
+    'ch01.body': 'Sistemas full-stack en C#/.NET y Python: modelos de datos, APIs, eventos en tiempo real y despliegue en producción. El trabajo que no se ve —&#8288;un pipeline de importación que normaliza y valida miles de filas desordenadas, verificación biométrica de identidad, gestión de clientes y proveedores, la capa de datos corporativa sobre la que se sostiene todo lo demás.',
     'ch02.verb': 'Romper',
     'ch02.h3':   'Seguridad ofensiva',
-    'ch02.body': 'Seguridad ofensiva práctica en web (OWASP), redes y sistemas, radiofrecuencia y señales, hardware e ingeniería inversa de firmware —y también en sistemas industriales (ICS / OT). Hallazgos clasificados según CVE y MITRE ATT&amp;CK, puntuados con CVSS, y las herramientas y el hardening necesarios para cerrarlos.',
+    'ch02.body': 'Seguridad ofensiva práctica en web (OWASP), redes y sistemas, radiofrecuencia y señales, hardware e ingeniería inversa de firmware —&#8288;y también en sistemas industriales (ICS / OT). Hallazgos clasificados según CVE y MITRE ATT&amp;CK, puntuados con CVSS, y las herramientas y el hardening necesarios para cerrarlos.',
     'ch02.meta': '<span class="tag">web · OWASP</span><span class="tag">redes</span><span class="tag">RF · señales</span><span class="tag">hardware · firmware</span><span class="tag">ICS / OT</span>',
     'ch03.verb': 'Liderar',
     'ch03.h3':   'Fundador y CEO',
-    'ch03.body': '<p>Fundé We Love Night y la dirijo como CEO y CTO —fijando la visión, la estrategia y la hoja de ruta técnica, diseñando el sistema y el modelo de datos y llevando el MVP a producción.</p><p>Y luego la mitad del trabajo que lo decide todo: dirigir el negocio —plan de negocio, marca, base legal y de propiedad intelectual, captación de inversión y alianzas, el lanzamiento sin una sola incidencia y los clientes de 2026 ya firmados.</p>',
+    'ch03.body': '<p>Fundé We Love Night y la dirijo como CEO y CTO —&#8288;fijando la visión, la estrategia y la hoja de ruta técnica, diseñando el sistema y el modelo de datos y llevando el MVP a producción.</p><p>Y luego la mitad del trabajo que lo decide todo: dirigir el negocio —&#8288;plan de negocio, marca, base legal y de propiedad intelectual, captación de inversión y alianzas, el lanzamiento sin una sola incidencia y los clientes de 2026 ya firmados.</p>',
     'ch03.meta': '<span class="tag">producto</span><span class="tag">arquitectura</span><span class="tag">observabilidad</span><span class="tag">go-to-market</span><span class="tag">equipo</span>',
 
     /* systems */
@@ -83,27 +83,27 @@
 
     'sys.wln.role':   'Fundador · CEO · CTO',
     'sys.wln.when':   '2024 → hoy · en producción',
-    'sys.wln.sum':    'Una empresa tecnológica que fundé y dirijo, que construye ticketing avanzado, analítica y digitalización de negocio para la economía nocturna —llevada de una página en blanco a un lanzamiento público.',
-    'sys.wln.points': '<li>Marco la dirección de la empresa como CEO y CTO —visión, estrategia, hoja de ruta de producto y equipo.</li><li>Dirijo el negocio de principio a fin: estudio de viabilidad, plan de negocio, registro de marca y propiedad intelectual, base legal y de privacidad y materiales para inversores.</li><li>Diseñé toda la arquitectura de software y el modelo de datos y llevé el MVP a producción —con monitorización, pasarelas de pago y analítica en marcha.</li><li>Impulso el go-to-market y las alianzas; aseguré y mantengo la plataforma de producción.</li><li>Dirigí el evento de lanzamiento sin una sola incidencia y cerré clientes clave para 2026.</li>',
+    'sys.wln.sum':    'Una empresa tecnológica que fundé y dirijo, que construye ticketing avanzado, analítica y digitalización de negocio para la economía nocturna —&#8288;llevada de una página en blanco a un lanzamiento público.',
+    'sys.wln.points': '<li>Marco la dirección de la empresa como CEO y CTO —&#8288;visión, estrategia, hoja de ruta de producto y equipo.</li><li>Dirijo el negocio de principio a fin: estudio de viabilidad, plan de negocio, registro de marca y propiedad intelectual, base legal y de privacidad y materiales para inversores.</li><li>Diseñé toda la arquitectura de software y el modelo de datos y llevé el MVP a producción —&#8288;con monitorización, pasarelas de pago y analítica en marcha.</li><li>Impulso el go-to-market y las alianzas; aseguré y mantengo la plataforma de producción.</li><li>Dirigí el evento de lanzamiento sin una sola incidencia y cerré clientes clave para 2026.</li>',
     'sys.wln.foot':   '<span class="tag">estrategia</span><span class="tag">go-to-market</span><span class="tag">.NET</span><span class="tag">PostgreSQL</span><span class="tag">pagos</span><span class="tag">Linux</span>',
     /* phone-only 'show / hide detail' control on each work card (one key per card: data-i18n keys are unique) */
     'sys.wln.more':   '<span class="show">Ver detalle</span><span class="less">Ocultar detalle</span>',
     'sys.jogo.more':  '<span class="show">Ver detalle</span><span class="less">Ocultar detalle</span>',
     'sys.lab.more':   '<span class="show">Ver detalle</span><span class="less">Ocultar detalle</span>',
 
-    /* one Suministros Jogo tenure — the groups block is a single key so the swap keeps its h4/ul structure */
+    /* one Suministros Jogo tenure&nbsp;— the groups block is a single key so the swap keeps its h4/ul structure */
     'sys.jogo.h3':     'Plataforma y software industrial',
     'sys.jogo.role':   'Responsable técnico · Desarrollador de software',
     'sys.jogo.when':   'Suministros Jogo · 2023 → hoy',
-    'sys.jogo.sum':    'Máximo responsable técnico de la plataforma web que gestiona procesos industriales reales de corte por láser —y de la automatización, el backend y las herramientas internas de una empresa metalúrgica. Planificación, coordinación del equipo, UI/UX, arquitectura, modelos de datos y APIs.',
-    'sys.jogo.points': '<div class="sys-g"><h4>Plataforma</h4><ul class="sys-points"><li>Anidado automático de piezas para corte por láser; procesamiento avanzado de DXF —leer, validar, convertir, optimizar.</li><li>SignalR para eventos en tiempo real; usuarios y roles; pasarelas de pago y facturación autónoma.</li><li>Módulos de seguridad, auditoría y logging avanzado; optimización de rendimiento y despliegue en producción.</li></ul></div><div class="sys-g"><h4>Automatización y herramientas</h4><ul class="sys-points"><li>Gestión integral de clientes y proveedores —fichas, tarifas, pedidos, facturación y la arquitectura de datos corporativa que hay detrás.</li><li>Importación inteligente de tarifas —normalización, validación estructural y procesamiento masivo.</li><li>Verificación biométrica de identidad; SMS y mailing automatizados; un planificador que genera y asigna eventos al personal.</li><li>Visor de documentos y control interno de archivos, on-premise y en la nube.</li></ul></div>',
+    'sys.jogo.sum':    'Máximo responsable técnico de la plataforma web que gestiona procesos industriales reales de corte por láser —&#8288;y de la automatización, el backend y las herramientas internas de una empresa metalúrgica. Planificación, coordinación del equipo, UI/UX, arquitectura, modelos de datos y APIs.',
+    'sys.jogo.points': '<div class="sys-g"><h4>Plataforma</h4><ul class="sys-points"><li>Anidado automático de piezas para corte por láser; procesamiento avanzado de DXF —&#8288;leer, validar, convertir, optimizar.</li><li>SignalR para eventos en tiempo real; usuarios y roles; pasarelas de pago y facturación autónoma.</li><li>Módulos de seguridad, auditoría y logging avanzado; optimización de rendimiento y despliegue en producción.</li></ul></div><div class="sys-g"><h4>Automatización y herramientas</h4><ul class="sys-points"><li>Gestión integral de clientes y proveedores —&#8288;fichas, tarifas, pedidos, facturación y la arquitectura de datos corporativa que hay detrás.</li><li>Importación inteligente de tarifas —&#8288;normalización, validación estructural y procesamiento masivo.</li><li>Verificación biométrica de identidad; SMS y mailing automatizados; un planificador que genera y asigna eventos al personal.</li><li>Visor de documentos y control interno de archivos, on-premise y en la nube.</li></ul></div>',
     'sys.jogo.foot':   '<span class="tag">ASP.NET Core</span><span class="tag">SignalR</span><span class="tag">SQL Server</span><span class="tag">DXF · anidado</span><span class="tag">C# / .NET</span><span class="tag">Python</span>',
 
     'sys.lab.h3':     'Seguridad ofensiva',
     'sys.lab.role':   'Pentesting · red team · investigación',
     'sys.lab.when':   'en curso',
-    'sys.lab.sum':    'Seguridad ofensiva en toda la pila —de las ondas de radio a la aplicación web y a la planta industrial—, sobre los sistemas industriales que construyo en Suministros Jogo y en proyectos propios, curtida en objetivos reales y en laboratorio. Certificado por OffSec, Hack The Box, INE y Black Hat.',
-    'sys.lab.points': '<li><b>Web y APIs</b> — pruebas guiadas por OWASP de autenticación, control de acceso y lógica de negocio.</li><li><b>Redes y sistemas</b> — pentesting de infraestructura, pivoting y escalada de privilegios.</li><li><b>Radiofrecuencia y señales</b> — captura y análisis de RF, wireless e IoT (ESP32 / ESP8266).</li><li><b>Hardware y firmware</b> — hardware hacking, extracción de firmware e ingeniería inversa.</li><li><b>Sistemas industriales (ICS / OT)</b> — seguridad de los procesos y plataformas industriales que también construyo.</li><li><b>Análisis de vulnerabilidades</b> — evaluación, triaje y puntuación con estándares reconocidos (CVE, CVSS, OWASP, MITRE ATT&amp;CK).</li><li><b>Hardening</b> — fortificación de sistemas, redes y aplicaciones con configuraciones seguras por defecto.</li><li><b>Normativa y estándares</b> — ISO/IEC 27001 (SGSI, controles del Anexo A), NIS2, DORA y RGPD; traduzco los hallazgos técnicos a las obligaciones que activan.</li><li><b>Herramientas y formación</b> — herramientas clave del sector (Burp Suite, Nmap, Metasploit, Wireshark, Ghidra) junto a mis propias herramientas de automatización de auditorías en Python/C#; formación interna en seguridad que preparo para el equipo.</li>',
+    'sys.lab.sum':    'Seguridad ofensiva en toda la pila —&#8288;de las ondas de radio a la aplicación web y a la planta industrial&#8288;—, sobre los sistemas industriales que construyo en Suministros Jogo y en proyectos propios, curtida en objetivos reales y en laboratorio. Certificado por OffSec, Hack The Box, INE y Black Hat.',
+    'sys.lab.points': '<li><b>Web y APIs</b>&nbsp;— pruebas guiadas por OWASP de autenticación, control de acceso y lógica de negocio.</li><li><b>Redes y sistemas</b>&nbsp;— pentesting de infraestructura, pivoting y escalada de privilegios.</li><li><b>Radiofrecuencia y señales</b>&nbsp;— captura y análisis de RF, wireless e IoT (ESP32 / ESP8266).</li><li><b>Hardware y firmware</b>&nbsp;— hardware hacking, extracción de firmware e ingeniería inversa.</li><li><b>Sistemas industriales (ICS / OT)</b>&nbsp;— seguridad de los procesos y plataformas industriales que también construyo.</li><li><b>Análisis de vulnerabilidades</b>&nbsp;— evaluación, triaje y puntuación con estándares reconocidos (CVE, CVSS, OWASP, MITRE ATT&amp;CK).</li><li><b>Hardening</b>&nbsp;— fortificación de sistemas, redes y aplicaciones con configuraciones seguras por defecto.</li><li><b>Normativa y estándares</b>&nbsp;— ISO/IEC 27001 (SGSI, controles del Anexo A), NIS2, DORA y RGPD; traduzco los hallazgos técnicos a las obligaciones que activan.</li><li><b>Herramientas y formación</b>&nbsp;— herramientas clave del sector (Burp Suite, Nmap, Metasploit, Wireshark, Ghidra) junto a mis propias herramientas de automatización de auditorías en Python/C#; formación interna en seguridad que preparo para el equipo.</li>',
 
     /* stack */
     'stack.idx': '[ CAPACIDADES ]',
@@ -121,16 +121,16 @@
     'stack.ul.design':        '<li>Figma</li><li>arquitectura UX</li><li>diseño de interacción</li>',
 
     'creds.cert.h4': 'Certificaciones',
-    'creds.cert.ul': '<li><span class="k">SEC</span><span><b>Offensive Hardware Hacking</b> — Black Hat</span></li><li><span class="k">PEN</span><span><b>eJPT</b> — Junior Penetration Tester</span></li><li><span class="k">SEC</span><span><b>OSCC-SEC</b> — OffSec</span></li><li><span class="k">SEC</span><span><b>CJCA</b> — Hack The Box</span></li><li><span class="k">PY</span><span><b>PCEP</b> — Programador Python certificado de nivel inicial</span></li><li><span class="k">NET</span><span>Contenido <b>CCNA</b> completado — Cisco</span></li><li><span class="k">FIN</span><span><b>Programa Finanzas para no Financieros</b> — ESADE</span></li>',
+    'creds.cert.ul': '<li><span class="k">SEC</span><span><b>Offensive Hardware Hacking</b>&nbsp;— Black Hat</span></li><li><span class="k">PEN</span><span><b>eJPT</b>&nbsp;— Junior Penetration Tester</span></li><li><span class="k">SEC</span><span><b>OSCC-SEC</b>&nbsp;— OffSec</span></li><li><span class="k">SEC</span><span><b>CJCA</b>&nbsp;— Hack The Box</span></li><li><span class="k">PY</span><span><b>PCEP</b>&nbsp;— Programador Python certificado de nivel inicial</span></li><li><span class="k">NET</span><span>Contenido <b>CCNA</b> completado&nbsp;— Cisco</span></li><li><span class="k">FIN</span><span><b>Programa Finanzas para no Financieros</b>&nbsp;— ESADE</span></li>',
     'creds.edu.h4': 'Formación y distinciones',
-    'creds.edu.ul': '<li><span class="k">BSC</span><span><b>Grado en Ingeniería del Software</b> <span class="sub">Mención en Computadores</span></span></li><li><span class="k">HON</span><span><b>Matrícula de honor</b> — Seguridad en Redes · Álgebra</span></li><li><span class="k">MUS</span><span><b>Título profesional de violonchelo</b> — Conservatori de Mallorca</span></li>',
+    'creds.edu.ul': '<li><span class="k">BSC</span><span><b>Grado en Ingeniería del Software</b> <span class="sub">Mención en Computadores</span></span></li><li><span class="k">HON</span><span><b>Matrícula de honor</b>&nbsp;— Seguridad en Redes · Álgebra</span></li><li><span class="k">MUS</span><span><b>Título profesional de violonchelo</b>&nbsp;— Conservatori de Mallorca</span></li>',
 
     /* other signals */
     'signals.idx': '[ FUERA&nbsp;DE&nbsp;HORAS ]',
     'signals.h2':  'Otras señales.',
     'cello.k':  'Baja frecuencia · sostenida',
     'cello.h3': 'Violonchelo',
-    'cello.p':  'Un título profesional del Conservatori de Mallorca. Años leyendo una partitura, sosteniendo una línea y aguzando el oído para esa única nota que desafina —el mismo oído que aplico a un sistema.',
+    'cello.p':  'Un título profesional del Conservatori de Mallorca. Años leyendo una partitura, sosteniendo una línea y aguzando el oído para esa única nota que desafina —&#8288;el mismo oído que aplico a un sistema.',
     'bball.k':  'Transitorio · alta energía',
     'bball.h3': 'Baloncesto',
     'bball.p':  'Semiprofesional, compitiendo a nivel nacional en 3ª FEB. Donde aprendí a rendir bajo presión, a leer la jugada dos movimientos por delante y a confiar en que un equipo haga su trabajo.',
@@ -139,15 +139,15 @@
     'contact.h2':      'Abre un <em>canal.</em>',
     'contact.sub':     'Vacantes, colaboraciones, trabajo de seguridad o simplemente para intercambiar impresiones sobre hardware. Leo todo lo que llega.',
     'contact.email.k': 'Correo',
-    'contact.github.note': 'Repos públicos — scrapers, herramientas ligeras de pentesting y microservicios.',
+    'contact.github.note': 'Repos públicos&nbsp;— scrapers, herramientas ligeras de pentesting y microservicios.',
 
     /* footer (closing readout) */
     'footer.top':     '↑&nbsp;Arriba',
     'footer.sig.k':   'Señal',
-    'footer.sig.v':   'Ingeniero de software · pentester · hacker de hardware',
+    'footer.sig.v':   '<span>Ingeniero de software</span><span>pentester</span><span>hacker de hardware</span>',
     'footer.type.k':  'Tipografía',
     'footer.trace.k': 'Traza',
-    'footer.trace.v': 'Un osciloscopio en vivo en WebGL —una onda real que se resintoniza en cada sección. Respeta la preferencia de movimiento reducido.',
+    'footer.trace.v': 'Un osciloscopio en vivo en WebGL —&#8288;una onda real que se resintoniza en cada sección. Respeta la preferencia de movimiento reducido.',
     'footer.loc':     'Palma, Islas Baleares · 2026',
     'footer.eot':     'Fin de la transmisión',
 
@@ -216,7 +216,6 @@
       b.classList.toggle('is-on', on);
       b.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
-    placeAll();
 
     current = lang;
     // let app.js re-render the chrome it generates (band names, trace captions) in the new language
@@ -269,37 +268,16 @@
     } catch (err){ root.classList.remove('vt-lang'); apply(lang); }
   }
 
-  /* ---- the gliding indicator: measure the active option, move the chip ---- */
-  function placeIndicator(sw){
-    var ind = sw.querySelector('.lang-ind');
-    var on  = sw.querySelector('.lang-opt.is-on') || sw.querySelector('.lang-opt');
-    if (!ind || !on) return;
-    // sub-pixel geometry: offset* rounds to whole pixels, which left the chip up to a pixel off its label. A pressed
-    // option is scaled (:active), so its rect would lie — then the layout offsets are the better answer.
-    var x = on.offsetLeft, y = on.offsetTop, w = on.offsetWidth, h = on.offsetHeight;
-    if (window.getComputedStyle && getComputedStyle(on).transform === 'none'){
-      var a = on.getBoundingClientRect(), b = sw.getBoundingClientRect();
-      if (a.width && b.width){ x = a.left - b.left - sw.clientLeft; y = a.top - b.top - sw.clientTop; w = a.width; h = a.height; }
-    }
-    ind.style.width  = w.toFixed(2) + 'px';
-    ind.style.height = h.toFixed(2) + 'px';
-    ind.style.transform = 'translate(' + x.toFixed(2) + 'px,' + y.toFixed(2) + 'px)';
-  }
-  function placeAll(){
-    var list = document.querySelectorAll('.lang-switch');
-    for (var i=0;i<list.length;i++) placeIndicator(list[i]);
-  }
+  /* ---- the gliding chip is pure CSS (i18n.css: it follows html[lang]) — nothing to measure, so nothing can drift.
+     Its glide is only switched on once the page has settled, so only a reader's own switch ever animates it. ---- */
+  function placeAll(){}   // kept for callers of BMJ_I18N.place: the geometry needs no JS any more
   function enableGlide(){
-    placeAll();
     var list = document.querySelectorAll('.lang-switch');
     for (var i=0;i<list.length;i++) list[i].classList.add('lang-ready');
   }
-  // place instantly once layout/fonts have settled, then enable the glide so
-  // only user-initiated changes animate — never the first paint
   if (document.fonts && document.fonts.ready){ document.fonts.ready.then(enableGlide); }
   window.addEventListener('load', enableGlide);
   setTimeout(enableGlide, 1200);
-  window.addEventListener('resize', placeAll, { passive:true });
 
   /* expose a tiny hook (handy for the console / future controls) */
   window.BMJ_I18N = { set:function(l){ if (SUPPORTED.indexOf(l) >= 0){ remember(l); apply(l); } }, get:function(){ return current; }, chrome:chrome, place:placeAll };

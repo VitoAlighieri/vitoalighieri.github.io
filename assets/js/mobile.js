@@ -97,6 +97,7 @@
   if (detWrap) DEST.forEach(function(){ var d = document.createElement('span'); d.className = 'tn-det'; detWrap.appendChild(d); dets.push(d); });
   function placeDetents(){
     if (!dets.length) return;
+    if (window.visualViewport && visualViewport.scale > 1.01) return;   // zoomed in: innerHeight is the zoomed view — keep the detents where they are
     var max = Math.max(1, document.documentElement.scrollHeight - innerHeight), vh = innerHeight;
     DEST.forEach(function(id, i){
       var el = document.getElementById(id); if (!el) return;
@@ -184,7 +185,6 @@
     var from = pillClip(), r = btn.getBoundingClientRect();
     ix.classList.add('is-open'); document.documentElement.classList.add('ix-open'); setInert(true); btn.setAttribute('aria-expanded', 'true');
     try { history.pushState({ bmjIx:1 }, ''); pushed = true; } catch(e){ pushed = false; }
-    if (window.BMJ_I18N && window.BMJ_I18N.place) window.BMJ_I18N.place();   // the index's EN/ES chip: measure it now it is laid out
     sizeTraces(); startTraces();
     var focusEl = $('.ix-row.is-cur', ix) || $('.ix-row', ix);
     buzz(6);
@@ -302,10 +302,12 @@
      ================================================================= */
   var chSec = $('#channels'), deck = $('#channels .channels'), pager = $('.ch-pager');
   var cards = deck ? $$('.channel', deck) : [], pgBtns = pager ? $$('button', pager) : [], curCard = -1, deckBooted = false;
+  // the deck snaps each card to its CENTRE (mobile.css), so tuning to a card brings its centre to the deck's centre
   function deckTo(i, beh){
     var c = cards[i]; if (!c || !deck) return;
-    var pad = parseFloat(getComputedStyle(deck).scrollPaddingLeft) || 0;
-    deck.scrollTo({ left:deck.scrollLeft + c.getBoundingClientRect().left - deck.getBoundingClientRect().left - pad, behavior:beh || (REDUCED ? 'auto' : 'smooth') });
+    var cr = c.getBoundingClientRect(), dr = deck.getBoundingClientRect();
+    var dx = (cr.left + cr.width / 2) - (dr.left + deck.clientLeft + deck.clientWidth / 2);
+    deck.scrollTo({ left:deck.scrollLeft + dx, behavior:beh || (REDUCED ? 'auto' : 'smooth') });
   }
   function setCard(i){
     if (!PHONE.matches){
@@ -431,9 +433,11 @@
   }
   var hero = $('#hero'), probe = hero && $('.probe', hero), ring = hero && $('.tapring', hero), hint = hero && $('.touchhint', hero);
   if (hero && probe && S && S.ok){
-    var TR = S.TR, W = innerWidth, lastDet = 0, followRaf = null;
+    // the hero's LAYOUT width, not innerWidth: on iOS a pinch-zoom shrinks innerWidth to the zoomed view, and the probe
+    // would then map the thumb onto the wrong part of the trace
+    var TR = S.TR, W = hero.clientWidth || innerWidth, lastDet = 0, followRaf = null;
     var prF = $('.pr-f', probe), prX = $('.pr-x', probe);
-    window.addEventListener('resize', function(){ W = innerWidth; }, { passive:true });
+    window.addEventListener('resize', function(){ W = hero.clientWidth || innerWidth; }, { passive:true });
     var uOf = function(x){ return Math.max(0, Math.min(1, 0.5 + (x/W - 0.5)/1.06)); };   // the trace is overscanned 1.06× full-bleed
     var xOf = function(u){ return (0.5 + (u - 0.5)*1.06)*W; };
     var probeAt = function(x){   // the cursor sits under the thumb; its chip is pushed back inside the edges
@@ -503,6 +507,7 @@
           var role = $('.hero-mid .role', hero), rd = $('.readout', hero);
           var lo2 = role ? role.getBoundingClientRect().bottom - hr.top + 10 : y + 30, hi = rd ? rd.getBoundingClientRect().top - hr.top - 34 : y + 30;
           hint.style.setProperty('--ly', (Math.max(lo2, Math.min(hi, y + 30)) - y).toFixed(1) + 'px');
+          hint.classList.toggle('nolabel', hi < lo2 - 4);   // no band left on a short screen (long Spanish lede): the ring alone, never a label over the readout
           hint.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px)';
           hint.classList.toggle('left', x < W*0.5);
           hint.classList.add('on', 'play');

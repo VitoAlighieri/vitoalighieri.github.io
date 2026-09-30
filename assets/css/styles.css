@@ -456,6 +456,12 @@ footer{ position:relative; z-index:2; border-top:1px solid var(--line); padding:
 .foot-grid .colo > div{ display:grid; gap:.4rem; align-content:start; }
 .foot-grid .colo dt{ font-family:var(--m); font-weight:500; font-size:.66rem; letter-spacing:.22em; text-transform:uppercase; color:var(--amber); }
 .foot-grid .colo dd{ margin:0; font-family:var(--m); font-weight:400; font-size:.78rem; letter-spacing:.03em; line-height:1.65; color:var(--bone-3); max-width:36ch; }
+/* '·'-separated lists that may wrap: no line starts or ends with a lone dot. Each item carries its dot in its own left
+   padding (--dg = the old ' · ' run: two spaces and the dot), the list is pulled --dg left and clipped at its own edge,
+   so the dot of whichever item opens a line is never seen. */
+.foot-grid .colo dd.dots{ --dg:calc(1.8em + .09em); display:flex; flex-wrap:wrap; margin-left:calc(-1 * var(--dg)); max-width:calc(36ch + var(--dg)); clip-path:inset(-.5em -.5em -.5em var(--dg)); }
+.foot-grid .colo dd.dots > span{ position:relative; padding-left:var(--dg); white-space:nowrap; }
+.foot-grid .colo dd.dots > span::before{ content:"·"; position:absolute; top:0; left:calc((var(--dg) - .03em) / 2); transform:translateX(-50%); letter-spacing:0; }
 .foot-end{
   display:flex; justify-content:space-between; flex-wrap:wrap; gap:.6rem 1.5rem; padding-top:1rem; border-top:1px solid var(--line);
   font-family:var(--m); font-weight:500; font-size:.66rem; letter-spacing:.18em; text-transform:uppercase; color:var(--mute);
@@ -713,7 +719,7 @@ body:has(#topbar.is-docked) .scrollcue .track::after{ animation-play-state:pause
   .sys-more[open] > summary .show{ display:none; }
   .sys-more[open] > summary .less{ display:inline; }
   .sys-more[open] > summary{ margin-bottom:.5rem; }
-  .sys-more > summary:active .pm{ background:rgba(255,173,58,.14); }
+  .sys-more > summary:active .pm{ background-color:rgba(255,173,58,.14); }
 }
 @media (max-width:480px){ .sys-points li{ text-wrap:auto; } }   /* 'pretty' produces a ragged 3–4-word rag on a 30ch measure */
 @media (max-width:400px){ .sys{ padding-inline:.875rem; } }       /* 14px: ~2 more characters per line inside a 320–360px column; the brackets ride the border, so nothing collides */

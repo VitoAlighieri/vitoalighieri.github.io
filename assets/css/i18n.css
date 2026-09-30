@@ -12,83 +12,88 @@
 /* ===================================================================
    EN / ES SWITCH — reads as part of the instrument chrome.
    A soft amber "chip" glides behind the active language; the option it
-   lands on lifts to amber. The chip geometry is measured in JS (i18n.js)
-   so it tracks the real glyph widths in either language.
+   lands on lifts to amber.
+   The whole switch is ONE piece of CSS geometry — nothing is measured in JS. Both options are boxes of the same fixed
+   width, the '/' has a fixed width, and the chip is sized and moved with those very same lengths. So the chip can never
+   drift off its label: not at any zoom (pinch, browser or text zoom), not while fonts load, not after a resize.
    =================================================================== */
-/* --ls tracking, --opx / --opy option padding: every variant sets these three, and the option derives its box from them */
+/* the knobs every variant sets:
+   --ls tracking · --opx space either side of the label · --opy space above/below the em box · --gp gap either side of
+   the '/' · --sp the switch's own inline padding (the chip starts there). The rest derives from them:
+   --ow option width = the two monospace cells (2 × .6em) + one inner letter-space + the side space; --oh option (and
+   chip) height. Phones set --ow / --oh straight in whole pixels. */
 .lang-switch{
-  --ls:.16em; --opx:.42rem; --opy:.2rem;
-  position:relative; display:inline-flex; align-items:center; gap:.45rem;
+  --ls:.16em; --opx:.42rem; --opy:.2rem; --gp:.45rem; --sp:0px;
+  --ow:calc(1.2em + var(--ls) + 2 * var(--opx)); --oh:calc(1em + 2 * var(--opy)); --dw:.6em;
+  position:relative; display:inline-flex; align-items:center; gap:var(--gp);
   line-height:1; white-space:nowrap;
   font-family:var(--m); font-weight:500; font-size:.72rem; letter-spacing:var(--ls);
 }
-/* optical centring: the tracking after the last letter is taken back out of the right padding, so 'EN' sits in the
-   exact middle of its chip (it used to lean ~1.2px left) */
+/* a fixed-width box with the label centred in it; the left padding equals the tracking the engine adds after the LAST
+   letter, so the ink — not the ink plus that trailing space — sits in the exact middle */
 .lang-switch .lang-opt{
-  position:relative; z-index:1;
+  position:relative; z-index:1; flex:none; box-sizing:border-box; width:var(--ow); height:var(--oh);
   -webkit-appearance:none; appearance:none; background:none; border:0; margin:0;
-  padding:var(--opy) calc(var(--opx) - var(--ls)) var(--opy) var(--opx); min-width:2.2ch; cursor:pointer; color:var(--mute);
+  padding:calc((var(--oh) - 1em) / 2) 0 calc((var(--oh) - 1em) / 2) var(--ls); cursor:pointer; color:var(--mute);
   font:inherit; letter-spacing:var(--ls); text-transform:uppercase; text-align:center; line-height:1;
-  border-radius:999px;
-  transition:color .35s var(--ease), transform .18s var(--ease);
+  border-radius:999px; overflow:visible;
+  transition:color .35s var(--ease), opacity .15s linear;
 }
 /* where the engine can trim the text box to the capitals (Chrome 133+, Safari 18.2+), the caps are centred exactly —
-   metric rounding otherwise leaves them up to ~1px high. The padding grows by what the trim removes (1em − .73em cap
-   height, halved), so every chip keeps exactly the same size either way. */
+   metric rounding otherwise leaves them up to ~1px high: the box is the caps (.73em) with equal space above and below. */
 @supports (text-box: trim-both cap alphabetic){
-  .lang-switch .lang-opt{ text-box:trim-both cap alphabetic; padding-top:calc(var(--opy) + .135em); padding-bottom:calc(var(--opy) + .135em); }
+  .lang-switch .lang-opt{ text-box:trim-both cap alphabetic; padding-top:calc((var(--oh) - .73em) / 2); padding-bottom:calc((var(--oh) - .73em) / 2); }
 }
 .lang-switch .lang-opt:hover{ color:var(--bone-2); }
 .lang-switch .lang-opt.is-on{ color:var(--amber); }
-.lang-switch .lang-opt:active{ transform:scale(.88); }
-.lang-switch .lang-div{ position:relative; z-index:1; color:var(--mute-2); letter-spacing:0; }   /* a lone '/' carries no tracking: it sits midway between EN and ES */
+.lang-switch .lang-opt:active{ opacity:.6; }   /* press feedback that moves nothing (a scaled label used to jump inside its chip) */
+.lang-switch .lang-div{ position:relative; z-index:1; flex:none; width:var(--dw); text-align:center; color:var(--mute-2); letter-spacing:0; }   /* a lone '/' carries no tracking */
 
-/* the gliding indicator (geometry set in JS) */
+/* the chip: exactly one option's box, centred on the same line as the options, moved by exactly one option + the '/'
+   and its two gaps. html[lang] is what i18n.js sets, so the chip follows the language with no measuring at all. */
 .lang-switch .lang-ind{
-  position:absolute; left:0; top:0; z-index:0; width:0; height:0;
+  position:absolute; z-index:0; left:var(--sp); top:0; bottom:0; margin:auto 0;
+  width:var(--ow); height:var(--oh);
   border-radius:999px; background:rgba(255,173,58,.12);
   border:1px solid rgba(255,173,58,.30);
   box-shadow:0 0 12px 1px var(--glow), inset 0 0 7px rgba(255,173,58,.07);
-  pointer-events:none; will-change:transform,width;
+  pointer-events:none; transform:none;   /* no layer, no transform at rest: nothing for a zoom to re-rasterise out of step with the label */
 }
-/* transitions only switch on after the first placement, so the chip never
-   slides in from the corner on load — it just appears in place */
-.lang-switch.lang-ready .lang-ind{
-  transition:transform .52s var(--ease), width .52s var(--ease), height .52s var(--ease);
-}
+html[lang="es"] .lang-switch .lang-ind{ transform:translateX(calc(var(--ow) + var(--dw) + 2 * var(--gp))); }
+/* transitions only switch on once the page has settled, so a Spanish reader's chip never slides over on load */
+.lang-switch.lang-ready .lang-ind{ transition:transform .52s var(--ease); }
 
 /* hero instance: a subtle pill so it reads as a control, sitting on the top line */
 .lang-switch--hero{
-  --ls:.2em;
-  align-self:flex-start; padding:.4rem .7rem;
+  --ls:.2em; --sp:.7rem;
+  align-self:flex-start; padding:.4rem var(--sp); font-size:.74rem;
   border:1px solid var(--line-2); border-radius:999px; background:rgba(13,18,28,.45);
   -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
 }
-.lang-switch--hero .lang-opt{ font-size:.74rem; }
 
 /* docked-strip instance: slim, the bar already provides the chrome */
-.lang-switch--bar{ --ls:.14em; font-size:.66rem; gap:.35rem; }
+.lang-switch--bar{ --ls:.14em; --gp:.35rem; font-size:.66rem; }
 
 /* reduced motion: keep the colour cue, drop the glide */
 @media (prefers-reduced-motion: reduce){
   .lang-switch.lang-ready .lang-ind{ transition:none; }
   .lang-switch .lang-opt{ transition:color .2s linear; }
-  .lang-switch .lang-opt:active{ transform:none; }
 }
 
-/* ----- phones: a compact 32px pill (the 44px+ touch targets come from the invisible ::before hit areas below);
-         the chip is 24px tall, the pill's padding is the same 3px all round, so chip and pill share one centre ----- */
+/* ----- phones: every length in WHOLE pixels, so each edge lands on a device pixel at 2× and 3× and nothing is
+         re-rounded differently when you zoom. The type is sized so its capitals are exactly 8px tall (JetBrains Mono's
+         caps are .73em: 8px ÷ .73 ≈ 10.96px) — then 'caps centred in an even-height chip' puts the baseline on a whole
+         pixel too, which no engine has to round (a fractional one was rounded ~.35px off centre, one way in the pill and
+         the other in the strip). Touch targets stay 44px through the ::before hit areas below. ----- */
+/* the hero pill: 24px = 1px border + 2px inset + an 18px chip (5px · 8px caps · 5px) + 2px + 1px */
 @media (max-width:600px){
-  .lang-switch--hero{ --opx:.62rem; --opy:.36rem; box-sizing:border-box; height:2rem; padding:0 3px; gap:.3rem; font-size:.78rem; }
-  .lang-switch--hero .lang-opt{ font-size:.78rem; }
+  .lang-switch--hero{ --ls:.16em; --gp:4px; --sp:2px; --ow:32px; --oh:18px; --dw:8px;
+    box-sizing:border-box; height:24px; padding:0 var(--sp); font-size:calc(8px / .73); }
 }
-/* tiniest phones: a little tighter so the hero's two-corner top row fits */
-@media (max-width:360px){
-  .lang-switch--hero{ --ls:.16em; --opx:.52rem; --opy:.4rem; gap:.22rem; font-size:.72rem; }
-  .lang-switch--hero .lang-opt{ font-size:.72rem; }
-}
+/* the strip: a 28 × 20 chip (6px · 8px caps · 6px); the 1px top margin lands it on a whole pixel of the strip's 59px
+   content box (60px less its hairline), which also puts it on the strip's true visual centre */
 @media (max-width:720px){
-  .lang-switch--bar{ --opx:.46rem; --opy:.28rem; }
+  .lang-switch--bar{ --ls:.14em; --gp:5px; --ow:28px; --oh:20px; --dw:7px; font-size:calc(8px / .73); margin-top:1px; }
 }
 
 /* ===================================================================
@@ -121,12 +126,10 @@
    The '/' divider passes taps through instead of reading as a dead button. */
 @media (hover:none){
   .lang-switch .lang-opt::before{ content:""; position:absolute; left:0; right:0; top:-14px; bottom:-14px; }
-  /* inner edges meet under the '/' (gap + divider + gap ≈ 18px on the strip, ≈ 24px on the hero pill), so a tap on the
-     slash always lands on an option; outer edges grow 10px — the strip's ES stops at 8px to leave the round CTA (≤380) its share of the gap */
-  .lang-switch .lang-opt:first-of-type::before{ left:-10px; right:-9px; }
-  .lang-switch .lang-opt:last-of-type::before{ right:-10px; left:-9px; }
-  .lang-switch--hero .lang-opt:first-of-type::before{ right:-12px; }
-  .lang-switch--hero .lang-opt:last-of-type::before{ left:-12px; }
+  /* inner edges meet exactly under the middle of the '/' (half of gap + divider + gap each), so a tap on the slash always
+     lands on an option and neither side wins it; outer edges grow 10px */
+  .lang-switch .lang-opt:first-of-type::before{ left:-10px; right:calc(-1 * (var(--gp) + var(--dw) / 2)); }
+  .lang-switch .lang-opt:last-of-type::before{ right:-10px; left:calc(-1 * (var(--gp) + var(--dw) / 2)); }
   .lang-switch--bar .lang-opt:last-of-type::before{ right:-8px; }
   .lang-switch .lang-div{ pointer-events:none; }
   #topbar .mark::before{ content:""; position:absolute; inset:-14px -8px; }
