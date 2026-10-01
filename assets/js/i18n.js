@@ -21,14 +21,16 @@
       desc:    'Cybersecurity in Palma. I test web, networks, RF, hardware and ICS/OT, explain each finding to engineers and management, and map it to ISO 27001, NIS2 and DORA.',
       ogTitle: 'Biel Martínez Janer — Cybersecurity · Communication · Project leadership',
       ogDesc:  'I test systems the way an attacker would, explain each finding in terms your engineers and management can act on, and lead projects end to end.',
-      locale:  'en_US'
+      locale:  'en_US',
+      mail:    'Open a channel'
     },
     es: {
       title:   'Biel Martínez Janer — Ciberseguridad · Comunicación · Liderazgo de proyectos',
       desc:    'Ciberseguridad en Palma. Pruebo web, redes, RF, hardware e ICS/OT, explico cada hallazgo a técnicos y a dirección y lo traduzco a ISO 27001, NIS2 y DORA.',
       ogTitle: 'Biel Martínez Janer — Ciberseguridad · Comunicación · Liderazgo de proyectos',
       ogDesc:  'Pruebo sistemas como lo haría un atacante, explico cada hallazgo a técnicos y a dirección en su idioma y lidero proyectos de principio a fin.',
-      locale:  'es_ES'
+      locale:  'es_ES',
+      mail:    'Abre un canal'
     }
   };
 
@@ -114,7 +116,7 @@
     'sys.lab.h3':     'Seguridad ofensiva',
     'sys.lab.role':   '<span>Pentesting</span><span>red team</span><span>investigación</span>',
     'sys.lab.when':   'en curso',
-    'sys.lab.sum':    'Seguridad ofensiva en toda la pila —&#8288;de las ondas de radio a la aplicación web y a la planta industrial&#8288;—, sobre los sistemas industriales que construyo en Suministros Jogo y en proyectos propios, curtida en objetivos reales y en laboratorio. Certificado por OffSec, Hack The Box, INE y Black Hat.',
+    'sys.lab.sum':    'Seguridad ofensiva en toda la pila —&#8288;de las ondas de radio a la aplicación web y a la planta industrial&#8288;—, sobre los sistemas industriales que construyo en Suministros Jogo y en proyectos propios, curtida en objetivos reales y en laboratorio. Certificado por OffSec, Hack The Box e INE; formado en Black Hat.',
     'sys.lab.points': '<li><b>Web y APIs</b>&nbsp;— pruebas guiadas por OWASP de autenticación, control de acceso y lógica de negocio.</li><li><b>Redes y sistemas</b>&nbsp;— pentesting de infraestructura, pivoting y escalada de privilegios.</li><li><b>Radiofrecuencia y señales</b>&nbsp;— captura y análisis de RF, wireless e IoT (ESP32 / ESP8266).</li><li><b>Hardware y firmware</b>&nbsp;— hardware hacking, extracción de firmware e ingeniería inversa.</li><li><b>Sistemas industriales (ICS / OT)</b>&nbsp;— seguridad de los procesos y plataformas industriales que también construyo.</li><li><b>Análisis de vulnerabilidades</b>&nbsp;— evaluación, triaje y puntuación con estándares reconocidos (CVE, CVSS, OWASP, MITRE ATT&amp;CK).</li><li><b>Hardening</b>&nbsp;— fortificación de sistemas, redes y aplicaciones con configuraciones seguras por defecto.</li><li><b>Normativa y estándares</b>&nbsp;— ISO/IEC 27001 (SGSI, controles del Anexo A), NIS2, DORA y RGPD; traduzco los hallazgos técnicos a las obligaciones que activan.</li><li><b>Herramientas y formación</b>&nbsp;— herramientas clave del sector (Burp Suite, Nmap, Metasploit, Wireshark, Ghidra) junto a mis propias herramientas de automatización de auditorías en Python/C#; formación interna en seguridad que preparo para el equipo.</li>',
 
     /* stack */
@@ -131,8 +133,8 @@
     'stack.ul.industrial':    '<li>integración de corte por láser</li><li>DXF</li><li>anidado automático</li>',
     'stack.ul.design':        '<li>Figma</li><li>arquitectura UX</li><li>diseño de interacción</li>',
 
-    'creds.cert.h4': 'Certificaciones',
-    'creds.cert.ul': '<li><span class="k">SEC</span><span><b>Offensive Hardware Hacking</b>&nbsp;— Black Hat</span></li><li><span class="k">PEN</span><span><b>eJPT</b>&nbsp;— Junior Penetration Tester</span></li><li><span class="k">SEC</span><span><b>OSCC-SEC</b>&nbsp;— OffSec</span></li><li><span class="k">SEC</span><span><b>CJCA</b>&nbsp;— Hack The Box</span></li><li><span class="k">PY</span><span><b>PCEP</b>&nbsp;— Programador Python certificado de nivel inicial</span></li><li><span class="k">NET</span><span>Contenido <b>CCNA</b> completado&nbsp;— Cisco</span></li><li><span class="k">FIN</span><span><b>Programa Finanzas para no Financieros</b>&nbsp;— ESADE</span></li>',
+    'creds.cert.h4': 'Certificaciones y formación',
+    'creds.cert.ul': '<li><span class="k">SEC</span><span><b>Offensive Hardware Hacking</b>&nbsp;— Black Hat</span></li><li><span class="k">PEN</span><span><b>eJPT</b>&nbsp;— Junior Penetration Tester, INE</span></li><li><span class="k">SEC</span><span><b>OSCC-SEC</b>&nbsp;— OffSec</span></li><li><span class="k">SEC</span><span><b>CJCA</b>&nbsp;— Hack The Box</span></li><li><span class="k">PY</span><span><b>PCEP</b>&nbsp;— Programador Python certificado de nivel inicial</span></li><li><span class="k">NET</span><span>Contenido <b>CCNA</b> completado&nbsp;— Cisco</span></li><li><span class="k">FIN</span><span><b>Programa Finanzas para no Financieros</b>&nbsp;— ESADE</span></li>',
     'creds.edu.h4': 'Formación y distinciones',
     'creds.edu.ul': '<li><span class="k">BSC</span><span><b>Grado en Ingeniería del Software</b> <span class="sub">Mención en Computadores</span></span></li><li><span class="k">HON</span><span><b>Matrícula de honor</b>&nbsp;— Seguridad en Redes · Álgebra</span></li><li><span class="k">MUS</span><span><b>Título profesional de violonchelo</b>&nbsp;— Conservatori de Mallorca</span></li>',
 
@@ -147,7 +149,7 @@
 
     /* contact */
     'contact.h2':      'Abre un <em>canal.</em>',
-    'contact.sub':     '¿Tienes un sistema que poner a prueba o proteger, o un puesto en ciberseguridad que cubrir? Escríbeme: leo todo lo que llega.',
+    'contact.sub':     '¿Tienes un sistema que poner a prueba o proteger, o un puesto en ciberseguridad que cubrir? Cuéntame qué es, el alcance aproximado y tus plazos: leo todo lo que llega.',
     'contact.email.k': 'Correo',
     'contact.github.note': 'Repos públicos&nbsp;— scrapers, herramientas de pentesting, microservicios y el código de esta web.',
 
@@ -225,6 +227,7 @@
     setMeta(oglEl,  m.locale);
 
     document.documentElement.setAttribute('lang', lang);
+    document.querySelectorAll('a[data-mail]').forEach(function(a){ a.setAttribute('href', 'mailto:' + a.getAttribute('data-mail') + '?subject=' + encodeURIComponent(m.mail)); });
 
     document.querySelectorAll('.lang-opt').forEach(function(b){
       var on = (b.getAttribute('data-lang-set') === lang);

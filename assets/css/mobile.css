@@ -7,9 +7,26 @@
    index), and each section is recomposed for a tall glass.
    ===================================================================== */
 
-/* phone-only chrome: absent everywhere else */
+/* phone-only chrome: absent everywhere else (.mail-copy appears with JS, at every width: below) */
 .tuner, .chindex, .ch-pager, .ch-swipe, .mail-copy, .scope-touch, .probe, .tapring, .touchhint{ display:none; }
 .sr{ position:absolute !important; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; }
+
+/* the mail row's COPY key, every width (mailto is a dead end without a mail client — a phone without a mail app,
+   a desktop without a configured one); phones set their own address size in the CONTACT block below */
+.mail-wrap{ position:relative; --vfs:clamp(1.08rem,1.6vw,1.35rem); }   /* desktop: the address keeps the row size (styles.css) */
+.mail-wrap .link-row .v{ font-size:var(--vfs); }
+.js .mail-wrap .link-row{ padding-right:6.2rem; }       /* the key is ≤88px wide even as 'COPIAR ✓' */
+.js .mail-wrap .link-row .arrow{ display:none; }         /* the COPY key is this row's right-hand affordance; the row itself still opens mail */
+/* a 36px key centred on the ADDRESS line (the thing it copies), like the ↗ of the other rows — not on the whole
+   label + address block; the touch target stays 44px through ::before */
+.js .mail-copy{ display:inline-flex; align-items:center; gap:.45rem; position:absolute; right:.2rem; top:auto; bottom:calc(1.15rem + var(--vfs) * .825 - 18px);
+  box-sizing:border-box; height:36px; padding:0 calc(.9rem - .14em) 0 .9rem; cursor:pointer;
+  -webkit-appearance:none; appearance:none; border:1px solid rgba(var(--amber-rgb),.45); border-radius:999px; background:var(--wash);
+  font-family:var(--m); font-weight:500; font-size:var(--mono-c); letter-spacing:.14em; text-transform:uppercase; color:var(--amber); transition:transform .15s var(--ease), background .2s, color .2s; }
+.js .mail-copy::before{ content:""; position:absolute; inset:-4px; border-radius:999px; }
+.mail-copy:active{ transform:scale(.94); background:rgba(var(--amber-rgb),.18); }
+.mail-copy.is-done{ background:var(--amber); color:var(--on-amber); border-color:var(--amber); }
+.mail-copy.is-done::after{ content:"✓"; }
 
 @media (max-width:720px){
   :root{
@@ -111,7 +128,7 @@
     background:linear-gradient(90deg, transparent, var(--amber) 20%, var(--amber-2) 50%, var(--amber) 80%, transparent);
     box-shadow:0 0 14px 2px rgba(var(--amber-rgb),.55); }
   .ix-head{ display:flex; align-items:flex-end; gap:.8rem; padding-bottom:.9rem; }
-  .ix-head .idx{ font-family:var(--m); font-weight:500; font-size:var(--mono-l); letter-spacing:.2em; color:var(--amber); white-space:nowrap; line-height:1; }
+  .ix-head .idx{ font-family:var(--m); font-weight:500; font-size:var(--mono-l); letter-spacing:.2em; text-transform:uppercase; color:var(--amber); white-space:nowrap; line-height:1; }
   .ix-head .s-ticks{ flex:1; min-width:.5rem; }   /* the ticks give way first: '[ ÍNDICE DE CANALES ]' needs the row at 320 */
   .ix-head .ix-now{ font-family:var(--m); font-weight:500; font-size:var(--mono-t); letter-spacing:.16em; margin-right:-.16em; color:var(--bone-2); white-space:nowrap; line-height:1; font-variant-numeric:tabular-nums; }
   .ix-list{ list-style:none; margin:0; padding:0; align-self:center; border-top:1px solid var(--line); }
@@ -249,6 +266,7 @@
   .touchhint.nolabel .th-l{ display:none; }
   .touchhint .th-ar{ display:inline-block; margin-left:.3rem; animation:bmj-thar 1.2s ease-in-out infinite; }
   .touchhint:not(.on) .th-ar, #channels.deck-seen .ch-swipe::after{ animation:none; }   /* a hidden hint and a seen cue stop looping */
+  #channels.cue-out .ch-swipe::after{ animation-play-state:paused; }   /* and an off-screen cue waits (mobile.js) */
   @keyframes bmj-thar{ 0%,100%{ transform:translateX(-3px); } 50%{ transform:translateX(3px); } }
   #hero .touchhint.on{ opacity:1; transition:opacity .4s var(--ease); }
   #hero .touchhint.off{ opacity:0; transition:opacity .3s var(--ease); }
@@ -288,11 +306,12 @@
   .thesis-grid .body p:last-child{ margin-bottom:0; }
 
   /* ---------- 7 · CHANNELS AS A TUNER DECK ---------- */
-  .js .ch-pager{ display:grid; grid-template-columns:repeat(3,1fr); position:relative; margin:-.4rem var(--dk-off) 1rem; border-bottom:1px solid var(--line-2); }   /* exactly as wide as the centred card below it */
+  .js .ch-pager{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); position:relative; margin:-.4rem var(--dk-off) 1rem; border-bottom:1px solid var(--line-2); }   /* exactly as wide as the centred card below it */
   .ch-pager button{ -webkit-appearance:none; appearance:none; background:none; border:0; margin:0; cursor:pointer; min-height:44px; display:flex; align-items:center; justify-content:center; gap:.45rem;
     font-family:var(--m); font-weight:500; font-size:var(--mono-c); letter-spacing:.12em; text-transform:uppercase; color:var(--mute); transition:color .3s var(--ease); }
   .ch-pager button b{ font-weight:600; color:var(--mute-hi); transition:color .3s var(--ease); }
   .ch-pager button > span:last-child{ margin-right:-.12em; }   /* '01 BUILD' centred on its third of the pager, not 1px left of it */
+  @media (max-width:374px){ html[lang="es"] .ch-pager button{ flex-direction:column; gap:3px; line-height:1; } html[lang="es"] .ch-pager button > span:last-child{ margin-right:0; padding-left:.12em; } }   /* '02 CONSTRUIR' outgrows a third below 375: the number sits over the verb (English fits on one line down to 320) */
   .ch-pager button[aria-current="true"], .ch-pager button[aria-current="true"] b{ color:var(--amber); }
   .ch-pager .pg-needle{ position:absolute; left:0; bottom:-1px; width:33.334%; height:2px; background:var(--amber); box-shadow:0 0 8px rgba(var(--amber-rgb),.7);
     transform:translateX(calc(var(--dp,0) * 200%)); will-change:transform; pointer-events:none; }
@@ -333,7 +352,7 @@
     border-bottom:1px solid var(--line-2); border-radius:4px 4px 0 0;
     background:linear-gradient(rgba(var(--amber-rgb),.05) 1px, transparent 1px) 0 50%/100% 50%, repeating-linear-gradient(90deg, rgba(39,48,63,.55) 0 1px, transparent 1px 12.5%), rgba(3,5,10,.45); }
   .js #channels .ch-side .wf{ height:72px; opacity:.95; }
-  .js #channels .ch-side .ch-tele{ display:block; white-space:normal; line-height:1.5; }
+  .js #channels .ch-side .ch-tele{ display:flex; line-height:1.5; }
   /* the channel number: a big outlined numeral that FILLS when its card locks on */
   .js #channels .channel .ch-id{ grid-area:id; align-self:last baseline; display:block; font-size:0; padding:0; margin:0; }   /* the tiny 'CH' prefix is redundant under the screen caption */
   .js #channels .channel .ch-id b{ display:block; margin:0;
@@ -352,11 +371,11 @@
   .ch-meta, .sys-foot{ gap:.2rem 1.25em !important; overflow:hidden; }                /* the tick of an item that starts a line falls outside the box and vanishes */
   .tag:active{ color:var(--mute-hi) !important; border-color:transparent !important; }
 
-  /* ---------- 9 · SYSTEMS: plate codes (04.1–04.3), balanced roles, the security domains as an indexed register ---------- */
+  /* ---------- 9 · SYSTEMS: plate codes (05.1–05.3, the section's CH·05), balanced roles, the security domains as an indexed register ---------- */
   .systems{ counter-reset:sys; gap:1.1rem; }
   .sys{ counter-increment:sys; }
   .sys-head{ position:relative; padding-top:1.7rem; }
-  .sys-head::before{ content:"04." counter(sys); position:absolute; top:0; left:0;
+  .sys-head::before{ content:"05." counter(sys); position:absolute; top:0; left:0;
     font-family:var(--m); font-weight:500; font-size:var(--mono-t); letter-spacing:.2em; color:var(--amber); font-variant-numeric:tabular-nums; }
   .sys-head .role{ text-wrap:balance; letter-spacing:.1em; line-height:1.6; }
   .sys-head .role.dotlist{ --dl:.1em; }
@@ -382,21 +401,8 @@
   .contact-inner h2{ font-size:min(calc(var(--mw) / 6.3), calc(12 * var(--vh))); font-variation-settings:'wght' 780,'wdth' 125; line-height:.88; }
   .contact-inner h2 em{ display:block; }
   .link-row .v{ font-size:1.18rem; }
-  .mail-wrap{ position:relative; --vfs:1.18rem; }
-  .mail-wrap .link-row .v{ font-size:var(--vfs); }
+  .mail-wrap{ --vfs:1.18rem; }
   @media (max-width:380px){ .mail-wrap{ --vfs:1.05rem; } }  /* the address stays on one line beside the key at 320 */
-  .js .mail-wrap .link-row{ padding-right:6.2rem; }       /* the key is ≤88px wide even as 'COPIAR ✓' */
-  .js .mail-wrap .link-row .arrow{ display:none; }         /* the COPY key is this row's right-hand affordance; the row itself still opens mail */
-  /* a 36px key centred on the ADDRESS line (the thing it copies), like the ↗ of the other rows — not on the whole
-     label + address block; the touch target stays 44px through ::before */
-  .js .mail-copy{ display:inline-flex; align-items:center; gap:.45rem; position:absolute; right:.2rem; top:auto; bottom:calc(1.15rem + var(--vfs) * .825 - 18px);
-    box-sizing:border-box; height:36px; padding:0 calc(.9rem - .14em) 0 .9rem; cursor:pointer;
-    -webkit-appearance:none; appearance:none; border:1px solid rgba(var(--amber-rgb),.45); border-radius:999px; background:var(--wash);
-    font-family:var(--m); font-weight:500; font-size:var(--mono-c); letter-spacing:.14em; text-transform:uppercase; color:var(--amber); transition:transform .15s var(--ease), background .2s, color .2s; }
-  .js .mail-copy::before{ content:""; position:absolute; inset:-4px; border-radius:999px; }
-  .mail-copy:active{ transform:scale(.94); background:rgba(var(--amber-rgb),.18); }
-  .mail-copy.is-done{ background:var(--amber); color:var(--on-amber); border-color:var(--amber); }
-  .mail-copy.is-done::after{ content:"✓"; }
 
   /* ---------- 12 · FOOTER: the end-of-transmission block blinks while the strip signs off (mobile.js) ---------- */
   footer.eot-on .foot-end .eot::after{ animation:bmj-eot 1.05s steps(1,end) infinite; }
@@ -466,6 +472,15 @@
   .hero-top .coord .mono .sep{ display:block; height:0; overflow:hidden; }   /* "Palma" over "Balearic Islands": the place stacks instead of breaking around its dot */
   .hero-bot .cta{ white-space:normal; letter-spacing:.12em; padding-block:10px; }   /* the key's label may wrap; its arrow never leaves the key */
   .hero-top .eyebrow, .hero-top .mono, .hero-mid .role .ri{ overflow-wrap:anywhere; }   /* 250%+ text: a long word breaks rather than leaving the glass */
+  .ch-pager button{ flex-direction:column; gap:3px; line-height:1.1; padding-block:6px; text-align:center; overflow-wrap:anywhere; }   /* number over verb, each third holds its own label */
+  .stack-grid{ grid-template-columns:minmax(0,1fr); background:none; }   /* the bench goes single-column: no half is narrower than its longest word */
+  .stack-half > .stack-col:nth-child(even){ padding-left:0; }
+  .stack-col{ padding-right:0; }
+  .stack-col h3, .stack-col li{ overflow-wrap:anywhere; }
+  .sys-points, .foot-grid{ grid-template-columns:minmax(0,1fr); }   /* grids with an implicit auto column grew to their longest word */
+  .sys-points li, .sys-head > *, .foot-grid .colo dd, .foot-end > *{ min-width:0; overflow-wrap:anywhere; }
+  .foot-row{ flex-wrap:wrap; }
+  .dotlist > span{ white-space:normal; }   /* a long item ('Desarrollador de software') may wrap inside itself; its dot stays at its start */
 }
 @media (max-width:720px){ html{ overflow-x:clip; } }   /* a last guard: nothing can widen the phone's layout viewport */
 

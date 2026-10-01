@@ -34,7 +34,8 @@
     syncHold();
     try { document.dispatchEvent(new CustomEvent('bmj:hold', { detail:{ hold:HOLD } })); } catch(e){}
   }
-  document.addEventListener('click', function(e){ var b = e.target.closest ? e.target.closest('.eyebrow .live') : null; if (b) setHold(!HOLD); });
+  // the whole 'Signal — Active' readout is the target (the dot is the keyboard-focusable button inside it)
+  document.addEventListener('click', function(e){ var b = e.target.closest ? e.target.closest('.hold-sw') : null; if (b) setHold(!HOLD); });
   document.addEventListener('bmj:lang', syncHold);
   syncHold();
   /* TRANSIENT scope state — kept OUT of P on purpose: tuneTo() kills every tween on P at each section change.
@@ -391,7 +392,7 @@
       // soft glow pass + crisp pass, each faded out at both ends of the lane
       for (var pass=0; pass<2; pass++){
         var g = bctx.createLinearGradient(x0,0,x1,0);
-        var c = pass===0 ? '255,173,58' : '255,201,119', a = pass===0 ? .22 : .9;
+        var c = pass===0 ? '255,173,58' : '255,198,119', a = pass===0 ? .22 : .9;   // --amber-rgb / --amber-2
         g.addColorStop(0,'rgba('+c+',0)'); g.addColorStop(.14,'rgba('+c+','+a+')');
         g.addColorStop(.86,'rgba('+c+','+a+')'); g.addColorStop(1,'rgba('+c+',0)');
         bctx.beginPath();
@@ -479,15 +480,17 @@
       sn.innerHTML = bandHTML(sec.getAttribute('data-rule') || sec.getAttribute('data-band'), 'nm');
     });
   }
-  /* channel trace captions: 'SQUARE · f 3.20 · A 0.86' — the strip's own f/A vocabulary, read from the
+  /* channel trace captions: 'SQUARE · f 3.20 · A 0.86' (a dot list) — the strip's own f/A vocabulary, read from the
      article's data-* so the caption and the strip agree when that channel is tuned */
   var chTeles = Array.prototype.slice.call(document.querySelectorAll('.channel .ch-tele'));
   function renderCaptions(){
     chTeles.forEach(function(el){
       var art = el.closest ? el.closest('[data-band]') : null; if (!art) return;
       var shp = parseInt(art.getAttribute('data-shape')||'0',10), nz = parseFloat(art.getAttribute('data-noise')||'0');
-      el.innerHTML = '<b>' + T(SHAPE_NAMES[shp] || SHAPE_NAMES[0]) + '</b> · f <b>' + parseFloat(art.getAttribute('data-freq')||'2').toFixed(2) +
-                     '</b> · A <b>' + parseFloat(art.getAttribute('data-amp')||'1').toFixed(2) + '</b>' + (nz > 0.4 ? ' · ' + T('noise') : '');
+      // a .dotlist (styles.css): where the caption wraps, no line starts or ends on a lone '·'
+      el.classList.add('dotlist');
+      el.innerHTML = '<span><b>' + T(SHAPE_NAMES[shp] || SHAPE_NAMES[0]) + '</b></span><span>f <b>' + parseFloat(art.getAttribute('data-freq')||'2').toFixed(2) +
+                     '</b></span><span>A <b>' + parseFloat(art.getAttribute('data-amp')||'1').toFixed(2) + '</b></span>' + (nz > 0.4 ? '<span>' + T('noise') + '</span>' : '');
     });
   }
   renderRules(); renderCaptions();
@@ -553,7 +556,7 @@
 
   /* PHONE POWER-ON (≤720px, motion allowed): the scan head draws a flat line edge to edge, the line acquires the
      carrier with an elastic overshoot, the poster name rises while it decompresses on Anybody's width axis to each
-     line's own setting (--lw/--lg in mobile.css), the mono chrome decodes, EXP counts up and the CTA key wipes in.
+     line's own setting (--lw/--lg in mobile.css), the mono chrome decodes and the CTA key wipes in.
      Every beat ends by ~2.2s, inside the 2.6s motion-done failsafe; the axes are CSS vars, so the failsafe never fights them. */
   function phoneIntro(){
     var spans = gsap.utils.toArray('.hero-mid .name .ln > span');

@@ -44,9 +44,9 @@
     <span class="dot" aria-hidden="true"></span>
     <div class="lang-switch lang-switch--bar" role="group" aria-label="Idioma · Language">
       <span class="lang-ind" aria-hidden="true"></span>
-      <button type="button" class="lang-opt is-on" lang="en" data-lang-set="en" aria-pressed="true">EN</button>
+      <button type="button" class="lang-opt is-on" lang="en" data-lang-set="en" aria-pressed="true" aria-label="English">EN</button>
       <span class="lang-div" aria-hidden="true">/</span>
-      <button type="button" class="lang-opt" lang="es" data-lang-set="es" aria-pressed="false">ES</button>
+      <button type="button" class="lang-opt" lang="es" data-lang-set="es" aria-pressed="false" aria-label="Español">ES</button>
     </div>
     <!-- phones (≤720px) hide this link and the CH·xx readout: the thumb dock and the channel index below carry them -->
     <a href="#contact" class="cta-mini mono amber"><span class="cta-l" data-i18n="topbar.cta">OPEN CHANNEL</span><span class="ar" aria-hidden="true">↗</span></a>
@@ -93,9 +93,9 @@
     <div class="ix-bar">
       <div class="lang-switch lang-switch--ix" role="group" aria-label="Idioma · Language">
         <span class="lang-ind" aria-hidden="true"></span>
-        <button type="button" class="lang-opt is-on" lang="en" data-lang-set="en" aria-pressed="true">EN</button>
+        <button type="button" class="lang-opt is-on" lang="en" data-lang-set="en" aria-pressed="true" aria-label="English">EN</button>
         <span class="lang-div" aria-hidden="true">/</span>
-        <button type="button" class="lang-opt" lang="es" data-lang-set="es" aria-pressed="false">ES</button>
+        <button type="button" class="lang-opt" lang="es" data-lang-set="es" aria-pressed="false" aria-label="Español">ES</button>
       </div>
       <button type="button" class="ix-copy" data-copy="bielmj10@gmail.com"><span data-i18n="ix.copy">Copy email</span></button>
       <button type="button" class="ix-close"><span class="sr" data-i18n="ix.close">Close the index</span></button>
@@ -120,9 +120,9 @@
       </div>
       <div class="lang-switch lang-switch--hero" role="group" aria-label="Idioma · Language">
         <span class="lang-ind" aria-hidden="true"></span>
-        <button type="button" class="lang-opt is-on" lang="en" data-lang-set="en" aria-pressed="true">EN</button>
+        <button type="button" class="lang-opt is-on" lang="en" data-lang-set="en" aria-pressed="true" aria-label="English">EN</button>
         <span class="lang-div" aria-hidden="true">/</span>
-        <button type="button" class="lang-opt" lang="es" data-lang-set="es" aria-pressed="false">ES</button>
+        <button type="button" class="lang-opt" lang="es" data-lang-set="es" aria-pressed="false" aria-label="Español">ES</button>
       </div>
       <div class="id coord">
         <span class="eyebrow">39.57°N&nbsp;·&nbsp;2.65°E</span>
@@ -300,7 +300,7 @@
             </div>
             <div class="when" data-i18n="sys.lab.when">ongoing</div>
           </div>
-          <p class="sys-sum" data-i18n="sys.lab.sum">Offensive-security work across the whole stack&nbsp;— from the radio waves to the web app to the factory floor&nbsp;— on the industrial systems I build at Suministros Jogo and on my own projects, kept sharp on real targets and labs. Certified by OffSec, Hack The Box, INE and Black Hat.</p>
+          <p class="sys-sum" data-i18n="sys.lab.sum">Offensive-security work across the whole stack&nbsp;— from the radio waves to the web app to the factory floor&nbsp;— on the industrial systems I build at Suministros Jogo and on my own projects, kept sharp on real targets and labs. Certified by OffSec, Hack The Box and INE; trained at Black Hat.</p>
           <!-- .sys-more: always open on desktop (summary hidden); on phones app.js closes the two job cards so they stay scannable —
                this one carries data-keep and stays open: the nine domains are the differentiator a recruiter should not have to tap for -->
           <details class="sys-more" open data-keep>
@@ -425,10 +425,10 @@
 
       <div class="creds">
         <div class="col reveal">
-          <h3 data-i18n="creds.cert.h4">Certifications</h3>
+          <h3 data-i18n="creds.cert.h4">Certifications &amp; training</h3>
           <ul data-i18n="creds.cert.ul">
             <li><span class="k">SEC</span><span><b>Offensive Hardware Hacking</b>&nbsp;— Black Hat</span></li>
-            <li><span class="k">PEN</span><span><b>eJPT</b>&nbsp;— Junior Penetration Tester</span></li>
+            <li><span class="k">PEN</span><span><b>eJPT</b>&nbsp;— Junior Penetration Tester, INE</span></li>
             <li><span class="k">SEC</span><span><b>OSCC-SEC</b>&nbsp;— OffSec</span></li>
             <li><span class="k">SEC</span><span><b>CJCA</b>&nbsp;— Hack The Box</span></li>
             <li><span class="k">PY</span><span><b>PCEP</b>&nbsp;— Certified Entry-Level Python Programmer</span></li>
@@ -480,12 +480,12 @@
     <div class="wrap contact-inner">
       <div class="reveal">
         <h2 class="display" data-i18n="contact.h2">Open a <em>channel.</em></h2>
-        <p class="sub" data-i18n="contact.sub">Have a system to test or secure, or a cybersecurity role to fill? Write to me; I read everything that comes in.</p>
+        <p class="sub" data-i18n="contact.sub">Have a system to test or secure, or a cybersecurity role to fill? Tell me what it is, the rough scope and your timing; I read everything that comes in.</p>
       </div>
       <div class="links reveal">
-        <!-- phones: a COPY key beside the mail row (mailto is a dead end on a phone without a mail app) -->
+        <!-- a COPY key beside the mail row (mailto is a dead end without a mail client); i18n.js adds the subject in the page language -->
         <div class="mail-wrap">
-          <a class="link-row" href="mailto:bielmj10@gmail.com">
+          <a class="link-row" href="mailto:bielmj10@gmail.com?subject=Open%20a%20channel" data-mail="bielmj10@gmail.com">
             <span class="l"><span class="k" data-i18n="contact.email.k">Email</span><span class="v">bielmj10@gmail.com</span></span>
             <span class="arrow" aria-hidden="true">↗</span>
           </a>

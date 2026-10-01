@@ -452,7 +452,7 @@
       "refersTo": "button-primary",
       "description": "\"Open a channel\": the one conversion; a glass pill that floods amber on hover.",
       "html": "<a class=\"ds-btn-primary\" href=\"#\">Open a channel <span aria-hidden=\"true\">↗</span></a>",
-      "css": ".ds-btn-primary{display:inline-flex;align-items:center;gap:.7rem;min-height:44px;padding:0 1.3rem;border:1px solid rgba(255,173,58,.5);border-radius:999px;background:rgba(13,18,28,.45);font-family:var(--m,'JetBrains Mono',monospace);font-weight:500;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--amber,#FFAD3A);text-decoration:none;transition:background .35s cubic-bezier(.22,.61,.36,1),color .35s cubic-bezier(.22,.61,.36,1),border-color .35s cubic-bezier(.22,.61,.36,1)} .ds-btn-primary:hover{background:var(--amber,#FFAD3A);border-color:var(--amber,#FFAD3A);color:#0a0a0a} .ds-btn-primary:focus-visible{outline:2px solid var(--amber,#FFAD3A);outline-offset:3px} .ds-btn-primary:active{opacity:.85}"
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;gap:.7rem;min-height:44px;padding:0 1.3rem;border:1px solid rgba(255,173,58,.5);border-radius:999px;background:rgba(13,18,28,.45);font-family:var(--m,'JetBrains Mono',monospace);font-weight:500;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:var(--amber,#FFAD3A);text-decoration:none;transition:background .35s cubic-bezier(.22,.61,.36,1),color .35s cubic-bezier(.22,.61,.36,1),border-color .35s cubic-bezier(.22,.61,.36,1)} .ds-btn-primary:hover{background:var(--amber,#FFAD3A);border-color:var(--amber,#FFAD3A);color:#0a0a0a} .ds-btn-primary:focus-visible{outline:2px solid var(--amber,#FFAD3A);outline-offset:3px} .ds-btn-primary:active{opacity:.85}"
     },
     {
       "name": "Primary Key (phones)",
@@ -460,7 +460,7 @@
       "refersTo": "button-primary",
       "description": "The phone form of the primary action: a full-width 48px key with 6px corners.",
       "html": "<a class=\"ds-key-primary\" href=\"#\"><span>Open a channel</span><span aria-hidden=\"true\">↗</span></a>",
-      "css": ".ds-key-primary{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:48px;padding:0 20px;border:1px solid rgba(255,173,58,.5);border-radius:6px;background:rgba(8,11,18,.86);font-family:var(--m,'JetBrains Mono',monospace);font-weight:500;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--amber,#FFAD3A);text-decoration:none} .ds-key-primary:active{background:rgba(255,173,58,.16)} .ds-key-primary:focus-visible{outline:2px solid var(--amber,#FFAD3A);outline-offset:3px}"
+      "css": ".ds-key-primary{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:48px;padding:0 20px;border:1px solid rgba(255,173,58,.5);border-radius:6px;background:rgba(8,11,18,.86);font-family:var(--m,'JetBrains Mono',monospace);font-weight:500;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:var(--amber,#FFAD3A);text-decoration:none} .ds-key-primary:active{background:rgba(255,173,58,.16)} .ds-key-primary:focus-visible{outline:2px solid var(--amber,#FFAD3A);outline-offset:3px}"
     },
     {
       "name": "Language Switch",
@@ -476,7 +476,7 @@
       "refersTo": "disclosure-summary",
       "description": "\"Show detail\" on phones: a 44px bar whose 18px box sits 12px from its top, right and bottom; the +/− is two 10×2 bars in a 16px field, and the vertical one folds away.",
       "html": "<button class=\"ds-disclosure\" aria-expanded=\"false\"><span>Show detail</span><span class=\"ds-pm\" aria-hidden=\"true\"></span></button>",
-      "css": ".ds-disclosure{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:44px;padding:0 12px 0 14px;border:1px solid var(--line-2,#27303F);border-radius:3px;background:none;font-family:var(--m,'JetBrains Mono',monospace);font-weight:500;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--amber,#FFAD3A);cursor:pointer;transition:border-color .3s cubic-bezier(.22,.61,.36,1)} .ds-disclosure[aria-expanded=true]{border-color:rgba(255,173,58,.4)} .ds-disclosure:focus-visible{outline:2px solid var(--amber,#FFAD3A);outline-offset:3px} .ds-pm{flex:none;box-sizing:border-box;width:18px;height:18px;border:1px solid rgba(255,173,58,.5);border-radius:4px;background:linear-gradient(var(--amber,#FFAD3A),var(--amber,#FFAD3A)) 50% 50%/10px 2px no-repeat,linear-gradient(var(--amber,#FFAD3A),var(--amber,#FFAD3A)) 50% 50%/2px 10px no-repeat;transition:background-size .4s cubic-bezier(.7,0,.2,1)} .ds-disclosure[aria-expanded=true] .ds-pm{background-size:10px 2px,2px 0} .ds-disclosure:active .ds-pm{background-color:rgba(255,173,58,.14)}"
+      "css": ".ds-disclosure{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:44px;padding:0 12px 0 14px;border:1px solid var(--line-2,#27303F);border-radius:3px;background:none;font-family:var(--m,'JetBrains Mono',monospace);font-weight:500;font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;color:var(--amber,#FFAD3A);cursor:pointer;transition:border-color .3s cubic-bezier(.22,.61,.36,1)} .ds-disclosure[aria-expanded=true]{border-color:rgba(255,173,58,.4)} .ds-disclosure:focus-visible{outline:2px solid var(--amber,#FFAD3A);outline-offset:3px} .ds-pm{flex:none;box-sizing:border-box;width:18px;height:18px;border:1px solid rgba(255,173,58,.5);border-radius:4px;background:linear-gradient(var(--amber,#FFAD3A),var(--amber,#FFAD3A)) 50% 50%/10px 2px no-repeat,linear-gradient(var(--amber,#FFAD3A),var(--amber,#FFAD3A)) 50% 50%/2px 10px no-repeat;transition:background-size .4s cubic-bezier(.7,0,.2,1)} .ds-disclosure[aria-expanded=true] .ds-pm{background-size:10px 2px,2px 0} .ds-disclosure:active .ds-pm{background-color:rgba(255,173,58,.14)}"
     },
     {
       "name": "Instrument Card",
@@ -506,7 +506,7 @@
       "name": "Copy Key",
       "kind": "button",
       "refersTo": "key-copy",
-      "description": "Phone COPY key on the mail row: a 36px amber-wash pill that floods amber when the address is copied.",
+      "description": "COPY key on the mail row (every width, with JS): a 36px amber-wash pill that floods amber when the address is copied.",
       "html": "<button class=\"ds-key-copy\">Copy</button>",
       "css": ".ds-key-copy{display:inline-flex;align-items:center;box-sizing:border-box;height:36px;padding:0 calc(.9rem - .14em) 0 .9rem;border:1px solid rgba(255,173,58,.45);border-radius:999px;background:rgba(255,173,58,.06);font-family:var(--m,'JetBrains Mono',monospace);font-weight:500;font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--amber,#FFAD3A);cursor:pointer;transition:background .2s,color .2s} .ds-key-copy:active{background:rgba(255,173,58,.18)} .ds-key-copy.is-done{background:var(--amber,#FFAD3A);color:var(--on-amber,#0A0A0A);border-color:var(--amber,#FFAD3A)} .ds-key-copy:focus-visible{outline:2px solid var(--amber,#FFAD3A);outline-offset:3px}"
     },
@@ -514,7 +514,7 @@
       "name": "HOLD Switch",
       "kind": "custom",
       "refersTo": "hold-switch",
-      "description": "The live dot beside \"Signal — Active\" is a toggle: pressed, every ambient motion stops and the dot becomes a hollow ring.",
+      "description": "The live dot beside \"Signal — Active\" is a toggle (its words toggle it too): pressed, every ambient motion stops and the dot becomes a hollow ring.",
       "html": "<span class=\"ds-hold\"><button type=\"button\" class=\"ds-hold-dot\" aria-pressed=\"false\" aria-label=\"Pause the signal\"></button><span class=\"ds-hold-run\">Signal — Active</span><span class=\"ds-hold-held\">Signal — Paused</span></span>",
       "css": ".ds-hold{display:inline-flex;align-items:center;font-family:var(--m,'JetBrains Mono',monospace);font-weight:500;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--mute,#7D8699)} .ds-hold-dot{position:relative;width:6px;height:6px;margin-right:.6em;padding:0;border:0;border-radius:50%;background:var(--amber,#FFAD3A);box-shadow:0 0 8px 1px rgba(255,173,58,.16);cursor:pointer;animation:ds-live 2.6s ease-in-out infinite} .ds-hold-dot::before{content:'';position:absolute;inset:-19px -12px -19px -19px} .ds-hold-dot:hover{box-shadow:0 0 0 3px rgba(255,173,58,.22),0 0 8px 1px rgba(255,173,58,.16)} .ds-hold-dot:focus-visible{outline:2px solid var(--amber,#FFAD3A);outline-offset:4px} .ds-hold-held{display:none} .ds-hold-dot[aria-pressed=true]{animation:none;background:transparent;box-shadow:inset 0 0 0 1.5px var(--amber,#FFAD3A)} .ds-hold:has([aria-pressed=true]) .ds-hold-run{display:none} .ds-hold:has([aria-pressed=true]) .ds-hold-held{display:inline} @keyframes ds-live{50%{opacity:.35}} @media (prefers-reduced-motion:reduce){.ds-hold-dot{animation:none}}"
     },

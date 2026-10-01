@@ -309,6 +309,11 @@
      3 · CHANNEL DECK (horizontal snap inside #channels, phones only)
      ================================================================= */
   var chSec = $('#channels'), deck = $('#channels .channels'), pager = $('.ch-pager');
+  // the swipe cue loops only while it is on screen (an off-screen loop cost ~30% of the docked idle frame budget)
+  var cue = $('.ch-swipe');
+  if (cue && chSec && 'IntersectionObserver' in window){
+    new IntersectionObserver(function(es){ chSec.classList.toggle('cue-out', !es[es.length - 1].isIntersecting); }).observe(cue);
+  }
   var cards = deck ? $$('.channel', deck) : [], pgBtns = pager ? $$('button', pager) : [], curCard = -1, deckBooted = false;
   // the deck snaps each card to its CENTRE (mobile.css), so tuning to a card brings its centre to the deck's centre
   function deckTo(i, beh){
@@ -541,8 +546,7 @@
   if (ST && PHONE.matches && !REDUCED){
     $$('.s-head').forEach(function(h){
       ST.create({ trigger:h, start:'top 86%', once:true, onEnter:function(){
-        decode($('.s-rule .idx', h), 600);
-        setTimeout(function(){ decode($('.s-n', h), 450); }, 650);
+        decode($('.s-n', h), 450);
       }});
     });
   }

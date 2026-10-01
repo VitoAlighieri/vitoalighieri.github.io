@@ -1,6 +1,6 @@
 ---
 name: "Biel Martínez Janer"
-description: "A live amber trace on a dark instrument panel: the bilingual one-page portfolio of a software engineer, pentester and hardware hacker."
+description: "A live amber trace on a dark instrument panel: the bilingual one-page portfolio of a cybersecurity specialist who also communicates and leads projects."
 colors:
   phosphor-amber: "#FFAD3A"
   phosphor-hot: "#FFC677"
@@ -113,7 +113,7 @@ components:
   button-primary:
     backgroundColor: "{colors.panel-glass}"
     textColor: "{colors.phosphor-amber}"
-    typography: "{typography.label}"
+    typography: "{typography.label-control}"
     rounded: "{rounded.pill}"
     padding: "0 1.3rem"
     height: "44px"
@@ -123,7 +123,7 @@ components:
   # >720px only (hidden on phones); tracking .18em
   button-link:
     textColor: "{colors.phosphor-amber}"
-    typography: "{typography.label}"
+    typography: "{typography.label-control}"
     padding: "0 .35rem"
     height: "44px"
   # phones only (channel index)
@@ -197,17 +197,17 @@ components:
   # <=600px only; tracking .18em
   disclosure-summary:
     textColor: "{colors.phosphor-amber}"
-    typography: "{typography.label}"
+    typography: "{typography.label-control}"
     rounded: "{rounded.key}"
     padding: "0 12px 0 14px"
     height: "44px"
-  # phones only
+  # every width (the mail row), shown with JS
   key-copy:
     backgroundColor: "{colors.phosphor-wash}"
     textColor: "{colors.phosphor-amber}"
     typography: "{typography.label-control}"
     rounded: "{rounded.pill}"
-    padding: "0 calc(.9rem - .16em) 0 .9rem"
+    padding: "0 calc(.9rem - .14em) 0 .9rem"
     height: "36px"
   key-copy-done:
     backgroundColor: "{colors.phosphor-amber}"
@@ -299,7 +299,7 @@ A night-dark, blue-shifted instrument palette with a single warm phosphor accent
 - **Body** (400, clamp(15px, 1.05vw, 17px), 1.65): running copy, 56–66ch measures, `text-wrap: pretty` (auto on narrow bullets). The lede sits one step up (clamp(1rem, 1.4vw, 1.12rem)) and returns to 15px on phones.
 - **Label** (500, .72rem, .2em, uppercase): mono legends, such as section codes, card roles, the role line and action labels.
 - **Telemetry** (500, .66rem, .16em, tabular numerals): live readouts, such as band codes, f/A values, dates and plate codes.
-- **Control** (500, .75rem, .12em): any label that sits on a control (the deck pager, the index keys, COPY).
+- **Control** (500, .75rem, .1em–.2em): any label that sits on a control (the primary action, the strip action, "Show detail", "↑ Top", the deck pager, the index keys, COPY).
 
 ### Named Rules
 **The Readout Rule.** Mono is for what an instrument would print: codes, measurements, coordinates, dates, keys. It is always uppercase-tracked and always uses tabular numerals for figures. Paragraphs never set in mono. Two narrow exceptions: product and tool names in tags and spec strings keep their own case (ASP.NET Core, web / OWASP), and the footer colophon is a spec sheet, set in mono at 12px or more.
@@ -384,7 +384,7 @@ Every control should feel like an instrument control: precise, tactile, and alwa
 Adaptation is drawn as an instrument knob: a 270° tick scale, four amber detents and a notched cap. The four qualities sit beside it as hairline rows with mono names. The knob turns to whichever quality is in focus (the row crossing the middle of the screen, or the one under a mouse) and lands with the dock's small spring; that detent and that name light amber. On desktop the dial column is sticky; on phones it sits beside "Adaptation" above the rows.
 
 ### The HOLD Switch
-The live dot beside "Signal — Active" is a toggle button (aria-pressed). Pressed, it stops every ambient motion — the scope, the strip trace, the mini traces and the CSS sweeps — and the dot becomes a hollow ring while the label reads "Signal — Paused". Reduced motion starts held, with a still trace that is redrawn only when something changes.
+The live dot beside "Signal — Active" is a toggle button (aria-pressed); the words beside it toggle it too, so the target spans the dot and its label. Pressed, it stops every ambient motion — the scope, the strip trace, the mini traces and the CSS sweeps — and the dot becomes a hollow ring while the label reads "Signal — Paused". Reduced motion starts held, with a still trace that is redrawn only when something changes.
 
 ### Language Switch (signature)
 A slide switch, "EN / ES", whose amber chip glides between two fixed-width options. It is built entirely in CSS: the chip uses the same lengths as the options and follows the page language, so it never drifts at any zoom. On phones it is a 24px pill (1px border, 2px inset, 18px chip) whose capitals are exactly 8px tall. Press feedback dims the label; it never moves it.
