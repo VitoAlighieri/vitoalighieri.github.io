@@ -220,6 +220,7 @@ html.scope-hold footer .foot-end .eot::after, html.scope-hold .touchhint .th-ar{
 .hero-top{ display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); align-items:start; gap:1rem; }
 .hero-top .id{ display:flex; flex-direction:column; gap:.35rem; }
 .hero-top .coord{ text-align:right; }
+.hero-top .coord .mono{ white-space:nowrap; }   /* one line; the large-text tier (mobile.css) stacks the place and lets it wrap */
 /* right-aligned tracked text ends one letter-space short of the edge: pull the trailing tracking back out, so the
    coordinates end exactly where the content does and mirror the live dot under the opposite corner mark */
 @media (min-width:601px){ .hero-top .coord .eyebrow{ margin-right:-.28em; } .hero-top .coord .mono{ margin-right:-.22em; } }
@@ -330,6 +331,40 @@ html.scope-hold footer .foot-end .eot::after, html.scope-hold .touchhint .th-ar{
 /* ===================================================================
    SYSTEMS  (selected work)
    =================================================================== */
+/* ===================================================================
+   HOW I WORK — adaptation is the dial; the qualities are its detents.
+   The knob turns to whichever quality is in focus (app.js); that detent and that quality light. Same vocabulary as the
+   rest of the instrument: hairline rows, mono legends, one amber, light only on what is live.
+   =================================================================== */
+#method{ background:var(--ink); }
+.how{ display:grid; gap:clamp(2rem,5vw,4rem); }
+.how-intro{ margin:0; font-size:clamp(1.15rem,2.1vw,1.6rem); line-height:1.4; color:var(--bone-2); font-weight:500; max-width:30ch; }
+.how-intro b{ color:var(--bone); font-weight:600; }
+.how-adapt{ display:flex; align-items:center; gap:clamp(1rem,2.4vw,1.6rem); margin-top:clamp(1.6rem,3.4vw,2.6rem); }
+.how-dial{ flex:none; width:clamp(112px,13vw,164px); height:auto; overflow:visible; }
+.hd-scale line{ stroke:var(--line-2); stroke-width:1; }
+.hd-scale line.mj{ stroke:var(--mute-2); stroke-width:1.5; }
+.hd-det{ fill:var(--line-2); transition:fill .35s var(--ease); }
+.hd-det.is-on{ fill:var(--amber); filter:drop-shadow(0 0 3px rgba(var(--amber-rgb),.85)); }
+.hd-cap{ fill:var(--surface); stroke:var(--line-2); stroke-width:1; }
+.hd-grip{ fill:none; stroke:rgba(var(--amber-rgb),.28); stroke-width:1; stroke-dasharray:1 3.06; }
+.hd-notch{ stroke:var(--amber); stroke-width:2.5; stroke-linecap:round; }
+/* a physical knob: it lands on its detent with the dock's small spring */
+.hd-knob{ transform:rotate(var(--a,-105deg)); transform-origin:60px 60px; transition:transform .75s cubic-bezier(.18,1.25,.3,1); }
+.how-adapt-t h3{ margin:0 0 .45rem; font-family:var(--m); font-weight:500; font-size:var(--mono-l); letter-spacing:.2em; text-transform:uppercase; color:var(--amber); }
+.how-adapt-t p{ margin:0; color:var(--bone-2); max-width:34ch; }
+.how-list{ list-style:none; margin:0; padding:0; border-top:1px solid var(--line); }
+.how-q{ display:grid; gap:.4rem; padding:1.15rem 0 1.25rem; border-bottom:1px solid var(--line); }
+.how-q h3{ margin:0; font-family:var(--m); font-weight:500; font-size:var(--mono-l); letter-spacing:.2em; text-transform:uppercase; color:var(--bone-2); transition:color .35s var(--ease); }
+.how-q.is-on h3{ color:var(--amber); }
+.how-q p{ margin:0; color:var(--bone-2); max-width:56ch; }
+@media (min-width:900px){
+  .how{ grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr); align-items:start; }
+  .how-lead{ position:sticky; top:calc(var(--bar) + 2.5rem); }
+  .how-q{ grid-template-columns:minmax(9rem,13rem) minmax(0,1fr); gap:1.5rem; align-items:baseline; padding:1.5rem 0; }
+}
+@media (prefers-reduced-motion: reduce){ .hd-knob, .hd-det, .how-q h3{ transition:none; } }
+
 #systems{ background:linear-gradient(180deg, var(--ink-1), var(--ink)); }
 .systems{ display:grid; gap:clamp(1rem,2vw,1.4rem); grid-template-columns:1fr; }
 .sys.span{ grid-column:1 / -1; }
@@ -448,7 +483,7 @@ footer{ position:relative; z-index:2; border-top:1px solid var(--line); padding:
   transition:color .3s var(--ease);
 }
 .foot-top:hover{ color:var(--amber); }
-@media (hover:none){ .foot-top::before{ content:""; position:absolute; inset:-12px -8px; } }   /* 44px touch target without a tall box */
+.foot-top::before{ content:""; position:absolute; inset:-12px -8px; }   /* a 44px target without a tall box */
 .foot-grid .colo{
   margin:0; padding-top:1.2rem; border-top:1px solid var(--line);
   display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%,16rem),1fr)); gap:1rem clamp(1.5rem,4vw,3rem);
@@ -461,7 +496,7 @@ footer{ position:relative; z-index:2; border-top:1px solid var(--line); padding:
    --dl is the list's own tracking, taken out so the dot sits midway between the two inks. */
 .dotlist{ --dg:calc(1.2em + .6em); display:flex; flex-wrap:wrap; margin-left:calc(-1 * var(--dg)); clip-path:inset(-.6em -.6em -.6em var(--dg)); }
 .dotlist > span{ position:relative; padding-left:var(--dg); white-space:nowrap; }
-.dotlist > span::before{ content:"·"; position:absolute; top:0; left:calc((var(--dg) - var(--dl, 0em)) / 2); transform:translateX(-50%); letter-spacing:0; }
+.dotlist > span::before{ content:"·"; content:"·" / ""; position:absolute; top:0; left:calc((var(--dg) - var(--dl, 0em)) / 2); transform:translateX(-50%); letter-spacing:0; }
 .sys-head .role.dotlist{ --dl:.12em; }
 /* '·'-separated lists that may wrap: no line starts or ends with a lone dot. Each item carries its dot in its own left
    padding (--dg = the old ' · ' run: two spaces and the dot), the list is pulled --dg left and clipped at its own edge,
@@ -546,9 +581,8 @@ footer{ position:relative; z-index:2; border-top:1px solid var(--line); padding:
 .readout{ grid-area:read; display:flex; align-items:baseline; gap:.75rem; font-family:var(--m); font-weight:500; font-size:var(--mono-l); letter-spacing:.2em; text-transform:uppercase; color:var(--mute); white-space:nowrap; }
 .readout .rd-k{ color:var(--amber); }
 .readout .rd-k::after{ content:""; display:inline-block; width:22px; height:1px; margin:0 .2rem 0 .85rem; background:linear-gradient(90deg, var(--amber), var(--line-2)); vertical-align:middle; }
-.readout .rd-v{ display:inline-flex; align-items:baseline; gap:.6rem; color:var(--bone-2); }
-.readout .rd-v b{ font-family:var(--d); font-weight:800; font-variation-settings:'wght' 800,'wdth' 118; font-size:2.2rem; line-height:.8; letter-spacing:-.02em; color:var(--bone); }
-@media (max-width:360px){ .readout{ letter-spacing:.14em; gap:.5rem; } .readout .rd-k::after{ width:12px; margin:0 .2rem 0 .5rem; } }   /* the tick stays at every width; 22px+margins was 2px over at 320, 12px fits */
+.readout .rd-v{ --dl:.2em; --dg:.8em; color:var(--bone-2); }   /* a .dotlist one mono cell wide (.6em + the .2em tracking): reads as WEB·NET·RF, and wraps at large text sizes without a dot at either end of a line */
+@media (max-width:360px){ .readout{ letter-spacing:.14em; gap:.5rem; } .readout .rd-v{ --dl:.14em; --dg:.74em; } .readout .rd-k::after{ width:12px; margin:0 .2rem 0 .5rem; } }   /* the tick stays at every width; 22px+margins was 2px over at 320, 12px fits */
 .cta{
   display:inline-flex; align-items:center; gap:.7rem; min-height:44px; padding:0 1.3rem; white-space:nowrap;
   border:1px solid rgba(var(--amber-rgb),.5); border-radius:999px; background:rgba(13,18,28,.45);

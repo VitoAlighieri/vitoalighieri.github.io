@@ -120,20 +120,20 @@ html[lang="es"] .lang-switch .lang-ind{ transform:translateX(calc(var(--ow) + va
   html.vt-lang .vt-edge{ display:none; }
 }
 
-/* touch: 44px hit areas on the strip's controls without changing the visual
-   chrome — vertical for both options, plus the OUTER edge of each (EN's left,
-   ES's right), so the two targets grow without ever overlapping each other.
-   The '/' divider passes taps through instead of reading as a dead button. */
+/* 44px hit areas on the switch without changing the visual chrome, for every pointer (the system's own 44px rule) —
+   vertical for both options, plus the OUTER edge of each (EN's left, ES's right), so the two targets grow without ever
+   overlapping each other. The '/' divider passes clicks through instead of reading as a dead button. */
+.lang-switch .lang-opt::before{ content:""; position:absolute; left:0; right:0; top:-14px; bottom:-14px; }
+/* inner edges meet exactly under the middle of the '/' (half of gap + divider + gap each), so a tap on the slash always
+   lands on an option and neither side wins it; outer edges grow 10px */
+.lang-switch .lang-opt:first-of-type::before{ left:-10px; right:calc(-1 * (var(--gp) + var(--dw) / 2)); }
+.lang-switch .lang-opt:last-of-type::before{ right:-10px; left:calc(-1 * (var(--gp) + var(--dw) / 2)); }
+.lang-switch--bar .lang-opt:last-of-type::before{ right:-8px; }
+.lang-switch .lang-div{ pointer-events:none; }
+#topbar .mark::before{ content:""; position:absolute; inset:-14px -8px; }
+@supports (text-box: trim-both cap alphabetic){ #topbar .mark::before{ inset:-17px -8px; } }   /* the trimmed wordmark box is shorter: keep the 44px target */
+
 @media (hover:none){
-  .lang-switch .lang-opt::before{ content:""; position:absolute; left:0; right:0; top:-14px; bottom:-14px; }
-  /* inner edges meet exactly under the middle of the '/' (half of gap + divider + gap each), so a tap on the slash always
-     lands on an option and neither side wins it; outer edges grow 10px */
-  .lang-switch .lang-opt:first-of-type::before{ left:-10px; right:calc(-1 * (var(--gp) + var(--dw) / 2)); }
-  .lang-switch .lang-opt:last-of-type::before{ right:-10px; left:calc(-1 * (var(--gp) + var(--dw) / 2)); }
-  .lang-switch--bar .lang-opt:last-of-type::before{ right:-8px; }
-  .lang-switch .lang-div{ pointer-events:none; }
-  #topbar .mark::before{ content:""; position:absolute; inset:-14px -8px; }
-  @supports (text-box: trim-both cap alphabetic){ #topbar .mark::before{ inset:-17px -8px; } }   /* the trimmed wordmark box is shorter: keep the 44px target */
   /* no per-frame backdrop blur over the live WebGL scope on touch GPUs */
   .lang-switch--hero{ -webkit-backdrop-filter:none; backdrop-filter:none; background:rgba(13,18,28,.78); }
 }

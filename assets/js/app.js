@@ -493,11 +493,31 @@
   renderRules(); renderCaptions();
   document.addEventListener('bmj:lang', function(){ renderRules(); renderCaptions(); teleLastN = ''; });   // '' forces the strip's noise flag to re-print next frame
 
-  /* hero readout: the year count is computed from the start year so it never goes stale ('2023 → now' is live) */
+
+  /* HOW I WORK — the dial is ADAPTATION: it turns to whichever quality is in focus — the row crossing the middle of the
+     screen as you read, or the one under a mouse — and that quality and its detent light. The turn is the reader's own
+     doing (scroll / pointer), so it runs under HOLD too; reduced motion makes it a jump (CSS). */
   (function(){
-    var yrs = document.querySelector('.readout .rd-v b'); if (!yrs) return;
-    var n = Math.max(3, new Date().getFullYear() - 2023);
-    yrs.textContent = (n < 10 ? '0' : '') + n;
+    var sec = document.getElementById('method'); if (!sec) return;
+    var knob = sec.querySelector('.hd-knob'), dets = sec.querySelectorAll('.hd-det'), rows = sec.querySelectorAll('.how-q');
+    if (!knob || !rows.length) return;
+    var ANG = [-105, -35, 35, 105], cur = -1;
+    function set(i){
+      if (i === cur || i < 0) return; cur = i;
+      knob.style.setProperty('--a', ANG[i] + 'deg');
+      for (var k=0; k<dets.length; k++) dets[k].classList.toggle('is-on', k === i);
+      for (var r=0; r<rows.length; r++) rows[r].classList.toggle('is-on', r === i);
+    }
+    set(0);
+    Array.prototype.forEach.call(rows, function(row, i){
+      row.addEventListener('pointerenter', function(e){ if (e.pointerType === 'mouse') set(i); });
+    });
+    if ('IntersectionObserver' in window){
+      var io = new IntersectionObserver(function(en){
+        en.forEach(function(e){ if (e.isIntersecting) set(Array.prototype.indexOf.call(rows, e.target)); });
+      }, { rootMargin:'-46% 0px -46% 0px' });
+      Array.prototype.forEach.call(rows, function(row){ io.observe(row); });
+    }
   })();
 
   /* work cards: the bullet lists sit in <details class="sys-more" open>. Desktop keeps them open
@@ -557,12 +577,6 @@
       .fromTo('.hero-bot .readout', { opacity:0, x:-10 }, { opacity:1, x:0, duration:0.45, ease:'power2.out' }, 1.25)
       .fromTo('.hero-bot .lede', { opacity:0, y:12 }, { opacity:1, y:0, duration:0.6, ease:'power2.out' }, 1.4)
       .fromTo('.hero-bot .cta', { clipPath:'inset(0 100% 0 0 round 6px)' }, { clipPath:'inset(0 0% 0 0 round 6px)', duration:0.6, ease:'expo.inOut', clearProps:'clipPath' }, 1.55);
-    // EXP counts 00 → the value computed above (never hard-coded)
-    var yrs = document.querySelector('.readout .rd-v b');
-    if (yrs){
-      var to = parseInt(yrs.textContent, 10) || 3, c = { v:0 };
-      tl.to(c, { v:to, duration:0.7, ease:'power1.out', onUpdate:function(){ var n = Math.round(c.v); yrs.textContent = (n < 10 ? '0' : '') + n; } }, 1.3);
-    }
   }
 
   /* =================================================================

@@ -47,17 +47,18 @@ What a neighbouring candidate cannot truthfully copy is the combination. One per
 - **No build step.** The site is plain HTML, CSS and JS, with Three.js, GSAP and ScrollTrigger self-hosted in `assets/vendor/`. First-party CSS and JS carry a cache-busting `?v=N` that is bumped on every change.
 - **Bilingual.** English is canonical in `index.html`, marked with `data-i18n` keys; Spanish lives in `assets/js/i18n.js`. Both languages share one URL, and the choice is remembered in `localStorage`.
 - **One phone breakpoint.** A single 720 px gate is shared by every module. Phone rules never touch the desktop.
-- **Computed experience counter.** The years-of-experience figure is computed from 2023, never hard-coded.
+- **Scope readout.** The hero readout prints the scope (WEB · NET · RF · HW · ICS/OT). The years-of-experience counter was retired with the security-first hero (2026-10-01). The footer year is computed.
 - **Graceful fallback.** The WebGL oscilloscope degrades cleanly, and the page works without it.
 - **Undecided, owner to confirm:**
-  - The canonical title for the founder and lead experience, now that the venture is not named. Today it appears as "Founder & CEO" (channel CH·03), "Founder · CEO · CTO" (work card) and "founder & CTO" (meta description).
   - Whether freelance engagements need stated availability, scope or terms, or a CV download. None exists today.
-  - INE. It is named in the security summary but has no entry in the credentials list.
+- **Decided on 2026-10-01:**
+  - The founder card reads "Founder · project lead" / "Fundador · dirección de proyectos".
+  - INE needs no entry of its own: eJPT is INE's certification.
 
 ## Brand Commitments
 
-- **Identity.** Biel Martínez Janer, based in Palma, Balearic Islands. The role line leads with a general cybersecurity identity. "Pentester" must not be the headline label (owner: "para no encasillarse"); the exact wording is decided in the clarify step. It currently reads "Software engineer / pentester / hardware hacker".
-- **Thesis and vocabulary.** *I work in frequencies*, with the instrument vocabulary that carries it: channels and bands (CARRIER, BUILD, BREAK, LEAD, SYSTEMS, STACK, HUMAN), CH codes, "Open a channel", "Signal — Active", "End of transmission".
+- **Identity.** Biel Martínez Janer, based in Palma, Balearic Islands. The role line is "Cybersecurity / communication / project leadership" (ES "Ciberseguridad / comunicación / liderazgo de proyectos"), used in the hero, the page title and the footer. "Pentester" is never the headline label (owner: "para no encasillarse"); offensive security stays a capability.
+- **Thesis and vocabulary.** *I work in frequencies*, with the instrument vocabulary that carries it: channels and bands (CARRIER, BREAK, BUILD, LEAD, TUNING, SYSTEMS, STACK, SIGNALS, and TX for the contact), CH codes, one name per section with no bracketed labels, "Open a channel", "Signal — Active", "End of transmission".
 - **Voice.** First person, short sentences, the key phrase in bold. Nothing is claimed that cannot be backed.
 - **Spanish.** Adapted rather than translated: it addresses the reader as *tú*, puts infinitives on buttons, and keeps industry English (pentester, hardening, MVP, go-to-market).
 - **Owner rules, binding:**
@@ -74,8 +75,9 @@ What a neighbouring candidate cannot truthfully copy is the combination. One per
 
 All of it is in `index.html`, with Spanish in `assets/js/i18n.js`:
 
-- **Pitch and thesis.** "I build systems end to end — from the firmware on the bench to the platform in production — and I break them on purpose to find where they give."
-- **Channels.** CH·01 BUILD *Software & architecture*, CH·02 BREAK *Offensive security*, CH·03 LEAD *Founder & CEO*.
+- **Pitch.** "I test your systems the way an attacker would, explain each finding to your engineers and your management in their own terms, and lead the fix until it holds."
+- **Thesis.** "I work in frequencies." (untouchable, see above).
+- **Channels.** CH·01 BREAK *Offensive security*, CH·02 BUILD *Software & architecture*, CH·03 LEAD *Projects I've founded & led*; then CH·04 TUNING, *How I work* (adaptation plus detail, responsibility, review, communication).
 - **Offensive-security work.** Nine domains: web and APIs; networks and systems; RF and signals; hardware and firmware; ICS/OT; vulnerability analysis (CVE, CVSS, OWASP, MITRE ATT&CK); hardening; compliance (ISO/IEC 27001, NIS2, DORA, GDPR); tooling and training. The named tools are Burp Suite, Nmap, Metasploit, Wireshark and Ghidra.
 - **Suministros Jogo,** 2023 to now: technical lead and software developer on the laser-cutting and metallurgy platform.
 - **His own venture** (We Love Night, which must not be named on the site), 2024 to now, in production: launch with zero incidents, key clients closed for 2026.

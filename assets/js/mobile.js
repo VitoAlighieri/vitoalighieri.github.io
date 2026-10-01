@@ -92,7 +92,7 @@
   document.addEventListener('bmj:lang', function(){ renderBand(false); });
 
   /* detents: one per destination, at the scroll progress where its band tunes in (section top crosses the centre line) */
-  var DEST = ['hero', 'channels', 'systems', 'stack', 'signals', 'contact'];
+  var DEST = ['hero', 'channels', 'method', 'systems', 'stack', 'signals', 'contact'];
   var dets = [], detWrap = dock && $('.tn-dets', dock);
   if (detWrap) DEST.forEach(function(){ var d = document.createElement('span'); d.className = 'tn-det'; detWrap.appendChild(d); dets.push(d); });
   function placeDetents(){
@@ -107,8 +107,8 @@
   }
   function markDetent(){
     var parts = curBand.split(' — '), code = parts[0], idx = 0;
-    if (/CH·0[1-3]/.test(code)) idx = 1; else if (code === 'CH·04') idx = 2; else if (code === 'CH·05') idx = 3; else if (code === 'CH·06') idx = 4;
-    else if ((window.pageYOffset || 0) > innerHeight*2) idx = 5;   // CH·00 again, but past the hero: contact
+    if (/CH·0[1-3]/.test(code)) idx = 1; else if (code === 'CH·04') idx = 2; else if (code === 'CH·05') idx = 3;
+    else if (code === 'CH·06') idx = 4; else if (code === 'CH·07') idx = 5; else if (code === 'TX') idx = 6;
     dets.forEach(function(d, i){ d.classList.toggle('is-on', i === idx); });
   }
 
@@ -166,8 +166,7 @@
   }
   function curTarget(){
     var code = curBand.split(' — ')[0];
-    return { 'CH·01':'ch01', 'CH·02':'ch02', 'CH·03':'ch03', 'CH·04':'systems', 'CH·05':'stack', 'CH·06':'signals' }[code] ||
-           ((window.pageYOffset || 0) > innerHeight*2 ? 'contact' : 'hero');
+    return { 'CH·01':'ch01', 'CH·02':'ch02', 'CH·03':'ch03', 'CH·04':'method', 'CH·05':'systems', 'CH·06':'stack', 'CH·07':'signals', 'TX':'contact' }[code] || 'hero';
   }
   function markCurrent(){
     var t = curTarget(), top = /^ch0/.test(t) ? 'channels' : t;
@@ -185,7 +184,7 @@
     var from = pillClip(), r = btn.getBoundingClientRect();
     ix.classList.add('is-open'); document.documentElement.classList.add('ix-open'); setInert(true); btn.setAttribute('aria-expanded', 'true');
     try { history.pushState({ bmjIx:1 }, ''); pushed = true; } catch(e){ pushed = false; }
-    sizeTraces(); startTraces();
+    sizeTraces(); startTraces(); fitNames();
     var focusEl = $('.ix-row.is-cur', ix) || $('.ix-row', ix);
     buzz(6);
     if (!G || REDUCED || !bg.animate){
@@ -203,9 +202,18 @@
     ixTl = G.timeline({ defaults:{ overwrite:'auto' } })
       .fromTo(head, { opacity:0, y:-10 }, { opacity:1, y:0, duration:.45, ease:'power2.out' }, .3)
       .fromTo(rows, { opacity:0, y:34 }, { opacity:1, y:0, duration:.7, ease:'expo.out', stagger:.055 }, .28)
-      .fromTo(names, { '--w':64 }, { '--w':112, duration:.75, ease:'expo.out', stagger:.055 }, .28)
+      .fromTo(names, { '--w':64 }, { '--w':function(i, el){ return el._wt || 112; }, duration:.75, ease:'expo.out', stagger:.055 }, .28)
       .fromTo(ixFoot, { opacity:0, y:16 }, { opacity:1, y:0, duration:.45, ease:'power3.out' }, .4);
     if (focusEl) focusEl.focus({ preventScroll:true });
+  }
+  /* each index name is set on ONE line: where a long name (ES 'Cómo trabajo') would wrap at this width, its width axis
+     narrows (112 → as low as 72) until it fits; the unfold tween then lands on that value (el._wt) */
+  function fitNames(){
+    $$('.ix-name', ix).forEach(function(n){
+      var w = 112; n.style.setProperty('--w', w);
+      while (w > 72 && n.scrollWidth > n.clientWidth + 0.5){ w -= 4; n.style.setProperty('--w', w); }
+      n._wt = w;
+    });
   }
   function finishClose(){
     ix.classList.remove('is-open'); document.documentElement.classList.remove('ix-open'); setInert(false);

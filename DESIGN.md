@@ -19,7 +19,7 @@ colors:
   bone: "#ECE7DB"
   bone-soft: "#C5C8D2"
   bone-ash: "#8E8B85"
-  silkscreen-grey: "#737C8E"
+  silkscreen-grey: "#7D8699"
   silkscreen-grey-lit: "#8B94A6"
   tick-slate: "#535B6B"
 typography:
@@ -79,6 +79,12 @@ typography:
     letterSpacing: ".16em"
     fontFeature: "'tnum'"
   # >720px only; phones flatten tags to .75rem / .04em
+  # a label ON a control (pager, keys, COPY): never below 12px
+  label-control:
+    fontFamily: "'JetBrains Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace"
+    fontSize: ".75rem"
+    fontWeight: 500
+    letterSpacing: ".12em"
   label-chip:
     fontFamily: "'JetBrains Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace"
     fontSize: ".7rem"
@@ -89,6 +95,7 @@ rounded:
   none: "0"
   key: "3px"
   plate: "4px"
+  key-wide: "6px"
   pill: "999px"
   round: "50%"
 spacing:
@@ -198,7 +205,7 @@ components:
   key-copy:
     backgroundColor: "{colors.phosphor-wash}"
     textColor: "{colors.phosphor-amber}"
-    typography: "{typography.label-telemetry}"
+    typography: "{typography.label-control}"
     rounded: "{rounded.pill}"
     padding: "0 calc(.9rem - .16em) 0 .9rem"
     height: "36px"
@@ -206,6 +213,17 @@ components:
     backgroundColor: "{colors.phosphor-amber}"
     textColor: "{colors.on-phosphor}"
   # phones only; tracking .14em (.1em <=380px)
+  # the live dot beside 'Signal — Active' is the HOLD switch (filled: running; hollow ring: held)
+  hold-switch:
+    backgroundColor: "{colors.phosphor-amber}"
+    rounded: "{rounded.round}"
+    size: "6px"
+  # How I work: the adaptation dial (phones 104px)
+  dial:
+    backgroundColor: "{colors.panel-steel}"
+    textColor: "{colors.phosphor-amber}"
+    rounded: "{rounded.round}"
+    size: "clamp(112px,13vw,164px)"
   key-subchannel:
     textColor: "{colors.bone-soft}"
     typography: "{typography.label-telemetry}"
@@ -219,7 +237,7 @@ components:
 
 **Creative North Star: "The Handheld Receiver"**
 
-The page is a receiver you tune. It powers on with a flat line that finds its carrier. A live amber trace runs across a night-dark screen, and every section is a channel the instrument locks onto. The scope retunes its waveform per section, and the docked strip and the phone's thumb dock read out the current code (CH·00 CARRIER, CH·01 BUILD, CH·04 SYSTEMS…). Reading the page is tuning the dial. The interface is chrome around a signal: graticule rules, tick scales, viewfinder corners, mono readouts. The signal itself carries the colour.
+The page is a receiver you tune. It powers on with a flat line that finds its carrier. A live amber trace runs across a night-dark screen, and every section is a channel the instrument locks onto. The scope retunes its waveform per section, and the docked strip and the phone's thumb dock read out the current code (CH·00 CARRIER, CH·01 BREAK, CH·05 SYSTEMS…). Reading the page is tuning the dial. The interface is chrome around a signal: graticule rules, tick scales, viewfinder corners, mono readouts. The signal itself carries the colour.
 
 It is **precise** and **alive**:
 - **Precise.** Every small control is whole-pixel geometry that holds still under any zoom. Display lines are justified by their ink, not their boxes, and labels sit dead-centre in their frames.
@@ -255,11 +273,13 @@ A night-dark, blue-shifted instrument palette with a single warm phosphor accent
 - **Bone** (#ECE7DB): primary text and the display name; warm, never pure white.
 - **Soft Bone** (#C5C8D2): secondary text, lede and readout values.
 - **Ash Bone** (#8E8B85): warm dim running copy and notes.
-- **Silkscreen Grey** (#737C8E) and **Lit Silkscreen Grey** (#8B94A6): mono chrome labels, like the legends printed on an instrument's front panel. The lit step marks keys beside bright values.
+- **Silkscreen Grey** (#7D8699) and **Lit Silkscreen Grey** (#8B94A6): mono chrome labels, like the legends printed on an instrument's front panel. The lit step marks keys beside bright values.
 - **Tick Slate** (#535B6B): major ticks, separators and the `/` between languages.
 
 ### Named Rules
 **The One Signal Rule.** Phosphor Amber is the only hue on the page. Everything else is ink, steel and bone. A second accent, a gradient between hues or a cool tint breaks the instrument.
+
+**The One Triplet Rule.** Every amber transparency is written from one triplet, `rgba(var(--amber-rgb), α)`, with the two named steps as tokens (`--tint`, `--wash`) and `--on-amber` for text on a solid amber fill. Changing the accent is one edit.
 
 **The Lit-Means-Live Rule.** Amber light (glow, tint, the hot core) marks what is live, current or being touched: the trace, the active channel, the chosen language, a pressed key. A resting surface never glows to look important.
 
@@ -278,16 +298,19 @@ A night-dark, blue-shifted instrument palette with a single warm phosphor accent
 - **Wordmark** (800, wght 800 / wdth 120, .95rem, .02em): "BMJ." in the docked strip.
 - **Body** (400, clamp(15px, 1.05vw, 17px), 1.65): running copy, 56–66ch measures, `text-wrap: pretty` (auto on narrow bullets). The lede sits one step up (clamp(1rem, 1.4vw, 1.12rem)) and returns to 15px on phones.
 - **Label** (500, .72rem, .2em, uppercase): mono legends, such as section codes, card roles, the role line and action labels.
-- **Telemetry** (500, .66rem, .16em, tabular numerals): live readouts, such as band codes, f/A values, dates, plate codes and sub-channel keys.
+- **Telemetry** (500, .66rem, .16em, tabular numerals): live readouts, such as band codes, f/A values, dates and plate codes.
+- **Control** (500, .75rem, .12em): any label that sits on a control (the deck pager, the index keys, COPY).
 
 ### Named Rules
-**The Readout Rule.** Mono is for what an instrument would print: codes, measurements, coordinates, dates, keys. It is always uppercase-tracked and always uses tabular numerals for figures. Paragraphs never set in mono.
+**The Readout Rule.** Mono is for what an instrument would print: codes, measurements, coordinates, dates, keys. It is always uppercase-tracked and always uses tabular numerals for figures. Paragraphs never set in mono. Two narrow exceptions: product and tool names in tags and spec strings keep their own case (ASP.NET Core, web / OWASP), and the footer colophon is a spec sheet, set in mono at 12px or more.
+
+**The Twelve-Pixel Rule.** A label you press is never smaller than 12px (`--mono-c`); the telemetry tier is for readouts only.
 
 **The Ink-Not-Box Rule.** Display type aligns by its ink. Side bearings are measured and compensated, trailing letter-spacing is taken back out of centred and right-aligned labels, and on phones capitals are trimmed to the cap height (`text-box`) so they centre exactly.
 
 ## Layout
 
-A single scrolling column. A full-viewport hero is followed by sections inside a 1320px container with a fluid gutter (clamp(1.25rem, 5vw, 6rem), rounded to whole pixels on phones). Sections open with an instrument rule (label, tick scale, CH code readout) and a headline. Sections alternate between Night Ink and Lifted Night Ink and are separated by a single Graticule hairline.
+A single scrolling column. A full-viewport hero is followed by sections inside a 1320px container with a fluid gutter (clamp(1.25rem, 5vw, 6rem), rounded to whole pixels on phones). Sections open with an instrument rule (a tick scale and the section's CH code readout) and a headline; each section has one name, used by the headline, the channel index and the band. Sections alternate between Night Ink and Lifted Night Ink and are separated by a single Graticule hairline.
 
 Responsive behaviour is a deliberate second layout, not a squeeze. One gate at **720px**, shared by every stylesheet and script, switches to the phone layer. Desktop is untouched below it, and these changes apply only below it:
 - **Strip.** The docked strip becomes a pure scope screen.
@@ -299,6 +322,8 @@ Responsive behaviour is a deliberate second layout, not a squeeze. One gate at *
 
 ### Named Rules
 **The Whole-Pixel Rule.** On phones, every small control is built from integer CSS pixels so each edge lands on a device pixel at 2× and 3×, and nothing re-rounds when zoomed. This covers marks, pills, chips, the +/− box, the language chip and its 8px capitals. The gutter rounds to whole pixels too.
+
+**The Large-Text Rule.** Raised text (an `em` media query follows the reader's text size) never widens the phone: the hero header stacks, strings that never wrap may wrap, and the viewfinder marks step aside.
 
 **The Thumb Zone Rule.** On phones, navigation lives at the bottom edge (the tuner dock, the channel index's footer bar). The top strip only shows the signal.
 
@@ -355,6 +380,12 @@ Every control should feel like an instrument control: precise, tactile, and alwa
 - **Tuner dock (phones):** a floating 60px pill in the thumb zone. It shows a live dot, the CH code over the band name, a dial with one detent per section and a moving needle, and a 44px knob whose three bars kick like a VU meter on every retune. It ducks during fast flings and returns on pause.
 - **Channel index (phones):** full screen, grown out of the dock with a clip-path morph. It lists rows of a mono code and a display name with a mini trace, marks the current row in amber, and carries sub-channel keys for the three channels. The footer bar sits exactly where the dock was, holding the language switch, COPY and close.
 
+### How I Work (signature)
+Adaptation is drawn as an instrument knob: a 270° tick scale, four amber detents and a notched cap. The four qualities sit beside it as hairline rows with mono names. The knob turns to whichever quality is in focus (the row crossing the middle of the screen, or the one under a mouse) and lands with the dock's small spring; that detent and that name light amber. On desktop the dial column is sticky; on phones it sits beside "Adaptation" above the rows.
+
+### The HOLD Switch
+The live dot beside "Signal — Active" is a toggle button (aria-pressed). Pressed, it stops every ambient motion — the scope, the strip trace, the mini traces and the CSS sweeps — and the dot becomes a hollow ring while the label reads "Signal — Paused". Reduced motion starts held, with a still trace that is redrawn only when something changes.
+
 ### Language Switch (signature)
 A slide switch, "EN / ES", whose amber chip glides between two fixed-width options. It is built entirely in CSS: the chip uses the same lengths as the options and follows the page language, so it never drifts at any zoom. On phones it is a 24px pill (1px border, 2px inset, 18px chip) whose capitals are exactly 8px tall. Press feedback dims the label; it never moves it.
 
@@ -374,7 +405,8 @@ A 44px bar with a 1px Bezel Edge, amber tracked label at left and an 18px amber-
 - **Do** build phone controls in whole pixels and verify them zoomed in, so nothing drifts under pinch, browser or text zoom.
 - **Do** give every control a 44px target, a visible 2px amber focus ring and a press state.
 - **Do** move on the house curve (cubic-bezier(.22,.61,.36,1)) with exponential ease-out entrances. Under reduced motion every move becomes instant or a plain fade, while the trace stays alive but gentle.
-- **Do** keep wrapped lists free of dangling separators: no line may start or end with a lone "/", "·" or "—".
+- **Do** keep wrapped lists free of dangling separators: no line may start or end with a lone "/", "·" or "—" (`.dotlist` for · lists, glued dashes in prose).
+- **Do** keep every ambient motion stoppable: the HOLD switch stops it all, and reduced motion starts held.
 
 ### Don't:
 - **Don't** add a second accent, hue gradients or purple: generic SaaS is a rejected world.
@@ -382,4 +414,5 @@ A 44px bar with a 1px Bezel Edge, amber tracked label at left and an 18px amber-
 - **Don't** lift cards or panels with crisp drop shadows; the only lifting shadow belongs to the floating dock (cards keep the long ambient falloff).
 - **Don't** soften cards past 4px or build pages from same-size rounded icon cards.
 - **Don't** move a label inside its frame on press or hover.
+- **Don't** put a bracketed label above a heading; the rule's code is the only legend a section carries.
 - **Don't** set the neutrals to pure white or pure black; text is warm Bone (#ECE7DB) and the ground is blue-shifted Night Ink (#06080E).

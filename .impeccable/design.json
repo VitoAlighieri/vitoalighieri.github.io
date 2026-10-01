@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-01T09:00:00Z",
+  "generatedAt": "2026-10-01T12:00:00Z",
   "title": "Design System: Biel Martínez Janer",
   "extensions": {
     "colorMeta": {
@@ -247,16 +247,16 @@
       "silkscreen-grey": {
         "role": "neutral",
         "displayName": "Silkscreen Grey",
-        "canonical": "oklch(58.5% 0.0296 264.3)",
+        "canonical": "oklch(61.9% 0.0306 265.3)",
         "tonalRamp": [
-          "oklch(15% 0.0296 264.3)",
-          "oklch(25% 0.0296 264.3)",
-          "oklch(35% 0.0296 264.3)",
-          "oklch(45% 0.0296 264.3)",
-          "oklch(55% 0.0296 264.3)",
-          "oklch(65% 0.0296 264.3)",
-          "oklch(80% 0.0296 264.3)",
-          "oklch(95% 0.0296 264.3)"
+          "oklch(15% 0.0306 265.3)",
+          "oklch(25% 0.0306 265.3)",
+          "oklch(35% 0.0306 265.3)",
+          "oklch(45% 0.0306 265.3)",
+          "oklch(55% 0.0306 265.3)",
+          "oklch(65% 0.0306 265.3)",
+          "oklch(80% 0.0306 265.3)",
+          "oklch(95% 0.0306 265.3)"
         ]
       },
       "silkscreen-grey-lit": {
@@ -321,7 +321,11 @@
       },
       "label-telemetry": {
         "displayName": "Telemetry",
-        "purpose": "Live readouts: band codes, f/A values, dates, keys; tabular numerals."
+        "purpose": "Live readouts: band codes, f/A values, dates; tabular numerals. Readouts only, never a label you press."
+      },
+      "label-control": {
+        "displayName": "Control label",
+        "purpose": "A label on a control (pager, keys, COPY, disclosure): never below 12px (--mono-c), tracked .1em–.14em."
       },
       "label-chip": {
         "displayName": "Chip",
@@ -369,7 +373,7 @@
       {
         "name": "ease-dock-land",
         "value": "cubic-bezier(.18,1.25,.3,1)",
-        "purpose": "The dock arriving with a small spring, like a physical control."
+        "purpose": "The dock arriving with a small spring, like a physical control; the How I work knob lands on its detent with the same spring."
       },
       {
         "name": "ease-dock-exit",
@@ -394,7 +398,12 @@
       {
         "name": "reduced-motion",
         "value": "instant or plain fade",
-        "purpose": "Every move becomes instant or a fade; the trace stays alive but gentle."
+        "purpose": "Every move becomes instant or a fade; the page starts held (HOLD), the trace is drawn still and redrawn only when something changes."
+      },
+      {
+        "name": "hold",
+        "value": "html.scope-hold",
+        "purpose": "The HOLD switch: stops the scope, the strip trace, the mini traces and the CSS sweeps; remembered per visitor."
       }
     ],
     "breakpoints": [
@@ -459,13 +468,13 @@
       "refersTo": "toggle-language-option",
       "description": "EN / ES slide switch; the amber chip glides between two fixed-width options (phone geometry: 24px pill, 18px chip, 8px caps).",
       "html": "<div class=\"ds-lang\" role=\"group\" aria-label=\"Language\"><span class=\"ds-lang-chip\" aria-hidden=\"true\"></span><button class=\"ds-lang-opt is-on\" aria-pressed=\"true\">EN</button><span class=\"ds-lang-div\" aria-hidden=\"true\">/</span><button class=\"ds-lang-opt\" aria-pressed=\"false\">ES</button></div>",
-      "css": ".ds-lang{position:relative;display:inline-flex;align-items:center;gap:4px;box-sizing:border-box;height:24px;padding:0 2px;border:1px solid var(--line-2,#27303F);border-radius:999px;background:rgba(13,18,28,.78);font-family:var(--m,'JetBrains Mono',monospace);font-weight:500;font-size:10.9589px;letter-spacing:.16em} .ds-lang-opt{position:relative;z-index:1;box-sizing:border-box;width:32px;height:18px;padding:0 0 0 .16em;border:0;background:none;color:var(--mute,#737C8E);font:inherit;letter-spacing:inherit;text-transform:uppercase;cursor:pointer;transition:color .35s cubic-bezier(.22,.61,.36,1),opacity .15s linear} .ds-lang-opt:hover{color:var(--bone-2,#C5C8D2)} .ds-lang-opt.is-on{color:var(--amber,#FFAD3A)} .ds-lang-opt:active{opacity:.6} .ds-lang-opt:focus-visible{outline:2px solid var(--amber,#FFAD3A);outline-offset:3px;border-radius:999px} .ds-lang-div{position:relative;z-index:1;width:8px;text-align:center;color:var(--mute-2,#535B6B);letter-spacing:0} .ds-lang-chip{position:absolute;left:2px;top:0;bottom:0;margin:auto 0;width:32px;height:18px;box-sizing:border-box;border-radius:999px;background:rgba(255,173,58,.12);border:1px solid rgba(255,173,58,.30);box-shadow:0 0 12px 1px rgba(255,173,58,.16),inset 0 0 7px rgba(255,173,58,.07)}"
+      "css": ".ds-lang{position:relative;display:inline-flex;align-items:center;gap:4px;box-sizing:border-box;height:24px;padding:0 2px;border:1px solid var(--line-2,#27303F);border-radius:999px;background:rgba(13,18,28,.78);font-family:var(--m,'JetBrains Mono',monospace);font-weight:500;font-size:10.9589px;letter-spacing:.16em} .ds-lang-opt{position:relative;z-index:1;box-sizing:border-box;width:32px;height:18px;padding:0 0 0 .16em;border:0;background:none;color:var(--mute,#7D8699);font:inherit;letter-spacing:inherit;text-transform:uppercase;cursor:pointer;transition:color .35s cubic-bezier(.22,.61,.36,1),opacity .15s linear} .ds-lang-opt:hover{color:var(--bone-2,#C5C8D2)} .ds-lang-opt.is-on{color:var(--amber,#FFAD3A)} .ds-lang-opt:active{opacity:.6} .ds-lang-opt:focus-visible{outline:2px solid var(--amber,#FFAD3A);outline-offset:3px;border-radius:999px} .ds-lang-div{position:relative;z-index:1;width:8px;text-align:center;color:var(--mute-2,#535B6B);letter-spacing:0} .ds-lang-chip{position:absolute;left:2px;top:0;bottom:0;margin:auto 0;width:32px;height:18px;box-sizing:border-box;border-radius:999px;background:rgba(255,173,58,.12);border:1px solid rgba(255,173,58,.30);box-shadow:0 0 12px 1px rgba(255,173,58,.16),inset 0 0 7px rgba(255,173,58,.07)}"
     },
     {
       "name": "Disclosure Bar",
       "kind": "custom",
       "refersTo": "disclosure-summary",
-      "description": "\"Show detail\" on phones: a 44px bar with a drawn +/− box sitting square in its end.",
+      "description": "\"Show detail\" on phones: a 44px bar whose 18px box sits 12px from its top, right and bottom; the +/− is two 10×2 bars in a 16px field, and the vertical one folds away.",
       "html": "<button class=\"ds-disclosure\" aria-expanded=\"false\"><span>Show detail</span><span class=\"ds-pm\" aria-hidden=\"true\"></span></button>",
       "css": ".ds-disclosure{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:44px;padding:0 12px 0 14px;border:1px solid var(--line-2,#27303F);border-radius:3px;background:none;font-family:var(--m,'JetBrains Mono',monospace);font-weight:500;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--amber,#FFAD3A);cursor:pointer;transition:border-color .3s cubic-bezier(.22,.61,.36,1)} .ds-disclosure[aria-expanded=true]{border-color:rgba(255,173,58,.4)} .ds-disclosure:focus-visible{outline:2px solid var(--amber,#FFAD3A);outline-offset:3px} .ds-pm{flex:none;box-sizing:border-box;width:18px;height:18px;border:1px solid rgba(255,173,58,.5);border-radius:4px;background:linear-gradient(var(--amber,#FFAD3A),var(--amber,#FFAD3A)) 50% 50%/10px 2px no-repeat,linear-gradient(var(--amber,#FFAD3A),var(--amber,#FFAD3A)) 50% 50%/2px 10px no-repeat;transition:background-size .4s cubic-bezier(.7,0,.2,1)} .ds-disclosure[aria-expanded=true] .ds-pm{background-size:10px 2px,2px 0} .ds-disclosure:active .ds-pm{background-color:rgba(255,173,58,.14)}"
     },
@@ -473,8 +482,8 @@
       "name": "Instrument Card",
       "kind": "card",
       "refersTo": "card-instrument",
-      "description": "Work card: a square-cut steel plate with two amber viewfinder brackets that grow when it locks on.",
-      "html": "<article class=\"ds-card\"><div class=\"ds-card-role\">Pentesting · red team · research</div><h3 class=\"ds-card-title\">Offensive security</h3><p class=\"ds-card-body\">Hands-on offensive security from RF and hardware to ICS/OT.</p></article>",
+      "description": "Work card: a square-cut steel plate with two amber viewfinder brackets that grow when it locks on. The role line is a dot list: no line starts or ends with a separator.",
+      "html": "<article class=\"ds-card\"><div class=\"ds-card-role\">Pentesting · red team · research</div><h3 class=\"ds-card-title\">Offensive security</h3><p class=\"ds-card-body\">I test systems the way an attacker would and explain each finding in its reader’s terms.</p></article>",
       "css": ".ds-card{position:relative;padding:clamp(1.4rem,3.2vw,2.4rem);border:1px solid var(--line-2,#27303F);border-radius:4px;background:radial-gradient(70% 55% at 0% 0%,rgba(255,173,58,.065),transparent 65%),var(--surface,#0D121C);box-shadow:inset 0 1px 0 rgba(236,231,219,.04),0 24px 60px -36px rgba(0,0,0,.9);color:var(--bone,#ECE7DB);transition:background .45s cubic-bezier(.22,.61,.36,1)} .ds-card::before,.ds-card::after{content:'';position:absolute;width:22px;height:22px;border:0 solid var(--amber,#FFAD3A);opacity:.55;pointer-events:none;transition:opacity .45s cubic-bezier(.22,.61,.36,1),width .45s cubic-bezier(.22,.61,.36,1),height .45s cubic-bezier(.22,.61,.36,1)} .ds-card::before{top:-1px;left:-1px;border-top-width:2px;border-left-width:2px} .ds-card::after{bottom:-1px;right:-1px;border-bottom-width:2px;border-right-width:2px} .ds-card:hover{background:radial-gradient(70% 55% at 0% 0%,rgba(255,173,58,.09),transparent 65%),var(--surface-2,#111A28)} .ds-card:hover::before,.ds-card:hover::after{opacity:1;width:40px;height:40px} .ds-card-role{font-family:var(--m,'JetBrains Mono',monospace);font-weight:500;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--amber,#FFAD3A)} .ds-card-title{margin:.6rem 0 0;font-family:var(--d,'Anybody',sans-serif);font-weight:740;font-variation-settings:'wght' 740,'wdth' 104;font-size:1.45rem;line-height:1} .ds-card-body{margin:.8rem 0 0;font-family:var(--b,'Archivo',sans-serif);line-height:1.65;color:var(--bone-2,#C5C8D2)}"
     },
     {
@@ -490,7 +499,7 @@
       "kind": "nav",
       "refersTo": "dock-tuner",
       "description": "Phone navigation in the thumb zone: live dot, CH code over band name, a detented dial with a needle, and the VU-bar knob.",
-      "html": "<button class=\"ds-dock\"><span class=\"ds-dock-read\"><i class=\"ds-dock-dot\"></i><b>CH·02</b><span>Break</span></span><span class=\"ds-dock-scale\"><i></i></span><span class=\"ds-dock-knob\"><i></i><i></i><i></i></span></button>",
+      "html": "<button class=\"ds-dock\"><span class=\"ds-dock-read\"><i class=\"ds-dock-dot\"></i><b>CH·01</b><span>Break</span></span><span class=\"ds-dock-scale\"><i></i></span><span class=\"ds-dock-knob\"><i></i><i></i><i></i></span></button>",
       "css": ".ds-dock{display:grid;grid-template-columns:auto minmax(0,1fr) 44px;align-items:center;gap:14px;width:100%;height:60px;padding:0 7px 0 16px;border:1px solid var(--line-2,#27303F);border-radius:999px;background:linear-gradient(180deg,#0F1520,#080B12);box-shadow:0 0 0 1px rgba(0,0,0,.55),0 18px 38px -10px rgba(0,0,0,.92),inset 0 1px 0 rgba(236,231,219,.06);color:var(--bone,#ECE7DB);cursor:pointer;transition:transform .18s cubic-bezier(.22,.61,.36,1),border-color .3s} .ds-dock:active{transform:scale(.975);border-color:rgba(255,173,58,.55)} .ds-dock:focus-visible{outline:2px solid var(--amber,#FFAD3A);outline-offset:3px} .ds-dock-read{display:grid;grid-template-columns:auto auto;column-gap:9px;row-gap:5px;align-items:center;font-family:var(--m,'JetBrains Mono',monospace);font-weight:500;text-transform:uppercase;line-height:1} .ds-dock-dot{grid-row:1/3;width:7px;height:7px;border-radius:50%;background:var(--amber,#FFAD3A);box-shadow:0 0 10px 1px var(--amber,#FFAD3A)} .ds-dock-read b{font-weight:600;font-size:.86rem;letter-spacing:.1em} .ds-dock-read span{font-size:.7rem;letter-spacing:.16em;color:var(--mute-hi,#8B94A6)} .ds-dock-scale{position:relative;height:30px;background:repeating-linear-gradient(90deg,#27303F 0 1px,transparent 1px 6px) 0 100%/100% 5px no-repeat,linear-gradient(#27303F,#27303F) 0 100%/100% 1px no-repeat} .ds-dock-scale i{position:absolute;left:30%;top:3px;bottom:0;width:2px;background:var(--amber,#FFAD3A);box-shadow:0 0 8px 1px rgba(255,173,58,.75)} .ds-dock-knob{display:flex;align-items:center;justify-content:center;gap:3px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,173,58,.5);background:radial-gradient(circle at 50% 35%,rgba(255,173,58,.12),transparent 70%)} .ds-dock-knob i{width:2px;height:10px;border-radius:1px;background:var(--amber,#FFAD3A)} .ds-dock-knob i:nth-child(2){height:17px} .ds-dock-knob i:nth-child(3){height:12px}"
     },
     {
@@ -499,12 +508,28 @@
       "refersTo": "key-copy",
       "description": "Phone COPY key on the mail row: a 36px amber-wash pill that floods amber when the address is copied.",
       "html": "<button class=\"ds-key-copy\">Copy</button>",
-      "css": ".ds-key-copy{display:inline-flex;align-items:center;box-sizing:border-box;height:36px;padding:0 calc(.9rem - .16em) 0 .9rem;border:1px solid rgba(255,173,58,.45);border-radius:999px;background:rgba(255,173,58,.06);font-family:var(--m,'JetBrains Mono',monospace);font-weight:500;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--amber,#FFAD3A);cursor:pointer;transition:background .2s,color .2s} .ds-key-copy:active{background:rgba(255,173,58,.18)} .ds-key-copy.is-done{background:var(--amber,#FFAD3A);color:#0a0a0a;border-color:var(--amber,#FFAD3A)} .ds-key-copy:focus-visible{outline:2px solid var(--amber,#FFAD3A);outline-offset:3px}"
+      "css": ".ds-key-copy{display:inline-flex;align-items:center;box-sizing:border-box;height:36px;padding:0 calc(.9rem - .14em) 0 .9rem;border:1px solid rgba(255,173,58,.45);border-radius:999px;background:rgba(255,173,58,.06);font-family:var(--m,'JetBrains Mono',monospace);font-weight:500;font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--amber,#FFAD3A);cursor:pointer;transition:background .2s,color .2s} .ds-key-copy:active{background:rgba(255,173,58,.18)} .ds-key-copy.is-done{background:var(--amber,#FFAD3A);color:var(--on-amber,#0A0A0A);border-color:var(--amber,#FFAD3A)} .ds-key-copy:focus-visible{outline:2px solid var(--amber,#FFAD3A);outline-offset:3px}"
+    },
+    {
+      "name": "HOLD Switch",
+      "kind": "custom",
+      "refersTo": "hold-switch",
+      "description": "The live dot beside \"Signal — Active\" is a toggle: pressed, every ambient motion stops and the dot becomes a hollow ring.",
+      "html": "<span class=\"ds-hold\"><button type=\"button\" class=\"ds-hold-dot\" aria-pressed=\"false\" aria-label=\"Pause the signal\"></button><span class=\"ds-hold-run\">Signal — Active</span><span class=\"ds-hold-held\">Signal — Paused</span></span>",
+      "css": ".ds-hold{display:inline-flex;align-items:center;font-family:var(--m,'JetBrains Mono',monospace);font-weight:500;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--mute,#7D8699)} .ds-hold-dot{position:relative;width:6px;height:6px;margin-right:.6em;padding:0;border:0;border-radius:50%;background:var(--amber,#FFAD3A);box-shadow:0 0 8px 1px rgba(255,173,58,.16);cursor:pointer;animation:ds-live 2.6s ease-in-out infinite} .ds-hold-dot::before{content:'';position:absolute;inset:-19px -12px -19px -19px} .ds-hold-dot:hover{box-shadow:0 0 0 3px rgba(255,173,58,.22),0 0 8px 1px rgba(255,173,58,.16)} .ds-hold-dot:focus-visible{outline:2px solid var(--amber,#FFAD3A);outline-offset:4px} .ds-hold-held{display:none} .ds-hold-dot[aria-pressed=true]{animation:none;background:transparent;box-shadow:inset 0 0 0 1.5px var(--amber,#FFAD3A)} .ds-hold:has([aria-pressed=true]) .ds-hold-run{display:none} .ds-hold:has([aria-pressed=true]) .ds-hold-held{display:inline} @keyframes ds-live{50%{opacity:.35}} @media (prefers-reduced-motion:reduce){.ds-hold-dot{animation:none}}"
+    },
+    {
+      "name": "Adaptation Dial",
+      "kind": "custom",
+      "refersTo": "dial",
+      "description": "How I work: a 270° tick scale with four amber detents and a notched knob that springs to the quality in focus.",
+      "html": "<svg class=\"ds-dial\" style=\"--a:-35deg\" viewBox=\"0 0 120 120\" aria-hidden=\"true\"><g class=\"ds-dial-scale\"><line x1=\"28.9\" y1=\"91.1\" x2=\"23.2\" y2=\"96.8\" class=\"mj\"/><line x1=\"22.7\" y1=\"88.6\" x2=\"18.7\" y2=\"91.7\"/><line x1=\"19.3\" y1=\"83.5\" x2=\"15.0\" y2=\"86.0\"/><line x1=\"16.6\" y1=\"78.0\" x2=\"12.0\" y2=\"79.9\"/><line x1=\"14.6\" y1=\"72.2\" x2=\"9.8\" y2=\"73.5\"/><line x1=\"13.4\" y1=\"66.1\" x2=\"8.4\" y2=\"66.8\"/><line x1=\"16.0\" y1=\"60.0\" x2=\"8.0\" y2=\"60.0\" class=\"mj\"/><line x1=\"13.4\" y1=\"53.9\" x2=\"8.4\" y2=\"53.2\"/><line x1=\"14.6\" y1=\"47.8\" x2=\"9.8\" y2=\"46.5\"/><line x1=\"16.6\" y1=\"42.0\" x2=\"12.0\" y2=\"40.1\"/><line x1=\"19.3\" y1=\"36.5\" x2=\"15.0\" y2=\"34.0\"/><line x1=\"22.7\" y1=\"31.4\" x2=\"18.7\" y2=\"28.3\"/><line x1=\"28.9\" y1=\"28.9\" x2=\"23.2\" y2=\"23.2\" class=\"mj\"/><line x1=\"31.4\" y1=\"22.7\" x2=\"28.3\" y2=\"18.7\"/><line x1=\"36.5\" y1=\"19.3\" x2=\"34.0\" y2=\"15.0\"/><line x1=\"42.0\" y1=\"16.6\" x2=\"40.1\" y2=\"12.0\"/><line x1=\"47.8\" y1=\"14.6\" x2=\"46.5\" y2=\"9.8\"/><line x1=\"53.9\" y1=\"13.4\" x2=\"53.2\" y2=\"8.4\"/><line x1=\"60.0\" y1=\"16.0\" x2=\"60.0\" y2=\"8.0\" class=\"mj\"/><line x1=\"66.1\" y1=\"13.4\" x2=\"66.8\" y2=\"8.4\"/><line x1=\"72.2\" y1=\"14.6\" x2=\"73.5\" y2=\"9.8\"/><line x1=\"78.0\" y1=\"16.6\" x2=\"79.9\" y2=\"12.0\"/><line x1=\"83.5\" y1=\"19.3\" x2=\"86.0\" y2=\"15.0\"/><line x1=\"88.6\" y1=\"22.7\" x2=\"91.7\" y2=\"18.7\"/><line x1=\"91.1\" y1=\"28.9\" x2=\"96.8\" y2=\"23.2\" class=\"mj\"/><line x1=\"97.3\" y1=\"31.4\" x2=\"101.3\" y2=\"28.3\"/><line x1=\"100.7\" y1=\"36.5\" x2=\"105.0\" y2=\"34.0\"/><line x1=\"103.4\" y1=\"42.0\" x2=\"108.0\" y2=\"40.1\"/><line x1=\"105.4\" y1=\"47.8\" x2=\"110.2\" y2=\"46.5\"/><line x1=\"106.6\" y1=\"53.9\" x2=\"111.6\" y2=\"53.2\"/><line x1=\"104.0\" y1=\"60.0\" x2=\"112.0\" y2=\"60.0\" class=\"mj\"/><line x1=\"106.6\" y1=\"66.1\" x2=\"111.6\" y2=\"66.8\"/><line x1=\"105.4\" y1=\"72.2\" x2=\"110.2\" y2=\"73.5\"/><line x1=\"103.4\" y1=\"78.0\" x2=\"108.0\" y2=\"79.9\"/><line x1=\"100.7\" y1=\"83.5\" x2=\"105.0\" y2=\"86.0\"/><line x1=\"97.3\" y1=\"88.6\" x2=\"101.3\" y2=\"91.7\"/><line x1=\"91.1\" y1=\"91.1\" x2=\"96.8\" y2=\"96.8\" class=\"mj\"/></g><circle class=\"ds-dial-det\" cx=\"4.9\" cy=\"74.8\" r=\"2.4\"/><circle class=\"ds-dial-det is-on\" cx=\"27.3\" cy=\"13.3\" r=\"2.4\"/><circle class=\"ds-dial-det\" cx=\"92.7\" cy=\"13.3\" r=\"2.4\"/><circle class=\"ds-dial-det\" cx=\"115.1\" cy=\"74.8\" r=\"2.4\"/><g class=\"ds-dial-knob\"><circle class=\"ds-dial-cap\" cx=\"60\" cy=\"60\" r=\"33\"/><circle class=\"ds-dial-grip\" cx=\"60\" cy=\"60\" r=\"26\"/><line class=\"ds-dial-notch\" x1=\"60\" y1=\"30\" x2=\"60\" y2=\"44\"/></g></svg>",
+      "css": ".ds-dial{width:148px;height:auto;overflow:visible} .ds-dial-scale line{stroke:var(--line-2,#27303F);stroke-width:1} .ds-dial-scale line.mj{stroke:var(--mute-2,#535B6B);stroke-width:1.5} .ds-dial-det{fill:var(--line-2,#27303F);transition:fill .35s cubic-bezier(.22,.61,.36,1)} .ds-dial-det.is-on{fill:var(--amber,#FFAD3A);filter:drop-shadow(0 0 3px rgba(255,173,58,.85))} .ds-dial-cap{fill:var(--surface,#0D121C);stroke:var(--line-2,#27303F);stroke-width:1} .ds-dial-grip{fill:none;stroke:rgba(255,173,58,.28);stroke-width:1;stroke-dasharray:1 3.06} .ds-dial-notch{stroke:var(--amber,#FFAD3A);stroke-width:2.5;stroke-linecap:round} .ds-dial-knob{transform:rotate(var(--a,-105deg));transform-origin:60px 60px;transition:transform .75s cubic-bezier(.18,1.25,.3,1)} .ds-dial:hover{--a:35deg} @media (prefers-reduced-motion:reduce){.ds-dial-knob,.ds-dial-det{transition:none}}"
     }
   ],
   "narrative": {
     "northStar": "The Handheld Receiver",
-    "overview": "The page is a receiver you tune. It powers on with a flat line that finds its carrier. A live amber trace runs across a night-dark screen, and every section is a channel the instrument locks onto. The scope retunes its waveform per section, and the docked strip and the phone's thumb dock read out the current code (CH·00 CARRIER, CH·01 BUILD, CH·04 SYSTEMS…). Reading the page is tuning the dial. The interface is chrome around a signal: graticule rules, tick scales, viewfinder corners, mono readouts. The signal itself carries the colour.\n\nIt is **precise** and **alive**:\n- **Precise.** Every small control is whole-pixel geometry that holds still under any zoom. Display lines are justified by their ink, not their boxes, and labels sit dead-centre in their frames.\n- **Alive.** The trace moves and answers touch and scroll. Cards lock on, the dock kicks like a VU meter on every retune, and switching language is itself a retune.\n\nDensity is calm. There is one accent, generous dark space and hairline structure. The voice is a well-made bench instrument, warm and exact, never a costume. Two worlds are confirmed rejections: **generic SaaS** (same-size rounded cards, purple gradients, startup templates) and **cold sci-fi** (cyan/blue HUD glows, glass panels, game interfaces).",
+    "overview": "The page is a receiver you tune. It powers on with a flat line that finds its carrier. A live amber trace runs across a night-dark screen, and every section is a channel the instrument locks onto. The scope retunes its waveform per section, and the docked strip and the phone's thumb dock read out the current code (CH·00 CARRIER, CH·01 BREAK, CH·05 SYSTEMS…). Reading the page is tuning the dial. The interface is chrome around a signal: graticule rules, tick scales, viewfinder corners, mono readouts. The signal itself carries the colour.\n\nIt is **precise** and **alive**:\n- **Precise.** Every small control is whole-pixel geometry that holds still under any zoom. Display lines are justified by their ink, not their boxes, and labels sit dead-centre in their frames.\n- **Alive.** The trace moves and answers touch and scroll. Cards lock on, the dock kicks like a VU meter on every retune, and switching language is itself a retune.\n\nDensity is calm. There is one accent, generous dark space and hairline structure. The voice is a well-made bench instrument, warm and exact, never a costume. Two worlds are confirmed rejections: **generic SaaS** (same-size rounded cards, purple gradients, startup templates) and **cold sci-fi** (cyan/blue HUD glows, glass panels, game interfaces).",
     "keyCharacteristics": [
       "One phosphor-amber signal on night ink; everything else is steel, hairline and bone.",
       "A live WebGL trace as the hero material that retunes per section.",
@@ -520,13 +545,23 @@
         "section": "colors"
       },
       {
+        "name": "The One Triplet Rule",
+        "body": "Every amber transparency is written from one triplet, `rgba(var(--amber-rgb), α)`, with the two named steps as tokens (`--tint`, `--wash`) and `--on-amber` for text on a solid amber fill. Changing the accent is one edit.",
+        "section": "colors"
+      },
+      {
         "name": "The Lit-Means-Live Rule",
         "body": "Amber light (glow, tint, the hot core) marks what is live, current or being touched: the trace, the active channel, the chosen language, a pressed key. A resting surface never glows to look important.",
         "section": "colors"
       },
       {
         "name": "The Readout Rule",
-        "body": "Mono is for what an instrument would print: codes, measurements, coordinates, dates, keys. It is always uppercase-tracked and always uses tabular numerals for figures. Paragraphs never set in mono.",
+        "body": "Mono is for what an instrument would print: codes, measurements, coordinates, dates, keys. It is always uppercase-tracked and always uses tabular numerals for figures. Paragraphs never set in mono. Two narrow exceptions: product and tool names in tags and spec strings keep their own case (ASP.NET Core, web / OWASP), and the footer colophon is a spec sheet, set in mono at 12px or more.",
+        "section": "typography"
+      },
+      {
+        "name": "The Twelve-Pixel Rule",
+        "body": "A label you press is never smaller than 12px (`--mono-c`); the telemetry tier is for readouts only.",
         "section": "typography"
       },
       {
@@ -537,6 +572,11 @@
       {
         "name": "The Whole-Pixel Rule",
         "body": "On phones, every small control is built from integer CSS pixels so each edge lands on a device pixel at 2× and 3×, and nothing re-rounds when zoomed. This covers marks, pills, chips, the +/− box, the language chip and its 8px capitals. The gutter rounds to whole pixels too.",
+        "section": "layout"
+      },
+      {
+        "name": "The Large-Text Rule",
+        "body": "Raised text (an `em` media query follows the reader's text size) never widens the phone: the hero header stacks, strings that never wrap may wrap, and the viewfinder marks step aside.",
         "section": "layout"
       },
       {
@@ -568,7 +608,8 @@
       "**Do** build phone controls in whole pixels and verify them zoomed in, so nothing drifts under pinch, browser or text zoom.",
       "**Do** give every control a 44px target, a visible 2px amber focus ring and a press state.",
       "**Do** move on the house curve (cubic-bezier(.22,.61,.36,1)) with exponential ease-out entrances. Under reduced motion every move becomes instant or a plain fade, while the trace stays alive but gentle.",
-      "**Do** keep wrapped lists free of dangling separators: no line may start or end with a lone \"/\", \"·\" or \"—\"."
+      "**Do** keep wrapped lists free of dangling separators: no line may start or end with a lone \"/\", \"·\" or \"—\" (`.dotlist` for · lists, glued dashes in prose).",
+      "**Do** keep every ambient motion stoppable: the HOLD switch stops it all, and reduced motion starts held."
     ],
     "donts": [
       "**Don't** add a second accent, hue gradients or purple: generic SaaS is a rejected world.",
@@ -576,6 +617,7 @@
       "**Don't** lift cards or panels with crisp drop shadows; the only lifting shadow belongs to the floating dock (cards keep the long ambient falloff).",
       "**Don't** soften cards past 4px or build pages from same-size rounded icon cards.",
       "**Don't** move a label inside its frame on press or hover.",
+      "**Don't** put a bracketed label above a heading; the rule's code is the only legend a section carries.",
       "**Don't** set the neutrals to pure white or pure black; text is warm Bone (#ECE7DB) and the ground is blue-shifted Night Ink (#06080E)."
     ]
   }
