@@ -1,0 +1,6 @@
+# GitHub Pages: the site is the static index.html; these are working documents for the design tooling, not pages.
+# (Pages renders root Markdown files as pages by default, and copies other files as they are.)
+exclude:
+  - PRODUCT.md
+  - DESIGN.md
+  - .impeccable
