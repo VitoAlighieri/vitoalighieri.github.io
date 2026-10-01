@@ -26,15 +26,15 @@ html.has-cursor, html.has-cursor *{ cursor:none !important; }
 /* the precise point — tracks the pointer 1:1 */
 #cursor .cursor-dot > i{
   width:6px; height:6px; border-radius:50%;
-  background:var(--amber); box-shadow:0 0 8px 1px rgba(255,173,58,.75);
+  background:var(--amber); box-shadow:0 0 8px 1px rgba(var(--amber-rgb),.75);
   transition:opacity .25s var(--ease), width .2s var(--ease), height .2s var(--ease), transform .16s var(--ease);
 }
 
 /* the trailing reticle */
 #cursor .cursor-ring > i{
   width:30px; height:30px; border-radius:50%;
-  border:1px solid rgba(255,173,58,.55);
-  box-shadow:0 0 14px rgba(255,173,58,.16), inset 0 0 9px rgba(255,173,58,.06);
+  border:1px solid rgba(var(--amber-rgb),.55);
+  box-shadow:0 0 14px rgba(var(--amber-rgb),.16), inset 0 0 9px var(--wash);
   transition:opacity .3s var(--ease), width .3s var(--ease), height .3s var(--ease),
              border-color .3s var(--ease), background-color .3s var(--ease), transform .16s var(--ease);
 }
@@ -43,13 +43,13 @@ html.has-cursor, html.has-cursor *{ cursor:none !important; }
 
 /* over a channel row or a panel: the ring squares off into a crosshair — the scope locking on */
 #cursor.lock .cursor-ring > i{
-  width:26px; height:26px; border-radius:3px; border-color:rgba(255,173,58,.8);
+  width:26px; height:26px; border-radius:3px; border-color:rgba(var(--amber-rgb),.8);
   background:linear-gradient(var(--amber),var(--amber)) center/1px 8px no-repeat,
              linear-gradient(var(--amber),var(--amber)) center/8px 1px no-repeat;
 }
 
 /* over an interactive target: the ring opens + warms, the dot tucks in */
-#cursor.hot .cursor-ring > i{ width:54px; height:54px; border-color:var(--amber); background-color:rgba(255,173,58,.09); }
+#cursor.hot .cursor-ring > i{ width:54px; height:54px; border-color:var(--amber); background-color:rgba(var(--amber-rgb),.09); }
 #cursor.hot .cursor-dot > i{ width:4px; height:4px; }
 /* hot wins over lock on size, radius and crosshair, so a link inside a panel returns to the round ring */
 #cursor.hot .cursor-ring > i{ border-radius:50%; background-image:none; }
@@ -65,4 +65,12 @@ html.has-cursor, html.has-cursor *{ cursor:none !important; }
   }
   #cursor .cursor-dot > i{ transition:opacity .2s linear, width .2s linear, height .2s linear; }
   #cursor.down .cursor-ring > i, #cursor.down .cursor-dot > i{ transform:translate(-50%,-50%); }
+}
+
+/* the reticle never overrides an OS cursor someone depends on: with more contrast asked for, or forced colours, the
+   native cursor comes back and the reticle stands down */
+@media (prefers-contrast: more), (forced-colors: active){
+  html.has-cursor, html.has-cursor *{ cursor:auto !important; }
+  html.has-cursor a, html.has-cursor button, html.has-cursor summary{ cursor:pointer !important; }
+  #cursor, .cursor-dot, .cursor-ring{ display:none !important; }
 }

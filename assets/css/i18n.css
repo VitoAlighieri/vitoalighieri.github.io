@@ -54,9 +54,9 @@
 .lang-switch .lang-ind{
   position:absolute; z-index:0; left:var(--sp); top:0; bottom:0; margin:auto 0;
   width:var(--ow); height:var(--oh);
-  border-radius:999px; background:rgba(255,173,58,.12);
-  border:1px solid rgba(255,173,58,.30);
-  box-shadow:0 0 12px 1px var(--glow), inset 0 0 7px rgba(255,173,58,.07);
+  border-radius:999px; background:var(--tint);
+  border:1px solid rgba(var(--amber-rgb),.30);
+  box-shadow:0 0 12px 1px var(--glow), inset 0 0 7px rgba(var(--amber-rgb),.07);
   pointer-events:none; transform:none;   /* no layer, no transform at rest: nothing for a zoom to re-rasterise out of step with the label */
 }
 html[lang="es"] .lang-switch .lang-ind{ transform:translateX(calc(var(--ow) + var(--dw) + 2 * var(--gp))); }
@@ -105,7 +105,7 @@ html[lang="es"] .lang-switch .lang-ind{ transform:translateX(calc(var(--ow) + va
 .vt-edge{ display:none; }
 @supports (view-transition-name:none){
   html.vt-lang .vt-edge{ display:block; position:fixed; left:0; right:0; top:0; height:2px; z-index:40; pointer-events:none; view-transition-name:bmj-edge;
-    background:linear-gradient(90deg, transparent, var(--amber) 18%, #FFE3B8 50%, var(--amber) 82%, transparent); box-shadow:0 0 16px 3px rgba(255,173,58,.55); }
+    background:linear-gradient(90deg, transparent, var(--amber) 18%, var(--amber-2) 50%, var(--amber) 82%, transparent); box-shadow:0 0 16px 3px rgba(var(--amber-rgb),.55); }
   html.vt-lang .hero-mid .name{ view-transition-name:bmj-name; }
   html.vt-lang::view-transition-old(root){ animation:bmj-vt-out .3s cubic-bezier(.4,0,1,1) both; }
   html.vt-lang::view-transition-new(root){ animation:bmj-vt-in .55s cubic-bezier(.6,0,.2,1) both; }

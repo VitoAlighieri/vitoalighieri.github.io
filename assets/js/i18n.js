@@ -38,14 +38,15 @@
   var CHROME_ES = {
     CARRIER:'PORTADORA', BUILD:'CONSTRUIR', BREAK:'ROMPER', LEAD:'LIDERAR', SYSTEMS:'SISTEMAS', STACK:'BANCO', HUMAN:'HUMANO',
     SINE:'SENO', SQUARE:'CUADRADA', TRIANGLE:'TRIÁNGULO', PULSE:'PULSO', STEP:'ESCALÓN', noise:'ruido',
-    COPIED:'COPIADO'
+    COPIED:'COPIADO', SELECTED:'SELECCIONADO', 'Pause the signal':'Pausar la señal'
   };
 
   /* ---- Spanish body copy, keyed by data-i18n.
           Adapted, not literal, where a more natural turn of phrase reads better. ---- */
   var ES = {
     /* hero */
-    'hero.signal': '<i class="live"></i>Señal&nbsp;—&nbsp;Activa',
+    'hero.signal': 'Señal&nbsp;—&nbsp;Activa',
+    'hero.hold':   'Señal&nbsp;—&nbsp;En&nbsp;pausa',
     'hero.place':  'Palma&nbsp;·&nbsp;Islas&nbsp;Baleares',
     'hero.role':   '<span class="ri"><i>Ingeniero de software</i><span class="sep">/</span></span><span class="ri">pentester<span class="sep">/</span></span><span class="ri">hacker de hardware</span>',
     'hero.expk':   'Exp',
@@ -148,7 +149,7 @@
     'footer.type.k':  'Tipografía',
     'footer.trace.k': 'Traza',
     'footer.trace.v': 'Un osciloscopio en vivo en WebGL —&#8288;una onda real que se resintoniza en cada sección. Respeta la preferencia de movimiento reducido.',
-    'footer.loc':     'Palma, Islas Baleares · 2026',
+    'footer.loc':     'Palma, Islas Baleares · <span class="yr">2026</span>',
     'footer.eot':     'Fin de la transmisión',
 
     /* phone chrome: tuner dock, channel index, channel deck, copy, touch hint */
@@ -176,6 +177,9 @@
     'deck.ch03':       'Liderar',
     'deck.swipe':      'Desliza para resintonizar',
     'contact.copy':    'Copiar',
+    'contact.copy.sr':   ' la dirección de correo',
+    'ix.name':           'Índice de canales',
+    'deck.pager':        'Canales',
     'hero.touch':      'Toca la señal'
   };
 
@@ -270,7 +274,6 @@
 
   /* ---- the gliding chip is pure CSS (i18n.css: it follows html[lang]) — nothing to measure, so nothing can drift.
      Its glide is only switched on once the page has settled, so only a reader's own switch ever animates it. ---- */
-  function placeAll(){}   // kept for callers of BMJ_I18N.place: the geometry needs no JS any more
   function enableGlide(){
     var list = document.querySelectorAll('.lang-switch');
     for (var i=0;i<list.length;i++) list[i].classList.add('lang-ready');
@@ -280,7 +283,7 @@
   setTimeout(enableGlide, 1200);
 
   /* expose a tiny hook (handy for the console / future controls) */
-  window.BMJ_I18N = { set:function(l){ if (SUPPORTED.indexOf(l) >= 0){ remember(l); apply(l); } }, get:function(){ return current; }, chrome:chrome, place:placeAll };
+  window.BMJ_I18N = { set:function(l){ if (SUPPORTED.indexOf(l) >= 0){ remember(l); apply(l); } }, get:function(){ return current; }, chrome:chrome };
 })();
 
 /* ---------------------------------------------------------------------
@@ -297,7 +300,11 @@
   function update(){
     var h = hero.offsetHeight || window.innerHeight || 1;
     var y = window.pageYOffset || document.documentElement.scrollTop || 0;
-    topbar.classList.toggle('is-docked', y > h * 0.85);   // the strip slides in over the last 30% of the hero (app.js); it is half in at 85%
+    var docked = y > h * 0.85;   // the strip slides in over the last 30% of the hero (app.js); it is half in at 85%
+    topbar.classList.toggle('is-docked', docked);
+    // until it has docked the strip is invisible (opacity 0): keep it out of the tab order and the accessibility tree,
+    // so Tab never lands on a control nobody can see (index.html starts it inert; no-JS keeps it inert)
+    if (docked) topbar.removeAttribute('inert'); else topbar.setAttribute('inert', '');
   }
   update();
   window.addEventListener('scroll', update, { passive:true });

@@ -8,6 +8,10 @@
 (function(){
   "use strict";
   var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // claim the hero intro (index.html holds the copy back for it only until 1s): if we are here in time, the power-on
+  // plays; if not, the copy is already showing and the intro is skipped (no hide-then-reveal flash on a slow link)
+  var INTRO = document.documentElement.classList.contains('intro');
+  if (INTRO) clearTimeout(window.__bmjIntro);
   var IS_TOUCH = window.matchMedia('(hover: none)').matches;
   // Reduced-motion keeps the signature waveform alive but gentle; the bigger
   // motion (name slide-in, ambient drift, scroll jolts) is dropped below.
@@ -15,6 +19,24 @@
   var scrollVel = 0;   // 0..1, fed by the ScrollTrigger below, decays in frame(); the signal reacts to the reader's hand
   // ONE phone gate for the whole site (the same query mobile.css / mobile.js use); tablets and desktop keep the approved layout
   var PHONE = window.matchMedia('(max-width:720px)');
+  /* HOLD — one switch for every ambient motion: the scope, the strip trace, the mini traces and the CSS sweeps. The live
+     dot beside 'Signal — Active' is the control (a toggle button, aria-pressed). Reduced motion starts held: a still
+     trace, redrawn only when a retune or a touch changes it. The reader's own choice wins and is remembered. */
+  var HOLD = REDUCED;
+  try { var holdSaved = localStorage.getItem('bmj-hold'); if (holdSaved === '1' || holdSaved === '0') HOLD = (holdSaved === '1'); } catch(e){}
+  function syncHold(){
+    document.documentElement.classList.toggle('scope-hold', HOLD);
+    var bs = document.querySelectorAll('.eyebrow .live');
+    for (var i=0; i<bs.length; i++){ bs[i].setAttribute('aria-pressed', HOLD ? 'true' : 'false'); bs[i].setAttribute('aria-label', T('Pause the signal')); }
+  }
+  function setHold(v){
+    HOLD = !!v; try { localStorage.setItem('bmj-hold', HOLD ? '1' : '0'); } catch(e){}
+    syncHold();
+    try { document.dispatchEvent(new CustomEvent('bmj:hold', { detail:{ hold:HOLD } })); } catch(e){}
+  }
+  document.addEventListener('click', function(e){ var b = e.target.closest ? e.target.closest('.eyebrow .live') : null; if (b) setHold(!HOLD); });
+  document.addEventListener('bmj:lang', syncHold);
+  syncHold();
   /* TRANSIENT scope state — kept OUT of P on purpose: tuneTo() kills every tween on P at each section change.
      env/draw/head: the phone power-on (amplitude envelope, drawn fraction of the trace, scan-head visibility);
      barEnv: the strip's end-of-transmission collapse; rip[]: up to 3 travelling wave packets struck by a tap
@@ -38,6 +60,9 @@
     return y;
   }
   document.body.classList.add('is-ready');
+  // the footer year is computed (never goes stale); i18n swaps the footer copy, so it is re-set after every switch
+  function setYear(){ var y = String(new Date().getFullYear()), els = document.querySelectorAll('.yr'); for (var i=0;i<els.length;i++) els[i].textContent = y; }
+  setYear(); document.addEventListener('bmj:lang', setYear);
   // failsafe: ensure hero/name are visible shortly after load no matter what
   setTimeout(function(){ document.documentElement.classList.add('motion-done'); }, 2600);
 
@@ -106,7 +131,7 @@
       laneX1 = t ? (t.left  - b.left - 18) : barW;
     }
     if ('ResizeObserver' in window && teleEl) new ResizeObserver(measureLane).observe(teleEl);   // EN/ES changes the readout width
-    var renderer = new THREE.WebGLRenderer({ canvas:canvas, antialias:!REDUCED, alpha:true, powerPreference:'high-performance' });
+    var renderer = new THREE.WebGLRenderer({ canvas:canvas, antialias:!REDUCED, alpha:true, powerPreference:'default' });
     renderer.setClearColor(0x000000, 0);
     var DPRMAX = Q.dpr;
     var scene = new THREE.Scene();
@@ -242,10 +267,12 @@
     // Pointer-driven parallax has been removed by request: moving the mouse no
     // longer shifts the wave or the scene sideways. The hero now breathes on its
     // own with a calm, automatic, time-based drift (see frame()).
-    var phase=0, last=performance.now();
+    var phase=0, last=performance.now(), heldSig='';
     function frame(now){
+      // once the hero has docked away only the strip's trace is on screen: 30 fps is plenty (the mini traces run at 30 too)
+      if (P.dock >= 0.985 && now - last < 33){ raf = requestAnimationFrame(frame); return; }
       var dt = Math.min(0.05,(now-last)/1000); last=now;
-      phase += dt*P.speed*SCOPE_SPEED*(1 + scrollVel*0.8);   // a flick makes the trace race (≤1.8×), then settle — mild enough for trackpad inertia
+      if (!HOLD) phase += dt*P.speed*SCOPE_SPEED*(1 + scrollVel*0.8);   // a flick makes the trace race (≤1.8×), then settle — mild enough for trackpad inertia; held, time stands still
       scrollVel *= Math.pow(0.03, dt);   // ~1s to settle
       // touch physics (all no-ops at rest): packets age and ring out, the stretched trace springs home with an overshoot
       if (TR.live){
@@ -259,6 +286,12 @@
       } else { TR.det = 1; TR.detV = 0; }
       if (TR.probe >= 0) TR.pu = TR.probe;
       TR.probeA += ((TR.probe >= 0 ? 1 : 0) - TR.probeA)*(1 - Math.pow(0.002, dt));
+      // held and nothing moving (no retune tween, no touch, no dock change, same size): skip the redraw entirely
+      if (HOLD){
+        var sig = [P.dock, P.morph, P.freq, P.amp, P.noise, P.shape, P.fromShape, P.glow, TR.det, TR.env, TR.draw, TR.head, TR.probeA, TR.barEnv, TR.live, W, H].join('|');
+        if (sig === heldSig){ raf = requestAnimationFrame(frame); return; }
+        heldSig = sig;
+      } else heldSig = '';
 
       // gentle automatic ambient drift (no pointer coupling, no horizontal pan):
       // a slow vertical float + a faint inward "breath" so the scope feels alive
@@ -269,7 +302,7 @@
       camera.position.z = 9 + (Math.cos(phase*0.32) - 1) * 0.10 * amb;
       camera.lookAt(0,0,0);
 
-      computeWave();
+      if (P.dock < 0.985) computeWave();   // the 3D wave is only computed while its window (the hero) is visible
 
       // only pay for the 3D render while the hero (its only window) is visible
       if (P.dock < 0.985) renderer.render(scene,camera);
@@ -415,7 +448,6 @@
   /* =================================================================
      RESIZE wiring + boot
      ================================================================= */
-  function sizeStageVar(){ /* set --bar in px already; nothing dynamic */ }
   if (Scope){
     Scope.resize();
     Scope.start();
@@ -556,7 +588,9 @@
     var topbarEl = document.getElementById('topbar');
 
     /* hero name reveal — always animates: the power-on on phones, a slide reveal on larger screens, a gentle fade under reduced motion */
-    if (!REDUCED && PHONE.matches){
+    if (!INTRO){
+      /* the copy is already on screen (slow link): no intro */
+    } else if (!REDUCED && PHONE.matches){
       phoneIntro();
     } else if (!REDUCED){
       var tl = gsap.timeline({ delay:0.12 });
@@ -584,9 +618,7 @@
         var bar = Math.max(0, (d-0.7)/0.3);          // 0 → 1 over the last 30%
         if (REDUCED) gsap.set('#topbar', { opacity: bar, yPercent: 0 });
         else gsap.set('#topbar', { opacity: bar > 0 ? 1 : 0, yPercent: -100*(1-bar) });
-        // only let the docked strip capture clicks/focus once it's half in (i18n.js gates on the same 85%
-        // of the hero; its controls + lang switch are gated on this class in i18n.css)
-        if (topbarEl) topbarEl.classList.toggle('is-docked', bar > 0.5);
+        // (the docked state — is-docked + inert — has one owner: i18n.js, on the same 85% of the hero)
       }
     });
 
@@ -694,7 +726,7 @@
       var live = LIVE && (PHONE.matches || (!IS_TOUCH && shp >= 0));   // phones: every trace; fine pointers: the channel traces; tablets keep the still frame
       var ctx = cv.getContext('2d'), w = 0, h = 0, ph = 0.4, lastT = 0, raf = null, inView = false, hov = false;
       var kk = { a:0, u:.5, t:9 };   // one tap ripple per mini trace
-      cv.bmjKick = function(u, a){ kk.u = u; kk.a = REDUCED ? 0 : a; kk.t = 0; };
+      cv.bmjKick = function(u, a){ kk.u = u; kk.a = REDUCED ? 0 : a; kk.t = 0; if (live && inView && !raf) raf = requestAnimationFrame(loop); };
       function ripK(u){
         if (kk.a < 0.01) return 0;
         var d = Math.abs(u - kk.u), f = kk.t*0.9, e = (d - f)/0.07;
@@ -737,8 +769,9 @@
       }
       function loop(t){
         raf = null; if (!inView) return;
+        if (HOLD && kk.a <= 0.01){ draw(); return; }      // held: one still frame; the loop sleeps until a tap or bmj:hold wakes it
         if (t - lastT >= 1000/FPS){
-          var dts = Math.min(0.1, (t - lastT)/1000); lastT = t; ph += 0.045*(hov ? 2 : 1);
+          var dts = Math.min(0.1, (t - lastT)/1000); lastT = t; if (!HOLD) ph += 0.045*(hov ? 2 : 1);
           if (kk.a > 0.01){ kk.t += dts; kk.a *= Math.pow(0.1, dts); }
           draw();
         }
@@ -754,6 +787,7 @@
           inView = en[0].isIntersecting;
           if (inView && !raf) raf = requestAnimationFrame(loop);
         }, { threshold:0.1 }).observe(cv);
+        document.addEventListener('bmj:hold', function(){ if (inView && !raf) raf = requestAnimationFrame(loop); });
       }
       window.addEventListener('resize', function(){ size(); draw(); }, {passive:true});
     });

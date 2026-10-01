@@ -293,7 +293,7 @@
       c.lineWidth = cur ? 1.6 : 1.2; c.strokeStyle = cur ? '#FFAD3A' : 'rgba(139,148,166,.7)'; c.stroke();
     });
   }
-  function trLoop(t){ trRaf = requestAnimationFrame(trLoop); if (t - trLast < 33) return; trLast = t; trPh += 0.06; drawTraces(); }
+  function trLoop(t){ trRaf = requestAnimationFrame(trLoop); if (t - trLast < 33) return; trLast = t; if (document.documentElement.classList.contains('scope-hold')) return; trPh += 0.06; drawTraces(); }
   function startTraces(){ drawTraces(); if (!REDUCED && !trRaf) trRaf = requestAnimationFrame(trLoop); }
   function stopTraces(){ if (trRaf) cancelAnimationFrame(trRaf); trRaf = null; }
 
@@ -390,9 +390,17 @@
       if (el){ el.classList.add('is-done'); clearTimeout(el._t); el._t = setTimeout(function(){ el.classList.remove('is-done'); }, 1600); }
       flashMsg('COPIED'); buzz([6, 40, 6]); if (S) S.kick(0.5, 0.8);
     }
+    // both copy paths refused (a locked-down browser): select the address on the page so a long-press / ⌘C finishes
+    // the job, and say so in the dock and the live region — never a silent tap
+    function fail(){
+      var v = document.querySelector('.mail-wrap .link-row .v');
+      if (v && window.getSelection){ var r = document.createRange(); r.selectNodeContents(v); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r); }
+      flashMsg('SELECTED');
+    }
     function legacy(){
-      var ta = document.createElement('textarea'); ta.value = txt; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
-      document.body.appendChild(ta); ta.select(); try { if (document.execCommand('copy')) ok(); } catch(e){} document.body.removeChild(ta);
+      var ta = document.createElement('textarea'), done = false; ta.value = txt; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
+      document.body.appendChild(ta); ta.select(); try { done = document.execCommand('copy'); } catch(e){} document.body.removeChild(ta);
+      if (done) ok(); else fail();
     }
     if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(txt).then(ok, legacy); else legacy();
   }
