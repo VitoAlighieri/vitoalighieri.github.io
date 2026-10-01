@@ -1,0 +1,582 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-01T09:00:00Z",
+  "title": "Design System: Biel Martínez Janer",
+  "extensions": {
+    "colorMeta": {
+      "phosphor-amber": {
+        "role": "primary",
+        "displayName": "Phosphor Amber",
+        "canonical": "oklch(80.9% 0.1554 70.6)",
+        "tonalRamp": [
+          "oklch(15% 0.1554 70.6)",
+          "oklch(25% 0.1554 70.6)",
+          "oklch(35% 0.1554 70.6)",
+          "oklch(45% 0.1554 70.6)",
+          "oklch(55% 0.1554 70.6)",
+          "oklch(65% 0.1554 70.6)",
+          "oklch(80% 0.1554 70.6)",
+          "oklch(95% 0.1554 70.6)"
+        ]
+      },
+      "phosphor-hot": {
+        "role": "primary",
+        "displayName": "Hot Phosphor",
+        "canonical": "oklch(86.1% 0.1165 74.2)",
+        "tonalRamp": [
+          "oklch(15% 0.1165 74.2)",
+          "oklch(25% 0.1165 74.2)",
+          "oklch(35% 0.1165 74.2)",
+          "oklch(45% 0.1165 74.2)",
+          "oklch(55% 0.1165 74.2)",
+          "oklch(65% 0.1165 74.2)",
+          "oklch(80% 0.1165 74.2)",
+          "oklch(95% 0.1165 74.2)"
+        ]
+      },
+      "phosphor-glow": {
+        "role": "primary",
+        "displayName": "Phosphor Glow",
+        "canonical": "oklch(80.9% 0.1554 70.6 / 0.16)",
+        "tonalRamp": [
+          "oklch(15% 0.1554 70.6 / 0.16)",
+          "oklch(25% 0.1554 70.6 / 0.16)",
+          "oklch(35% 0.1554 70.6 / 0.16)",
+          "oklch(45% 0.1554 70.6 / 0.16)",
+          "oklch(55% 0.1554 70.6 / 0.16)",
+          "oklch(65% 0.1554 70.6 / 0.16)",
+          "oklch(80% 0.1554 70.6 / 0.16)",
+          "oklch(95% 0.1554 70.6 / 0.16)"
+        ]
+      },
+      "phosphor-tint": {
+        "role": "primary",
+        "displayName": "Phosphor Tint",
+        "canonical": "oklch(80.9% 0.1554 70.6 / 0.12)",
+        "tonalRamp": [
+          "oklch(15% 0.1554 70.6 / 0.12)",
+          "oklch(25% 0.1554 70.6 / 0.12)",
+          "oklch(35% 0.1554 70.6 / 0.12)",
+          "oklch(45% 0.1554 70.6 / 0.12)",
+          "oklch(55% 0.1554 70.6 / 0.12)",
+          "oklch(65% 0.1554 70.6 / 0.12)",
+          "oklch(80% 0.1554 70.6 / 0.12)",
+          "oklch(95% 0.1554 70.6 / 0.12)"
+        ]
+      },
+      "phosphor-wash": {
+        "role": "primary",
+        "displayName": "Phosphor Wash",
+        "canonical": "oklch(80.9% 0.1554 70.6 / 0.06)",
+        "tonalRamp": [
+          "oklch(15% 0.1554 70.6 / 0.06)",
+          "oklch(25% 0.1554 70.6 / 0.06)",
+          "oklch(35% 0.1554 70.6 / 0.06)",
+          "oklch(45% 0.1554 70.6 / 0.06)",
+          "oklch(55% 0.1554 70.6 / 0.06)",
+          "oklch(65% 0.1554 70.6 / 0.06)",
+          "oklch(80% 0.1554 70.6 / 0.06)",
+          "oklch(95% 0.1554 70.6 / 0.06)"
+        ]
+      },
+      "on-phosphor": {
+        "role": "neutral",
+        "displayName": "Carbon",
+        "canonical": "oklch(14.5% 0.0000 89.9)",
+        "tonalRamp": [
+          "oklch(15% 0.0000 89.9)",
+          "oklch(25% 0.0000 89.9)",
+          "oklch(35% 0.0000 89.9)",
+          "oklch(45% 0.0000 89.9)",
+          "oklch(55% 0.0000 89.9)",
+          "oklch(65% 0.0000 89.9)",
+          "oklch(80% 0.0000 89.9)",
+          "oklch(95% 0.0000 89.9)"
+        ]
+      },
+      "night-ink": {
+        "role": "neutral",
+        "displayName": "Night Ink",
+        "canonical": "oklch(13.5% 0.0143 267.4)",
+        "tonalRamp": [
+          "oklch(15% 0.0143 267.4)",
+          "oklch(25% 0.0143 267.4)",
+          "oklch(35% 0.0143 267.4)",
+          "oklch(45% 0.0143 267.4)",
+          "oklch(55% 0.0143 267.4)",
+          "oklch(65% 0.0143 267.4)",
+          "oklch(80% 0.0143 267.4)",
+          "oklch(95% 0.0143 267.4)"
+        ]
+      },
+      "night-ink-lifted": {
+        "role": "neutral",
+        "displayName": "Lifted Night Ink",
+        "canonical": "oklch(15.0% 0.0161 265.8)",
+        "tonalRamp": [
+          "oklch(15% 0.0161 265.8)",
+          "oklch(25% 0.0161 265.8)",
+          "oklch(35% 0.0161 265.8)",
+          "oklch(45% 0.0161 265.8)",
+          "oklch(55% 0.0161 265.8)",
+          "oklch(65% 0.0161 265.8)",
+          "oklch(80% 0.0161 265.8)",
+          "oklch(95% 0.0161 265.8)"
+        ]
+      },
+      "panel-steel": {
+        "role": "neutral",
+        "displayName": "Panel Steel",
+        "canonical": "oklch(18.2% 0.0221 263.8)",
+        "tonalRamp": [
+          "oklch(15% 0.0221 263.8)",
+          "oklch(25% 0.0221 263.8)",
+          "oklch(35% 0.0221 263.8)",
+          "oklch(45% 0.0221 263.8)",
+          "oklch(55% 0.0221 263.8)",
+          "oklch(65% 0.0221 263.8)",
+          "oklch(80% 0.0221 263.8)",
+          "oklch(95% 0.0221 263.8)"
+        ]
+      },
+      "panel-steel-raised": {
+        "role": "neutral",
+        "displayName": "Raised Panel Steel",
+        "canonical": "oklch(21.6% 0.0308 259.0)",
+        "tonalRamp": [
+          "oklch(15% 0.0308 259.0)",
+          "oklch(25% 0.0308 259.0)",
+          "oklch(35% 0.0308 259.0)",
+          "oklch(45% 0.0308 259.0)",
+          "oklch(55% 0.0308 259.0)",
+          "oklch(65% 0.0308 259.0)",
+          "oklch(80% 0.0308 259.0)",
+          "oklch(95% 0.0308 259.0)"
+        ]
+      },
+      "panel-glass": {
+        "role": "neutral",
+        "displayName": "Panel Glass",
+        "canonical": "oklch(18.2% 0.0221 263.8 / 0.45)",
+        "tonalRamp": [
+          "oklch(15% 0.0221 263.8 / 0.45)",
+          "oklch(25% 0.0221 263.8 / 0.45)",
+          "oklch(35% 0.0221 263.8 / 0.45)",
+          "oklch(45% 0.0221 263.8 / 0.45)",
+          "oklch(55% 0.0221 263.8 / 0.45)",
+          "oklch(65% 0.0221 263.8 / 0.45)",
+          "oklch(80% 0.0221 263.8 / 0.45)",
+          "oklch(95% 0.0221 263.8 / 0.45)"
+        ]
+      },
+      "graticule-line": {
+        "role": "neutral",
+        "displayName": "Graticule",
+        "canonical": "oklch(25.1% 0.0291 261.4)",
+        "tonalRamp": [
+          "oklch(15% 0.0291 261.4)",
+          "oklch(25% 0.0291 261.4)",
+          "oklch(35% 0.0291 261.4)",
+          "oklch(45% 0.0291 261.4)",
+          "oklch(55% 0.0291 261.4)",
+          "oklch(65% 0.0291 261.4)",
+          "oklch(80% 0.0291 261.4)",
+          "oklch(95% 0.0291 261.4)"
+        ]
+      },
+      "bezel-edge": {
+        "role": "neutral",
+        "displayName": "Bezel Edge",
+        "canonical": "oklch(30.7% 0.0299 260.5)",
+        "tonalRamp": [
+          "oklch(15% 0.0299 260.5)",
+          "oklch(25% 0.0299 260.5)",
+          "oklch(35% 0.0299 260.5)",
+          "oklch(45% 0.0299 260.5)",
+          "oklch(55% 0.0299 260.5)",
+          "oklch(65% 0.0299 260.5)",
+          "oklch(80% 0.0299 260.5)",
+          "oklch(95% 0.0299 260.5)"
+        ]
+      },
+      "bone": {
+        "role": "neutral",
+        "displayName": "Bone",
+        "canonical": "oklch(92.9% 0.0169 88.0)",
+        "tonalRamp": [
+          "oklch(15% 0.0169 88.0)",
+          "oklch(25% 0.0169 88.0)",
+          "oklch(35% 0.0169 88.0)",
+          "oklch(45% 0.0169 88.0)",
+          "oklch(55% 0.0169 88.0)",
+          "oklch(65% 0.0169 88.0)",
+          "oklch(80% 0.0169 88.0)",
+          "oklch(95% 0.0169 88.0)"
+        ]
+      },
+      "bone-soft": {
+        "role": "neutral",
+        "displayName": "Soft Bone",
+        "canonical": "oklch(83.3% 0.0143 272.7)",
+        "tonalRamp": [
+          "oklch(15% 0.0143 272.7)",
+          "oklch(25% 0.0143 272.7)",
+          "oklch(35% 0.0143 272.7)",
+          "oklch(45% 0.0143 272.7)",
+          "oklch(55% 0.0143 272.7)",
+          "oklch(65% 0.0143 272.7)",
+          "oklch(80% 0.0143 272.7)",
+          "oklch(95% 0.0143 272.7)"
+        ]
+      },
+      "bone-ash": {
+        "role": "neutral",
+        "displayName": "Ash Bone",
+        "canonical": "oklch(63.8% 0.0095 84.6)",
+        "tonalRamp": [
+          "oklch(15% 0.0095 84.6)",
+          "oklch(25% 0.0095 84.6)",
+          "oklch(35% 0.0095 84.6)",
+          "oklch(45% 0.0095 84.6)",
+          "oklch(55% 0.0095 84.6)",
+          "oklch(65% 0.0095 84.6)",
+          "oklch(80% 0.0095 84.6)",
+          "oklch(95% 0.0095 84.6)"
+        ]
+      },
+      "silkscreen-grey": {
+        "role": "neutral",
+        "displayName": "Silkscreen Grey",
+        "canonical": "oklch(58.5% 0.0296 264.3)",
+        "tonalRamp": [
+          "oklch(15% 0.0296 264.3)",
+          "oklch(25% 0.0296 264.3)",
+          "oklch(35% 0.0296 264.3)",
+          "oklch(45% 0.0296 264.3)",
+          "oklch(55% 0.0296 264.3)",
+          "oklch(65% 0.0296 264.3)",
+          "oklch(80% 0.0296 264.3)",
+          "oklch(95% 0.0296 264.3)"
+        ]
+      },
+      "silkscreen-grey-lit": {
+        "role": "neutral",
+        "displayName": "Lit Silkscreen Grey",
+        "canonical": "oklch(66.5% 0.0287 264.4)",
+        "tonalRamp": [
+          "oklch(15% 0.0287 264.4)",
+          "oklch(25% 0.0287 264.4)",
+          "oklch(35% 0.0287 264.4)",
+          "oklch(45% 0.0287 264.4)",
+          "oklch(55% 0.0287 264.4)",
+          "oklch(65% 0.0287 264.4)",
+          "oklch(80% 0.0287 264.4)",
+          "oklch(95% 0.0287 264.4)"
+        ]
+      },
+      "tick-slate": {
+        "role": "neutral",
+        "displayName": "Tick Slate",
+        "canonical": "oklch(47.0% 0.0278 264.3)",
+        "tonalRamp": [
+          "oklch(15% 0.0278 264.3)",
+          "oklch(25% 0.0278 264.3)",
+          "oklch(35% 0.0278 264.3)",
+          "oklch(45% 0.0278 264.3)",
+          "oklch(55% 0.0278 264.3)",
+          "oklch(65% 0.0278 264.3)",
+          "oklch(80% 0.0278 264.3)",
+          "oklch(95% 0.0278 264.3)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The name only; a poster on phones, each line justified to the measure by its ink."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section headings, balanced, under the instrument rule."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Card titles: systems, channels, signals."
+      },
+      "title-wordmark": {
+        "displayName": "Wordmark",
+        "purpose": "\"BMJ.\" in the docked strip."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running copy; pretty wrapping, 56–66ch measures."
+      },
+      "body-large": {
+        "displayName": "Lede",
+        "purpose": "The hero lede and thesis body, one step above body (15px on phones)."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Mono legends: section codes, roles, action labels; uppercase, tracked."
+      },
+      "label-telemetry": {
+        "displayName": "Telemetry",
+        "purpose": "Live readouts: band codes, f/A values, dates, keys; tabular numerals."
+      },
+      "label-chip": {
+        "displayName": "Chip",
+        "purpose": "Desktop spec chips; phones flatten them into a spec string."
+      }
+    },
+    "shadows": [
+      {
+        "name": "dock-lift",
+        "value": "0 0 0 1px rgba(0,0,0,.55), 0 18px 38px -10px rgba(0,0,0,.92), inset 0 1px 0 rgba(236,231,219,.06)",
+        "purpose": "The floating phone dock and the channel index bar only: a physical control over the page."
+      },
+      {
+        "name": "phosphor-glow",
+        "value": "0 0 12px 1px var(--glow), inset 0 0 7px rgba(255,173,58,.07)",
+        "purpose": "Lit state: the active language chip and other live elements. Signal, not elevation."
+      },
+      {
+        "name": "needle-glow",
+        "value": "0 0 8px 1px rgba(255,173,58,.75)",
+        "purpose": "The dock needle, the pager needle and current-channel marks."
+      },
+      {
+        "name": "panel-sheen",
+        "value": "inset 0 1px 0 rgba(236,231,219,.04)",
+        "purpose": "1px top highlight on resting panels."
+      },
+      {
+        "name": "ambient-falloff",
+        "value": "0 24px 60px -36px rgba(0,0,0,.9)",
+        "purpose": "Long, very soft shade seating work cards on the ground; never lift."
+      },
+      {
+        "name": "legibility-halo",
+        "value": "0 0 2px var(--ink), 0 0 10px var(--ink)",
+        "purpose": "Text-shadow keeping the amber role line crisp where the trace crosses it."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-house",
+        "value": "cubic-bezier(.22,.61,.36,1)",
+        "purpose": "Default curve for every state transition and reveal."
+      },
+      {
+        "name": "ease-dock-land",
+        "value": "cubic-bezier(.18,1.25,.3,1)",
+        "purpose": "The dock arriving with a small spring, like a physical control."
+      },
+      {
+        "name": "ease-dock-exit",
+        "value": "cubic-bezier(.5,0,.75,0)",
+        "purpose": "The dock ducking out of the way during a fast fling."
+      },
+      {
+        "name": "ease-wipe",
+        "value": "cubic-bezier(.7,0,.2,1)",
+        "purpose": "Rule tick scales drawing in; the +/− bar folding."
+      },
+      {
+        "name": "entrance",
+        "value": "expo.out (GSAP)",
+        "purpose": "Entrances: the name rising, the CTA wipe, card lock-on."
+      },
+      {
+        "name": "state-duration",
+        "value": ".3s–.55s",
+        "purpose": "Hover, press and lock-on transitions; reveals .9s (.7s on touch)."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "instant or plain fade",
+        "purpose": "Every move becomes instant or a fade; the trace stays alive but gentle."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "720px"
+      },
+      {
+        "name": "phone-header",
+        "value": "600px"
+      },
+      {
+        "name": "narrow",
+        "value": "640px"
+      },
+      {
+        "name": "compact",
+        "value": "480px"
+      },
+      {
+        "name": "small",
+        "value": "400px"
+      },
+      {
+        "name": "tiny",
+        "value": "380px"
+      },
+      {
+        "name": "smallest",
+        "value": "360px"
+      },
+      {
+        "name": "desktop-split",
+        "value": "900px"
+      },
+      {
+        "name": "card-two-column",
+        "value": "48rem (container query)"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Action (desktop)",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "\"Open a channel\": the one conversion; a glass pill that floods amber on hover.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\">Open a channel <span aria-hidden=\"true\">↗</span></a>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;gap:.7rem;min-height:44px;padding:0 1.3rem;border:1px solid rgba(255,173,58,.5);border-radius:999px;background:rgba(13,18,28,.45);font-family:var(--m,'JetBrains Mono',monospace);font-weight:500;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--amber,#FFAD3A);text-decoration:none;transition:background .35s cubic-bezier(.22,.61,.36,1),color .35s cubic-bezier(.22,.61,.36,1),border-color .35s cubic-bezier(.22,.61,.36,1)} .ds-btn-primary:hover{background:var(--amber,#FFAD3A);border-color:var(--amber,#FFAD3A);color:#0a0a0a} .ds-btn-primary:focus-visible{outline:2px solid var(--amber,#FFAD3A);outline-offset:3px} .ds-btn-primary:active{opacity:.85}"
+    },
+    {
+      "name": "Primary Key (phones)",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The phone form of the primary action: a full-width 48px key with 6px corners.",
+      "html": "<a class=\"ds-key-primary\" href=\"#\"><span>Open a channel</span><span aria-hidden=\"true\">↗</span></a>",
+      "css": ".ds-key-primary{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:48px;padding:0 20px;border:1px solid rgba(255,173,58,.5);border-radius:6px;background:rgba(8,11,18,.86);font-family:var(--m,'JetBrains Mono',monospace);font-weight:500;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--amber,#FFAD3A);text-decoration:none} .ds-key-primary:active{background:rgba(255,173,58,.16)} .ds-key-primary:focus-visible{outline:2px solid var(--amber,#FFAD3A);outline-offset:3px}"
+    },
+    {
+      "name": "Language Switch",
+      "kind": "custom",
+      "refersTo": "toggle-language-option",
+      "description": "EN / ES slide switch; the amber chip glides between two fixed-width options (phone geometry: 24px pill, 18px chip, 8px caps).",
+      "html": "<div class=\"ds-lang\" role=\"group\" aria-label=\"Language\"><span class=\"ds-lang-chip\" aria-hidden=\"true\"></span><button class=\"ds-lang-opt is-on\" aria-pressed=\"true\">EN</button><span class=\"ds-lang-div\" aria-hidden=\"true\">/</span><button class=\"ds-lang-opt\" aria-pressed=\"false\">ES</button></div>",
+      "css": ".ds-lang{position:relative;display:inline-flex;align-items:center;gap:4px;box-sizing:border-box;height:24px;padding:0 2px;border:1px solid var(--line-2,#27303F);border-radius:999px;background:rgba(13,18,28,.78);font-family:var(--m,'JetBrains Mono',monospace);font-weight:500;font-size:10.9589px;letter-spacing:.16em} .ds-lang-opt{position:relative;z-index:1;box-sizing:border-box;width:32px;height:18px;padding:0 0 0 .16em;border:0;background:none;color:var(--mute,#737C8E);font:inherit;letter-spacing:inherit;text-transform:uppercase;cursor:pointer;transition:color .35s cubic-bezier(.22,.61,.36,1),opacity .15s linear} .ds-lang-opt:hover{color:var(--bone-2,#C5C8D2)} .ds-lang-opt.is-on{color:var(--amber,#FFAD3A)} .ds-lang-opt:active{opacity:.6} .ds-lang-opt:focus-visible{outline:2px solid var(--amber,#FFAD3A);outline-offset:3px;border-radius:999px} .ds-lang-div{position:relative;z-index:1;width:8px;text-align:center;color:var(--mute-2,#535B6B);letter-spacing:0} .ds-lang-chip{position:absolute;left:2px;top:0;bottom:0;margin:auto 0;width:32px;height:18px;box-sizing:border-box;border-radius:999px;background:rgba(255,173,58,.12);border:1px solid rgba(255,173,58,.30);box-shadow:0 0 12px 1px rgba(255,173,58,.16),inset 0 0 7px rgba(255,173,58,.07)}"
+    },
+    {
+      "name": "Disclosure Bar",
+      "kind": "custom",
+      "refersTo": "disclosure-summary",
+      "description": "\"Show detail\" on phones: a 44px bar with a drawn +/− box sitting square in its end.",
+      "html": "<button class=\"ds-disclosure\" aria-expanded=\"false\"><span>Show detail</span><span class=\"ds-pm\" aria-hidden=\"true\"></span></button>",
+      "css": ".ds-disclosure{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:44px;padding:0 12px 0 14px;border:1px solid var(--line-2,#27303F);border-radius:3px;background:none;font-family:var(--m,'JetBrains Mono',monospace);font-weight:500;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--amber,#FFAD3A);cursor:pointer;transition:border-color .3s cubic-bezier(.22,.61,.36,1)} .ds-disclosure[aria-expanded=true]{border-color:rgba(255,173,58,.4)} .ds-disclosure:focus-visible{outline:2px solid var(--amber,#FFAD3A);outline-offset:3px} .ds-pm{flex:none;box-sizing:border-box;width:18px;height:18px;border:1px solid rgba(255,173,58,.5);border-radius:4px;background:linear-gradient(var(--amber,#FFAD3A),var(--amber,#FFAD3A)) 50% 50%/10px 2px no-repeat,linear-gradient(var(--amber,#FFAD3A),var(--amber,#FFAD3A)) 50% 50%/2px 10px no-repeat;transition:background-size .4s cubic-bezier(.7,0,.2,1)} .ds-disclosure[aria-expanded=true] .ds-pm{background-size:10px 2px,2px 0} .ds-disclosure:active .ds-pm{background-color:rgba(255,173,58,.14)}"
+    },
+    {
+      "name": "Instrument Card",
+      "kind": "card",
+      "refersTo": "card-instrument",
+      "description": "Work card: a square-cut steel plate with two amber viewfinder brackets that grow when it locks on.",
+      "html": "<article class=\"ds-card\"><div class=\"ds-card-role\">Pentesting · red team · research</div><h3 class=\"ds-card-title\">Offensive security</h3><p class=\"ds-card-body\">Hands-on offensive security from RF and hardware to ICS/OT.</p></article>",
+      "css": ".ds-card{position:relative;padding:clamp(1.4rem,3.2vw,2.4rem);border:1px solid var(--line-2,#27303F);border-radius:4px;background:radial-gradient(70% 55% at 0% 0%,rgba(255,173,58,.065),transparent 65%),var(--surface,#0D121C);box-shadow:inset 0 1px 0 rgba(236,231,219,.04),0 24px 60px -36px rgba(0,0,0,.9);color:var(--bone,#ECE7DB);transition:background .45s cubic-bezier(.22,.61,.36,1)} .ds-card::before,.ds-card::after{content:'';position:absolute;width:22px;height:22px;border:0 solid var(--amber,#FFAD3A);opacity:.55;pointer-events:none;transition:opacity .45s cubic-bezier(.22,.61,.36,1),width .45s cubic-bezier(.22,.61,.36,1),height .45s cubic-bezier(.22,.61,.36,1)} .ds-card::before{top:-1px;left:-1px;border-top-width:2px;border-left-width:2px} .ds-card::after{bottom:-1px;right:-1px;border-bottom-width:2px;border-right-width:2px} .ds-card:hover{background:radial-gradient(70% 55% at 0% 0%,rgba(255,173,58,.09),transparent 65%),var(--surface-2,#111A28)} .ds-card:hover::before,.ds-card:hover::after{opacity:1;width:40px;height:40px} .ds-card-role{font-family:var(--m,'JetBrains Mono',monospace);font-weight:500;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--amber,#FFAD3A)} .ds-card-title{margin:.6rem 0 0;font-family:var(--d,'Anybody',sans-serif);font-weight:740;font-variation-settings:'wght' 740,'wdth' 104;font-size:1.45rem;line-height:1} .ds-card-body{margin:.8rem 0 0;font-family:var(--b,'Archivo',sans-serif);line-height:1.65;color:var(--bone-2,#C5C8D2)}"
+    },
+    {
+      "name": "Spec String",
+      "kind": "chip",
+      "refersTo": "chip-flat",
+      "description": "Phone chips: a flat mono spec string, each item led by a 3px amber square tick placed in the gap.",
+      "html": "<div class=\"ds-spec\"><span>ASP.NET Core</span><span>EF Core</span><span>SignalR</span><span>PostgreSQL</span></div>",
+      "css": ".ds-spec{display:flex;flex-wrap:wrap;gap:.2rem 1.25em;overflow:hidden;padding-left:1.25em;margin-left:-1.25em} .ds-spec>span{position:relative;font-family:var(--m,'JetBrains Mono',monospace);font-size:.75rem;letter-spacing:.04em;color:var(--mute-hi,#8B94A6);white-space:nowrap} .ds-spec>span::before{content:'';position:absolute;left:-.62em;top:50%;width:3px;height:3px;transform:translate(-50%,-50%);background:var(--amber,#FFAD3A);opacity:.7}"
+    },
+    {
+      "name": "Tuner Dock",
+      "kind": "nav",
+      "refersTo": "dock-tuner",
+      "description": "Phone navigation in the thumb zone: live dot, CH code over band name, a detented dial with a needle, and the VU-bar knob.",
+      "html": "<button class=\"ds-dock\"><span class=\"ds-dock-read\"><i class=\"ds-dock-dot\"></i><b>CH·02</b><span>Break</span></span><span class=\"ds-dock-scale\"><i></i></span><span class=\"ds-dock-knob\"><i></i><i></i><i></i></span></button>",
+      "css": ".ds-dock{display:grid;grid-template-columns:auto minmax(0,1fr) 44px;align-items:center;gap:14px;width:100%;height:60px;padding:0 7px 0 16px;border:1px solid var(--line-2,#27303F);border-radius:999px;background:linear-gradient(180deg,#0F1520,#080B12);box-shadow:0 0 0 1px rgba(0,0,0,.55),0 18px 38px -10px rgba(0,0,0,.92),inset 0 1px 0 rgba(236,231,219,.06);color:var(--bone,#ECE7DB);cursor:pointer;transition:transform .18s cubic-bezier(.22,.61,.36,1),border-color .3s} .ds-dock:active{transform:scale(.975);border-color:rgba(255,173,58,.55)} .ds-dock:focus-visible{outline:2px solid var(--amber,#FFAD3A);outline-offset:3px} .ds-dock-read{display:grid;grid-template-columns:auto auto;column-gap:9px;row-gap:5px;align-items:center;font-family:var(--m,'JetBrains Mono',monospace);font-weight:500;text-transform:uppercase;line-height:1} .ds-dock-dot{grid-row:1/3;width:7px;height:7px;border-radius:50%;background:var(--amber,#FFAD3A);box-shadow:0 0 10px 1px var(--amber,#FFAD3A)} .ds-dock-read b{font-weight:600;font-size:.86rem;letter-spacing:.1em} .ds-dock-read span{font-size:.7rem;letter-spacing:.16em;color:var(--mute-hi,#8B94A6)} .ds-dock-scale{position:relative;height:30px;background:repeating-linear-gradient(90deg,#27303F 0 1px,transparent 1px 6px) 0 100%/100% 5px no-repeat,linear-gradient(#27303F,#27303F) 0 100%/100% 1px no-repeat} .ds-dock-scale i{position:absolute;left:30%;top:3px;bottom:0;width:2px;background:var(--amber,#FFAD3A);box-shadow:0 0 8px 1px rgba(255,173,58,.75)} .ds-dock-knob{display:flex;align-items:center;justify-content:center;gap:3px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,173,58,.5);background:radial-gradient(circle at 50% 35%,rgba(255,173,58,.12),transparent 70%)} .ds-dock-knob i{width:2px;height:10px;border-radius:1px;background:var(--amber,#FFAD3A)} .ds-dock-knob i:nth-child(2){height:17px} .ds-dock-knob i:nth-child(3){height:12px}"
+    },
+    {
+      "name": "Copy Key",
+      "kind": "button",
+      "refersTo": "key-copy",
+      "description": "Phone COPY key on the mail row: a 36px amber-wash pill that floods amber when the address is copied.",
+      "html": "<button class=\"ds-key-copy\">Copy</button>",
+      "css": ".ds-key-copy{display:inline-flex;align-items:center;box-sizing:border-box;height:36px;padding:0 calc(.9rem - .16em) 0 .9rem;border:1px solid rgba(255,173,58,.45);border-radius:999px;background:rgba(255,173,58,.06);font-family:var(--m,'JetBrains Mono',monospace);font-weight:500;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--amber,#FFAD3A);cursor:pointer;transition:background .2s,color .2s} .ds-key-copy:active{background:rgba(255,173,58,.18)} .ds-key-copy.is-done{background:var(--amber,#FFAD3A);color:#0a0a0a;border-color:var(--amber,#FFAD3A)} .ds-key-copy:focus-visible{outline:2px solid var(--amber,#FFAD3A);outline-offset:3px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Handheld Receiver",
+    "overview": "The page is a receiver you tune. It powers on with a flat line that finds its carrier. A live amber trace runs across a night-dark screen, and every section is a channel the instrument locks onto. The scope retunes its waveform per section, and the docked strip and the phone's thumb dock read out the current code (CH·00 CARRIER, CH·01 BUILD, CH·04 SYSTEMS…). Reading the page is tuning the dial. The interface is chrome around a signal: graticule rules, tick scales, viewfinder corners, mono readouts. The signal itself carries the colour.\n\nIt is **precise** and **alive**:\n- **Precise.** Every small control is whole-pixel geometry that holds still under any zoom. Display lines are justified by their ink, not their boxes, and labels sit dead-centre in their frames.\n- **Alive.** The trace moves and answers touch and scroll. Cards lock on, the dock kicks like a VU meter on every retune, and switching language is itself a retune.\n\nDensity is calm. There is one accent, generous dark space and hairline structure. The voice is a well-made bench instrument, warm and exact, never a costume. Two worlds are confirmed rejections: **generic SaaS** (same-size rounded cards, purple gradients, startup templates) and **cold sci-fi** (cyan/blue HUD glows, glass panels, game interfaces).",
+    "keyCharacteristics": [
+      "One phosphor-amber signal on night ink; everything else is steel, hairline and bone.",
+      "A live WebGL trace as the hero material that retunes per section.",
+      "Three type voices: wide heavy display, quiet humanist body, mono readouts.",
+      "Viewfinder corners and tick-scale rules as the framing vocabulary.",
+      "Flat panels; glow only marks what is live.",
+      "Phone-first controls in the thumb zone, built to the pixel."
+    ],
+    "rules": [
+      {
+        "name": "The One Signal Rule",
+        "body": "Phosphor Amber is the only hue on the page. Everything else is ink, steel and bone. A second accent, a gradient between hues or a cool tint breaks the instrument.",
+        "section": "colors"
+      },
+      {
+        "name": "The Lit-Means-Live Rule",
+        "body": "Amber light (glow, tint, the hot core) marks what is live, current or being touched: the trace, the active channel, the chosen language, a pressed key. A resting surface never glows to look important.",
+        "section": "colors"
+      },
+      {
+        "name": "The Readout Rule",
+        "body": "Mono is for what an instrument would print: codes, measurements, coordinates, dates, keys. It is always uppercase-tracked and always uses tabular numerals for figures. Paragraphs never set in mono.",
+        "section": "typography"
+      },
+      {
+        "name": "The Ink-Not-Box Rule",
+        "body": "Display type aligns by its ink. Side bearings are measured and compensated, trailing letter-spacing is taken back out of centred and right-aligned labels, and on phones capitals are trimmed to the cap height (`text-box`) so they centre exactly.",
+        "section": "typography"
+      },
+      {
+        "name": "The Whole-Pixel Rule",
+        "body": "On phones, every small control is built from integer CSS pixels so each edge lands on a device pixel at 2× and 3×, and nothing re-rounds when zoomed. This covers marks, pills, chips, the +/− box, the language chip and its 8px capitals. The gutter rounds to whole pixels too.",
+        "section": "layout"
+      },
+      {
+        "name": "The Thumb Zone Rule",
+        "body": "On phones, navigation lives at the bottom edge (the tuner dock, the channel index's footer bar). The top strip only shows the signal.",
+        "section": "layout"
+      },
+      {
+        "name": "The Flat Panel Rule",
+        "body": "Surfaces are flat at rest; a step in ink is the only lift. A lifting shadow belongs to a physical control that floats (the dock), never to a card that wants attention; cards keep only the ambient falloff.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Viewfinder Rule",
+        "body": "Frames are implied by corners, not drawn as boxes. A bracket marks the region of interest; a full border is for a panel or a key.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Still-Label Rule",
+        "body": "Pressing a control may change its colour, fill or brightness, never the position of its label inside its frame.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "**Do** keep Phosphor Amber (#FFAD3A) the only hue, and spend it on signal: the trace, the current state, the primary action, focus.",
+      "**Do** build depth from the ink steps and 1px Graticule / Bezel Edge hairlines; let only live elements glow.",
+      "**Do** set codes, measurements, dates and keys in JetBrains Mono, uppercase-tracked with tabular numerals; keep sentences in Archivo.",
+      "**Do** frame regions with 2px amber viewfinder corners instead of full boxes.",
+      "**Do** build phone controls in whole pixels and verify them zoomed in, so nothing drifts under pinch, browser or text zoom.",
+      "**Do** give every control a 44px target, a visible 2px amber focus ring and a press state.",
+      "**Do** move on the house curve (cubic-bezier(.22,.61,.36,1)) with exponential ease-out entrances. Under reduced motion every move becomes instant or a plain fade, while the trace stays alive but gentle.",
+      "**Do** keep wrapped lists free of dangling separators: no line may start or end with a lone \"/\", \"·\" or \"—\"."
+    ],
+    "donts": [
+      "**Don't** add a second accent, hue gradients or purple: generic SaaS is a rejected world.",
+      "**Don't** use cyan or blue HUD glows, glass panels or game-interface chrome: cold sci-fi is a rejected world.",
+      "**Don't** lift cards or panels with crisp drop shadows; the only lifting shadow belongs to the floating dock (cards keep the long ambient falloff).",
+      "**Don't** soften cards past 4px or build pages from same-size rounded icon cards.",
+      "**Don't** move a label inside its frame on press or hover.",
+      "**Don't** set the neutrals to pure white or pure black; text is warm Bone (#ECE7DB) and the ground is blue-shifted Night Ink (#06080E)."
+    ]
+  }
+}
