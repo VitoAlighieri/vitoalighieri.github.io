@@ -12,7 +12,8 @@ colors:
   night-ink-lifted: "#080B12"
   panel-steel: "#0D121C"
   panel-steel-raised: "#111A28"
-  panel-glass: "rgba(13,18,28,.45)"   # hover:none devices use .78 with no blur
+  # hover:none devices use .78 with no blur
+  panel-glass: "rgba(13,18,28,.45)"
   graticule-line: "#1A2230"
   bezel-edge: "#27303F"
   bone: "#ECE7DB"
@@ -22,21 +23,24 @@ colors:
   silkscreen-grey-lit: "#8B94A6"
   tick-slate: "#535B6B"
 typography:
-  display:   # >720px; phones size each name line to the measure by its ink (mobile.css --fit/--lsb)
+  # >720px; phones size each name line to the measure by its ink (mobile.css --fit/--lsb)
+  display:
     fontFamily: "'Anybody Variable', 'Archivo Variable', system-ui, sans-serif"
     fontSize: "clamp(2.6rem,min(13.5vw,17.5vh),10.6rem)"
     fontWeight: 800
     lineHeight: 0.9
     letterSpacing: "-.02em"
     fontVariation: "'wght' 825,'wdth' 122"
-  headline:   # size >720px; phones: min(calc(var(--mw)/8.2), calc(9*var(--vh))), -.015em
+  # size >720px; phones: min(calc(var(--mw)/8.2), calc(9*var(--vh))), -.015em
+  headline:
     fontFamily: "'Anybody Variable', 'Archivo Variable', system-ui, sans-serif"
     fontSize: "clamp(2rem,5.5vw,4.2rem)"
     fontWeight: 800
     lineHeight: 0.92
     letterSpacing: "-.01em"
     fontVariation: "'wght' 760,'wdth' 112"
-  title:   # size >720px; phones 1.45rem; letterSpacing inherited from body
+  # size >720px; phones 1.45rem; letterSpacing inherited from body
+  title:
     fontFamily: "'Anybody Variable', 'Archivo Variable', system-ui, sans-serif"
     fontSize: "clamp(1.5rem,3.4vw,2.5rem)"
     fontWeight: 740
@@ -55,23 +59,27 @@ typography:
     fontWeight: 400
     lineHeight: 1.65
     letterSpacing: ".005em"
-  body-large:   # phones: the hero lede drops to 15px / 1.5
+  # phones: the hero lede drops to 15px / 1.5
+  body-large:
     fontFamily: "'Archivo Variable', system-ui, -apple-system, sans-serif"
     fontSize: "clamp(1rem,1.4vw,1.12rem)"
     fontWeight: 400
-  label:   # modal tracking; real uses range .1em-.28em
+  # modal tracking; real uses range .1em-.28em
+  label:
     fontFamily: "'JetBrains Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace"
     fontSize: ".72rem"
     fontWeight: 500
     letterSpacing: ".2em"
-  label-telemetry:   # desktop #topbar .tele is .75rem / .14em
+  # desktop #topbar .tele is .75rem / .14em
+  label-telemetry:
     fontFamily: "'JetBrains Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace"
     fontSize: ".66rem"
     fontWeight: 500
     lineHeight: 1
     letterSpacing: ".16em"
     fontFeature: "'tnum'"
-  label-chip:   # >720px only; phones flatten tags to .75rem / .04em
+  # >720px only; phones flatten tags to .75rem / .04em
+  label-chip:
     fontFamily: "'JetBrains Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace"
     fontSize: ".7rem"
     fontWeight: 500
@@ -84,14 +92,18 @@ rounded:
   pill: "999px"
   round: "50%"
 spacing:
-  gutter: "clamp(1.25rem, 5vw, 6rem)"   # rounded to whole px on phones
-  section: "clamp(3.75rem,9vh,8.5rem)"   # >720px; phones: clamp(3.75rem,9svh,5rem) clamp(3.25rem,7svh,4.25rem)
+  # rounded to whole px on phones
+  gutter: "clamp(1.25rem, 5vw, 6rem)"
+  # >720px; phones: clamp(3.75rem,9svh,5rem) clamp(3.25rem,7svh,4.25rem)
+  section: "clamp(3.75rem,9vh,8.5rem)"
   container: "1320px"
   strip: "60px"
   touch: "44px"
-  card-gap: "clamp(1rem,2vw,1.4rem)"   # phones: .systems gap 1.1rem
+  # phones: .systems gap 1.1rem
+  card-gap: "clamp(1rem,2vw,1.4rem)"
 components:
-  button-primary:   # >720px; phones: the full-width key below
+  # >720px; phones: the full-width key below
+  button-primary:
     backgroundColor: "{colors.panel-glass}"
     textColor: "{colors.phosphor-amber}"
     typography: "{typography.label}"
@@ -101,39 +113,46 @@ components:
   button-primary-hover:
     backgroundColor: "{colors.phosphor-amber}"
     textColor: "{colors.on-phosphor}"
-  button-link:   # >720px only (hidden on phones); tracking .18em
+  # >720px only (hidden on phones); tracking .18em
+  button-link:
     textColor: "{colors.phosphor-amber}"
     typography: "{typography.label}"
     padding: "0 .35rem"
     height: "44px"
-  button-close:   # phones only (channel index)
+  # phones only (channel index)
+  button-close:
     backgroundColor: "{colors.phosphor-tint}"
     textColor: "{colors.phosphor-amber}"
     rounded: "{rounded.round}"
     size: "44px"
-  chip:   # >720px only
+  # >720px only
+  chip:
     backgroundColor: "{colors.panel-steel}"
     textColor: "{colors.bone-soft}"
     typography: "{typography.label-chip}"
     rounded: "{rounded.pill}"
     padding: ".32rem .7rem"
-  chip-flat:   # <=720px; mono .75rem / .04em
+  # <=720px; mono .75rem / .04em
+  chip-flat:
     textColor: "{colors.silkscreen-grey-lit}"
     rounded: "{rounded.none}"
     padding: "0"
-  card-instrument:   # padding >640px; 1.2rem <=640, 1.15rem 1rem <=600
+  # padding >640px; 1.2rem <=640, 1.15rem 1rem <=600
+  card-instrument:
     backgroundColor: "{colors.panel-steel}"
     textColor: "{colors.bone}"
     rounded: "{rounded.plate}"
     padding: "clamp(1.4rem,3.2vw,2.4rem)"
   card-instrument-hover:
     backgroundColor: "{colors.panel-steel-raised}"
-  card-deck:   # phones only
+  # phones only
+  card-deck:
     backgroundColor: "{colors.panel-steel}"
     textColor: "{colors.bone}"
     rounded: "{rounded.plate}"
     padding: "1.25rem 1.1rem 1.1rem"
-  badge-credential:   # mono .66rem / .1em, tabular-nums
+  # mono .66rem / .1em, tabular-nums
+  badge-credential:
     backgroundColor: "{colors.phosphor-wash}"
     textColor: "{colors.phosphor-amber}"
     rounded: "{rounded.plate}"
@@ -143,9 +162,11 @@ components:
     textColor: "{colors.bone}"
     rounded: "{rounded.none}"
     padding: "1.15rem .2rem"
-  list-row-link-hover:   # hover-capable pointers only; touch phones pin padding-left .2rem
+  # hover-capable pointers only; touch phones pin padding-left .2rem
+  list-row-link-hover:
     padding: "1.15rem .2rem 1.15rem .8rem"
-  toggle-language-option:   # hero .74rem/.2em, strip .66rem/.14em; phones 10.96px (8px caps)
+  # hero .74rem/.2em, strip .66rem/.14em; phones 10.96px (8px caps)
+  toggle-language-option:
     textColor: "{colors.silkscreen-grey}"
     rounded: "{rounded.pill}"
   toggle-language-option-active:
@@ -153,24 +174,28 @@ components:
   toggle-language-indicator:
     backgroundColor: "{colors.phosphor-tint}"
     rounded: "{rounded.pill}"
-  nav-strip:   # desktop readout is mono .75rem / .14em
+  # desktop readout is mono .75rem / .14em
+  nav-strip:
     backgroundColor: "{colors.night-ink}"
     textColor: "{colors.silkscreen-grey}"
     height: "60px"
     padding: "0 clamp(1.25rem, 5vw, 6rem)"
-  dock-tuner:   # phones only; a vertical gradient from #0F1520 to this ink
+  # phones only; a vertical gradient from #0F1520 to this ink
+  dock-tuner:
     backgroundColor: "{colors.night-ink-lifted}"
     textColor: "{colors.bone}"
     rounded: "{rounded.pill}"
     height: "60px"
     padding: "0 7px 0 16px"
-  disclosure-summary:   # <=600px only; tracking .18em
+  # <=600px only; tracking .18em
+  disclosure-summary:
     textColor: "{colors.phosphor-amber}"
     typography: "{typography.label}"
     rounded: "{rounded.key}"
     padding: "0 12px 0 14px"
     height: "44px"
-  key-copy:   # phones only
+  # phones only
+  key-copy:
     backgroundColor: "{colors.phosphor-wash}"
     textColor: "{colors.phosphor-amber}"
     typography: "{typography.label-telemetry}"
@@ -180,7 +205,8 @@ components:
   key-copy-done:
     backgroundColor: "{colors.phosphor-amber}"
     textColor: "{colors.on-phosphor}"
-  key-subchannel:   # phones only; tracking .14em (.1em <=380px)
+  # phones only; tracking .14em (.1em <=380px)
+  key-subchannel:
     textColor: "{colors.bone-soft}"
     typography: "{typography.label-telemetry}"
     rounded: "{rounded.key}"
