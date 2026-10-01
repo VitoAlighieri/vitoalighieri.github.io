@@ -14,7 +14,7 @@ web
 
 ## Product Purpose
 
-bielmartinez.com is the one-page portfolio of Biel Martínez Janer. It exists to win, in the owner's order:
+The site (vitoalighieri.github.io) is the one-page portfolio of Biel Martínez Janer. It exists to win, in the owner's order:
 
 1. freelance or contract security engagements;
 2. a position in cybersecurity;
@@ -24,20 +24,20 @@ Success is a relevant inbound contact. Every path leads to one action, *Open a c
 
 ## Positioning
 
-He is technical, and he also carries the communicative, business and strategic side (owner's words). Each half is evidenced on the site:
+Security comes first. He is an offensive-security specialist who also carries the communicative, business and strategic side (owner's words). The owner wants communication and the ability to lead projects to weigh almost as much as the security work. Each part is evidenced on the site:
 
 - **Technical:**
   - he builds and leads production systems as technical lead of an industrial laser-cutting and metallurgy platform at Suministros Jogo, 2023 to now;
   - he does hands-on offensive security from RF and hardware to ICS/OT.
 - **Business:**
-  - he founded We Love Night and runs it as CEO and CTO: business plan, brand, legal and IP groundwork, investor materials, launch;
+  - he has founded and led his own projects end to end: vision, strategy, business plan, brand, legal and IP groundwork, team, launch. These are shown as his own projects, without naming the venture;
   - he translates technical findings into compliance obligations.
 
 What a neighbouring candidate cannot truthfully copy is the combination. One person can scope security work, test it, explain it, and tie it to the business. He also builds the kind of systems he tests.
 
 ## Operating Context
 
-- A single static page that the owner maintains through Claude sessions. It deploys from the repository root to GitHub Pages under the custom domain bielmartinez.com (`CNAME`).
+- A single static page that the owner maintains through Claude sessions. It deploys from the repository root to GitHub Pages at vitoalighieri.github.io. The custom domain bielmartinez.com is no longer used; its `CNAME` was removed on 2026-10-01.
 - Visitors judge it alongside his CV and LinkedIn.
 - Contact runs only through email (mailto plus a copy key), GitHub and LinkedIn. There are no forms, no backend and no analytics.
 - The desktop design is approved. Phones are a first-class target with their own layer below 720 px: thumb dock, channel index, swipe deck.
@@ -50,7 +50,7 @@ What a neighbouring candidate cannot truthfully copy is the combination. One per
 - **Computed experience counter.** The years-of-experience figure is computed from 2023, never hard-coded.
 - **Graceful fallback.** The WebGL oscilloscope degrades cleanly, and the page works without it.
 - **Undecided, owner to confirm:**
-  - The canonical founder title. It appears as "Founder & CEO" (channel CH·03), "Founder · CEO · CTO" (work card) and "founder & CTO" (meta description).
+  - The canonical title for the founder and lead experience, now that the venture is not named. Today it appears as "Founder & CEO" (channel CH·03), "Founder · CEO · CTO" (work card) and "founder & CTO" (meta description).
   - Whether freelance engagements need stated availability, scope or terms, or a CV download. None exists today.
   - INE. It is named in the security summary but has no entry in the credentials list.
 
@@ -64,7 +64,9 @@ What a neighbouring candidate cannot truthfully copy is the combination. One per
   - never publish his phone number;
   - keep VeriFactu, ACTIC and the English C1 level off the site;
   - Grafana and Sentry appear only in the Stack section;
-  - cybersecurity carries the most weight: the offensive-security work card comes first and We Love Night last;
+  - cybersecurity carries the most weight: the offensive-security work card comes first and the founder / own-projects card last;
+  - do not name We Love Night (WLN) on the site, including meta tags and the Spanish copy. Present it as personal projects he has founded and led;
+  - the *I work in frequencies* thesis stays as it is and where it is, the section after the hero;
   - no "audits" label;
   - the credentials list shows OSCC-SEC (OffSec), CJCA (Hack The Box), eJPT and the ESADE *Finance for Non-Financial Managers* course.
 
@@ -76,7 +78,7 @@ All of it is in `index.html`, with Spanish in `assets/js/i18n.js`:
 - **Channels.** CH·01 BUILD *Software & architecture*, CH·02 BREAK *Offensive security*, CH·03 LEAD *Founder & CEO*.
 - **Offensive-security work.** Nine domains: web and APIs; networks and systems; RF and signals; hardware and firmware; ICS/OT; vulnerability analysis (CVE, CVSS, OWASP, MITRE ATT&CK); hardening; compliance (ISO/IEC 27001, NIS2, DORA, GDPR); tooling and training. The named tools are Burp Suite, Nmap, Metasploit, Wireshark and Ghidra.
 - **Suministros Jogo,** 2023 to now: technical lead and software developer on the laser-cutting and metallurgy platform.
-- **We Love Night,** 2024 to now, in production: launch with zero incidents, key clients closed for 2026.
+- **His own venture** (We Love Night, which must not be named on the site), 2024 to now, in production: launch with zero incidents, key clients closed for 2026.
 - **Credentials.**
   - Certifications and courses: Black Hat *Offensive Hardware Hacking*, eJPT, OSCC-SEC, CJCA, PCEP, CCNA content completed, ESADE finance course.
   - Education: a degree in Software Engineering; Honours in Network Security and Algebra; a professional cello degree from the Conservatori de Mallorca.
@@ -94,7 +96,7 @@ Absent, and never to be fabricated:
 ## Product Principles
 
 1. **Credibility a buyer can verify.** Lead with the security scope, tools and credentials that back it. Never add a claim the evidence cannot carry.
-2. **Show the bridge.** Present technical depth in business terms: findings tied to obligations, systems tied to outcomes, the founder experience as proof of judgement.
+2. **Show the bridge.** Present technical depth in business terms: findings tied to obligations, systems tied to outcomes. Communication and leading projects end to end are proof of judgement, carried by the projects he has led.
 3. **One channel, always within reach.** Opening contact must be effortless from any section, on any device.
 4. **Truth over filler.** Mark what is missing as an open decision instead of filling it with invented proof.
 5. **Two languages, one voice.** Spanish and English are equals, and both read as written in that language.
