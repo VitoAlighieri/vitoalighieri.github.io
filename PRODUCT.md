@@ -24,7 +24,7 @@ Success is a relevant inbound contact. Every path leads to one action, *Open a c
 
 ## Positioning
 
-Security comes first. He is an offensive-security specialist who also carries the communicative, business and strategic side (owner's words). The owner wants communication and the ability to lead projects to weigh almost as much as the security work. Each part is evidenced on the site:
+Security comes first. He is a cybersecurity specialist, with offensive security as a core capability rather than a closed job title, who also carries the communicative, business and strategic side (owner's words). The owner wants communication and the ability to lead projects to weigh almost as much as the security work. Each part is evidenced on the site:
 
 - **Technical:**
   - he builds and leads production systems as technical lead of an industrial laser-cutting and metallurgy platform at Suministros Jogo, 2023 to now;
@@ -56,7 +56,7 @@ What a neighbouring candidate cannot truthfully copy is the combination. One per
 
 ## Brand Commitments
 
-- **Identity.** Biel Martínez Janer, based in Palma, Balearic Islands. The role line reads "Software engineer / pentester / hardware hacker".
+- **Identity.** Biel Martínez Janer, based in Palma, Balearic Islands. The role line leads with a general cybersecurity identity. "Pentester" must not be the headline label (owner: "para no encasillarse"); the exact wording is decided in the clarify step. It currently reads "Software engineer / pentester / hardware hacker".
 - **Thesis and vocabulary.** *I work in frequencies*, with the instrument vocabulary that carries it: channels and bands (CARRIER, BUILD, BREAK, LEAD, SYSTEMS, STACK, HUMAN), CH codes, "Open a channel", "Signal — Active", "End of transmission".
 - **Voice.** First person, short sentences, the key phrase in bold. Nothing is claimed that cannot be backed.
 - **Spanish.** Adapted rather than translated: it addresses the reader as *tú*, puts infinitives on buttons, and keeps industry English (pentester, hardening, MVP, go-to-market).
