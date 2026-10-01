@@ -1,94 +1,69 @@
-# Biel Martínez Janer — portfolio landing page
+# Biel Martínez Janer — portfolio
 
-An awards-style, single-page site built around one idea: **you work in frequencies** —
-audio (cello), radio (RF / hardware), data (software), and the pulse of the night
-(*We Love Night*). The signature is a **live oscilloscope** rendered in WebGL that docks
-into a top "signal strip" on scroll and re-tunes its waveform per section.
+A single-page site for a cybersecurity specialist who also communicates and leads projects. The page is built as a
+**handheld receiver**: a live amber oscilloscope (WebGL) fills the hero, then docks into a signal strip that retunes its
+waveform for every section. On phones the controls move to the thumb zone: a tuner dock and a full-screen channel index.
 
-Built with **Three.js** (the scope) and **GSAP + ScrollTrigger** (choreography).
-Fully responsive, keyboard-focusable, and it honors `prefers-reduced-motion`
-(static trace, no animation).
+- **Bilingual (EN · ES):** English is the canonical copy in the HTML; Spanish is adapted, not translated.
+- **Accessible:** keyboard-first, a still trace under `prefers-reduced-motion`, a HOLD switch on the hero's live dot
+  that stops every ambient motion, forced-colours support, and controls that hold their geometry at any zoom.
+- **No build step:** plain HTML, CSS and JS. The libraries are self-hosted.
 
-On fine-pointer devices a custom **oscilloscope-style cursor** (an amber reticle — a
-precise dot plus a trailing ring that opens over interactive targets) replaces the
-native one; touch devices and no-JS keep the system cursor.
-
-**Bilingual (EN · ES).** A tiny no-dependency i18n layer adds an `EN / ES` switch in
-the hero and the docked signal strip. English is the canonical copy in the HTML
-(good for SEO and no-JS); Spanish lives in a dictionary and is swapped in by key. The
-choice is remembered (`localStorage`) and first-visit language follows the browser.
+Design and product records for the [Impeccable](https://impeccable.style) design skill (installed in `.claude/`):
+`PRODUCT.md` (who the site is for, owner rules), `DESIGN.md` + `.impeccable/design.json` (the visual system), and
+`.impeccable/` (critique and audit snapshots, briefs). `_config.yml` keeps them off the published site.
 
 ---
 
 ## Run it
 
-Because the multi-file version loads fonts and scripts as separate files, open it through
-a **local web server** (opening `index.html` directly via `file://` can block font loading
-in some browsers):
+Serve the folder with any static server; opening `index.html` over `file://` can block the fonts:
 
 ```bash
-cd biel-martinez-portfolio
 python3 -m http.server 8000
 # then open http://localhost:8000
 ```
 
-Any static server works (`npx serve`, VS Code "Live Server", etc.).
-
-> Prefer a zero-setup file? A second build, **`index.html` in the parent folder**, is a single
-> self-contained file (fonts + Three.js + GSAP all inlined). You can double-click that one and it
-> just works offline — handy for quick previews, though it's less convenient to edit.
-
 ## Deploy it
 
-It's a static site — drop the folder on any host:
-
-- **GitHub Pages:** push the folder, enable Pages on the branch/root.
-- **Netlify / Vercel / Cloudflare Pages:** drag-and-drop the folder, or point it at the repo. No build step.
+GitHub Pages serves the repository root (`main`) at **vitoalighieri.github.io**. Any static host works the same way.
+After changing CSS or JS, bump the `?v=N` query on every asset reference in `index.html` (cache-busting).
 
 ---
 
 ## Structure
 
 ```
-biel-martinez-portfolio/
-├─ index.html              # markup + content (edit your copy here)
-└─ assets/
-   ├─ css/
-   │  ├─ styles.css        # all styles + design tokens (:root variables) + custom scrollbar
-   │  ├─ i18n.css          # language-switch chrome + docked-strip gating
-   │  ├─ cursor.css        # custom oscilloscope-style cursor (reticle)
-   │  └─ fonts.css         # @font-face for the three families
-   ├─ js/
-   │  ├─ app.js            # the oscilloscope + scroll choreography
-   │  ├─ i18n.js           # EN/ES language layer (Spanish dictionary + switch logic)
-   │  └─ cursor.js         # custom-cursor controller (fine-pointer only)
-   ├─ fonts/               # self-hosted variable fonts (woff2)
-   └─ vendor/              # three.min.js, gsap.min.js, ScrollTrigger.min.js
+index.html                 # markup + the canonical English copy (data-i18n keys)
+assets/
+├─ css/
+│  ├─ styles.css           # tokens (:root), base layout, desktop design, the instrument system, forced colours
+│  ├─ i18n.css             # the EN/ES switch (pure CSS geometry) + the language-retune transition
+│  ├─ cursor.css           # the oscilloscope reticle cursor (fine pointers only)
+│  ├─ mobile.css           # the phone layer (≤720px): dock, channel index, swipe deck, poster hero
+│  └─ fonts.css            # @font-face for the three variable families
+├─ js/
+│  ├─ i18n.js              # runs first: Spanish dictionary, META, language switch, the strip's docked state
+│  ├─ app.js               # the scope (Three.js), HOLD, band resolver, section choreography, mini traces, the dial
+│  ├─ mobile.js            # phone layer: dock, channel index, deck, accordions, copy key, touch on the scope
+│  └─ cursor.js            # the reticle cursor
+├─ fonts/                  # Anybody, Archivo, JetBrains Mono (variable woff2, Latin subset)
+└─ vendor/                 # three.min.js (r160), gsap.min.js + ScrollTrigger.min.js (3.12.5)
 ```
 
-## Customizing
+## Editing
 
-- **Copy / sections:** edit `index.html`. Content is plain HTML, section by section.
-- **Colors:** `assets/css/styles.css`, the `:root` block at the top. The whole palette is a
-  handful of CSS variables; `--amber` is the single accent.
-- **Type:** display = *Anybody* (variable, run wide+heavy), body = *Archivo*, data = *JetBrains Mono*.
-  Swap in `fonts.css` + the `--d / --b / --m` variables.
-- **The waveform per section:** each `<section>` carries `data-shape`, `data-freq`, `data-amp`,
-  `data-noise`, and `data-band` attributes. Change those to re-tune the scope as the reader scrolls
-  (`shape`: 0 = sine, 1 = square/digital, 2 = triangle, 3 = pulse). Logic lives in `app.js`.
-- **Contact links:** already wired in the contact section of `index.html`
-  (email, github.com/VitoAlighieri, LinkedIn).
-- **Languages / copy in two languages:** every translatable element carries a
-  `data-i18n="some.key"`; the English text stays in `index.html` as the source of
-  truth, and the Spanish strings live in the `ES` dictionary in `assets/js/i18n.js`,
-  keyed identically. To tweak the Spanish wording, edit the matching key. To add a
-  third language, clone the `ES` block + the `META` entry under a new code and add a
-  button (`data-lang-set="xx"`) to each `.lang-switch`. Missing keys fall back to
-  English automatically.
+- **Copy:** English in `index.html`, Spanish under the same `data-i18n` key in the `ES` dictionary of
+  `assets/js/i18n.js` (titles and meta tags in `META`; generated instrument words such as band names in `CHROME_ES`).
+  Keys must stay one-to-one; a missing Spanish key falls back to English.
+- **Sections and the scope:** every `<section>` carries `data-band` (`CH·04 — TUNING`), `data-shape` (0 sine, 1 square,
+  2 triangle, 3 pulse, 4 step), `data-freq`, `data-amp` and `data-noise`; the scope, the strip, the dock and the
+  channel index all read them. Codes run CH·00 (hero + thesis), CH·01–03 (BREAK / BUILD / LEAD), CH·04 TUNING,
+  CH·05 SYSTEMS, CH·06 STACK, CH·07 SIGNALS, then TX (contact).
+- **Design system:** read `DESIGN.md` first. One accent (`--amber`), its transparencies via `--amber-rgb`, three type
+  voices, whole-pixel geometry for small phone controls.
 
-## Notes & credits
+## Credits
 
-- **Fonts** are subset to Latin. Anybody & Archivo (SIL Open Font License), JetBrains Mono (SIL OFL).
-- **Three.js** r160 and **GSAP** 3.12.5 (standard "no-charge" GSAP license for the core + ScrollTrigger).
-- Performance: device-pixel-ratio is capped, the 3D scene only renders while the hero is on screen,
-  and rendering pauses when the tab is hidden.
+Fonts: Anybody, Archivo and JetBrains Mono (SIL Open Font License). Three.js (MIT). GSAP 3.12.5 and ScrollTrigger
+(GSAP standard no-charge licence). Impeccable design skill (Apache-2.0).
